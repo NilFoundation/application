@@ -24,5 +24,5 @@
 
 if [ GLOB $(BOOST) : [ modules.peek project : JAMFILE ] ]
 {
-    use-project C:\\boost_1_54_0 : $(BOOST) ;
+
 }
