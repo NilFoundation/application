@@ -20,95 +20,79 @@
 // ->
 
 // generic exception to be used insted Boost.System
-class myexception_base : public std::exception
-{
+class myexception_base : public std::exception {
 public:
-   // build a new exception using LastError on Windows and errno on Unix
-   explicit myexception_base(const std::string& msg, unsigned int code)
-      : message_(msg) , code_(code)
-   { }
+    // build a new exception using LastError on Windows and errno on Unix
+    explicit myexception_base(const std::string &msg, unsigned int code) : message_(msg), code_(code) {
+    }
 
-   virtual const char * what () const throw () {
-      return message_.c_str();
-   }
+    virtual const char *what() const throw() {
+        return message_.c_str();
+    }
 
-   unsigned int code() const  {
-      return code_;
-   }
+    unsigned int code() const {
+        return code_;
+    }
 
 private:
-   std::string message_;  int code_;  
+    std::string message_;
+    int code_;
 };
 
-struct myexception : public myexception_base 
-{ 
-   myexception(const std::string& what, unsigned int error_code) 
-     : myexception_base(what, error_code) {}
+struct myexception : public myexception_base {
+    myexception(const std::string &what, unsigned int error_code) : myexception_base(what, error_code) {
+    }
 
-   std::string mymessage()
-   {
-       std::stringstream msg;
+    std::string mymessage() {
+        std::stringstream msg;
 
-       msg 
-          << what ()
-          << "("
-          << code()
-          << ")"
-          << std::endl;
+        msg << what() << "(" << code() << ")" << std::endl;
 
-      return msg.str();
-   }
+        return msg.str();
+    }
 };
 
 #define BOOST_APPLICATION_TROWN_MY_OWN_EXCEPTION throw myexception
+
 #include <boost/application.hpp>
 // <-
 
 using namespace boost;
 
-class myapp
-{
+class myapp {
 public:
 
-   myapp(application::context& context)
-      : context_(context)
-   {
-   }
+    myapp(application::context &context) : context_(context) {
+    }
 
-   int operator()()
-   {
-      if(!context_.find<application::args>())
-      {
-         throw myexception("custon error", 4121);
-      }
+    int operator()() {
+        if (!context_.find<application::args>()) {
+            throw myexception("custon error", 4121);
+        }
 
-      return 0;
-   }
+        return 0;
+    }
 
 private:
-   application::context& context_;
+    application::context &context_;
 
 };
 
 // main
 
-int main(int argc, char *argv[])
-{  
-   try 
-   {
-      application::context app_context;      
-      myapp app(app_context);
+int main(int argc, char *argv[]) {
+    try {
+        application::context app_context;
+        myapp app(app_context);
 
-      // app_context.insert<application::args>(
-      //    boost::make_shared<application::args>(argc, argv));
+        // app_context.insert<application::args>(
+        //    boost::make_shared<application::args>(argc, argv));
 
-      return application::launch<application::common>(app, app_context);
-   }
-   catch(myexception &e)
-   {
-      std::cerr << e.mymessage();
-      return 1;
-   }
+        return application::launch<application::common>(app, app_context);
+    } catch (myexception &e) {
+        std::cerr << e.mymessage();
+        return 1;
+    }
 
-   return 0;
+    return 0;
 }

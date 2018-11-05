@@ -14,15 +14,13 @@
 
 using namespace boost::application;
 
-int main(int argc, char* argv[])
-{
-   boost::system::error_code ec;
+int main(int argc, char *argv[]) {
+    boost::system::error_code ec;
 
-   while(1) 
-   {
-      boost::this_thread::sleep(boost::posix_time::seconds(1));
-      std::cout << "runing...";
-   }
+    while (1) {
+        boost::this_thread::sleep(boost::posix_time::seconds(1));
+        std::cout << "runing...";
+    }
 
-   return 1;
+    return 1;
 }

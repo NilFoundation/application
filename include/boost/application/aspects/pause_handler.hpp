@@ -19,23 +19,23 @@
 #include <boost/application/config.hpp>
 #include <boost/application/handler.hpp>
 
-namespace boost { namespace application {
+namespace boost {
+    namespace application {
 
-   class pause_handler : public handler<>
-   {
-   public:
-      pause_handler(const callback& cb)
-         : handler<>(cb) {}
-   };
+        class pause_handler : public handler<> {
+        public:
+            pause_handler(const callback &cb) : handler<>(cb) {
+            }
+        };
 
-   class pause_handler_default_behaviour : public pause_handler
-   {
-   public:
-      pause_handler_default_behaviour(const callback& cb)
-         : pause_handler(cb) {}
-   };
+        class pause_handler_default_behaviour : public pause_handler {
+        public:
+            pause_handler_default_behaviour(const callback &cb) : pause_handler(cb) {
+            }
+        };
 
-}} // boost::application
+    }
+} // boost::application
 
 #endif // BOOST_APPLICATION_ASPECT_PAUSE_HANDLER_HPP
 

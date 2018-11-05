@@ -20,36 +20,31 @@
 
 using namespace boost;
 
-class myapp
-{
+class myapp {
 public:
 
-   // param
-   int operator()(application::context& context)
-   {
-      return 0;
-   }
+    // param
+    int operator()(application::context &context) {
+        return 0;
+    }
 };
 
 // main
 
 //[ecver
 // ...
-int main(int argc, char *argv[])
-{   
-   myapp app;
-   application::context app_context;
+int main(int argc, char *argv[]) {
+    myapp app;
+    application::context app_context;
 
-   boost::system::error_code ec;
-   int result = application::launch<application::common>(app, app_context, ec);
+    boost::system::error_code ec;
+    int result = application::launch<application::common>(app, app_context, ec);
 
-   if(ec)
-   {
-      std::cerr << "[E] " << ec.message() 
-         << " <" << ec.value() << "> " << std::cout;
-   }
+    if (ec) {
+        std::cerr << "[E] " << ec.message() << " <" << ec.value() << "> " << std::cout;
+    }
 
-   return result;
+    return result;
 }
 //]
 

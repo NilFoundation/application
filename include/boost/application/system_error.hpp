@@ -22,47 +22,54 @@
 #   pragma once
 #endif
 
-namespace boost { namespace application {
+namespace boost {
+    namespace application {
 
-   // BOOST_APPLICATION_LAST_ERROR
+        // BOOST_APPLICATION_LAST_ERROR
 
-   /*!
-    * Retrieves the last error code of system.
-    *
-    * \return the last error code of system.
-    *
-    * [Windows]
-    * GetLastError
-    *
-    * [POSIX]
-    * errno
-    *
-    */
-   inline int last_error(void) BOOST_NOEXCEPT
-   {
+        /*!
+         * Retrieves the last error code of system.
+         *
+         * \return the last error code of system.
+         *
+         * [Windows]
+         * GetLastError
+         *
+         * [POSIX]
+         * errno
+         *
+         */
+        inline int last_error(void)
+
+        BOOST_NOEXCEPT {
 #if defined(BOOST_POSIX_API)
-      return errno;
+        return errno;
 #elif defined(BOOST_WINDOWS_API)
-      return GetLastError();
+        return GetLastError();
 #endif
-   }
+    }
 
-   // BOOST_APPLICATION_SET_LAST_SYSTEM_ERROR
+    // BOOST_APPLICATION_SET_LAST_SYSTEM_ERROR
 
-   /*!
-    * Generate a system::error_code form last_error function.
-    *
-    * \return the system::error_code based on last_error
-    *         function (System Error).
-    *
-    */
-   inline system::error_code last_error_code() BOOST_NOEXCEPT
-   {
-      return boost::system::error_code(last_error(),
-         boost::system::system_category());
-   }
+    /*!
+     * Generate a system::error_code form last_error function.
+     *
+     * \return the system::error_code based on last_error
+     *         function (System Error).
+     *
+     */
+    inline system::error_code last_error_code()
 
-}}// boost::application
+    BOOST_NOEXCEPT {
+    return
+
+    boost::system::error_code(last_error(), boost::system::system_category()
+
+    );
+}
+
+}
+}// boost::application
 
 #endif // BOOST_APPLICATION_SYSTEM_ERROR_HPP
 

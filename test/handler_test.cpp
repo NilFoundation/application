@@ -7,61 +7,56 @@
 
 #define BOOST_APPLICATION_FEATURE_NS_SELECT_BOOST
 
+#define BOOST_TEST_MODULE handler_test
+
 #include <iostream>
 #include <boost/application.hpp>
-#include <boost/test/minimal.hpp>
+#include <boost/test/unit_test.hpp>
 
 using namespace boost;
 
-struct handler_test
-{
-   bool handler()
-   {
-      return true;
-   }
+struct handler_test {
+    bool handler() {
+        return true;
+    }
 };
 
-int test_main(int argc, char** argv)
-{
-   handler_test app_handler_test;
-   application::context app_context;
+struct fixture {
+    handler_test app_handler_test;
+    application::context app_context;
+};
 
-   {
-      application::handler<> h;
+BOOST_AUTO_TEST_SUITE()
 
-      BOOST_CHECK(!h.is_valid());
-      BOOST_CHECK(!h.is_valid());
-   }
+    BOOST_FIXTURE_TEST_CASE(test_case1, fixture) {
+        application::handler<> h;
 
-   {
-      application::handler<>::callback cb = boost::bind(
-         &handler_test::handler, &app_handler_test);
+        BOOST_CHECK(!h.is_valid());
+        BOOST_CHECK(!h.is_valid());
+    }
 
-      application::handler<> h(cb);
-      BOOST_CHECK(h.is_valid());
+    BOOST_FIXTURE_TEST_CASE(test_case2, fixture) {
+        application::handler<>::callback cb = boost::bind(&handler_test::handler, &app_handler_test);
 
-      application::handler<>::callback* hvb = 0;
-      BOOST_CHECK(h.get(hvb));
-      BOOST_CHECK((*hvb)());
-   }
+        application::handler<> h(cb);
+        BOOST_CHECK(h.is_valid());
 
-   {
-      application::handler<>::callback cb = boost::bind(
-         &handler_test::handler, &app_handler_test);
+        application::handler<>::callback *hvb = nullptr;
+        BOOST_CHECK(h.get(hvb));
+        BOOST_CHECK((*hvb)());
+    }
 
-      application::handler<> h;
-      h.set(cb);
+    BOOST_FIXTURE_TEST_CASE(test_case3, fixture) {
+        application::handler<>::callback cb = boost::bind(&handler_test::handler, &app_handler_test);
 
-      BOOST_CHECK(h.is_valid());
+        application::handler<> h;
+        h.set(cb);
 
-      application::handler<>::callback* hcb = 0;
-      BOOST_CHECK(h.get(hcb));
-      BOOST_CHECK((*hcb)());
-   }
+        BOOST_CHECK(h.is_valid());
 
-   return 0;
-}
+        application::handler<>::callback *hcb = nullptr;
+        BOOST_CHECK(h.get(hcb));
+        BOOST_CHECK((*hcb)());
+    }
 
-
-
-
+BOOST_AUTO_TEST_SUITE_END()

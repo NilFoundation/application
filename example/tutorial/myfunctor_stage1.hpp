@@ -20,24 +20,20 @@ using namespace boost;
 //[tutorials1
 
 /*<< Your application functor class >>*/
-class myapp
-{
+class myapp {
 public:
 
-   myapp(application::context& context)
-      : context_(context)
-   {
-   }
+    myapp(application::context &context) : context_(context) {
+    }
 
-   /*<< Application operator, this is like a 'main' function >>*/
-   int operator()()
-   {
-      // your application logic here!
-      return 0;
-   }
+    /*<< Application operator, this is like a 'main' function >>*/
+    int operator()() {
+        // your application logic here!
+        return 0;
+    }
 
 private:
-   application::context& context_;
+    application::context &context_;
 
 };
 

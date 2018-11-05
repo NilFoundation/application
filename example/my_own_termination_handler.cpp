@@ -27,111 +27,98 @@
 using namespace boost::application;
 
 //[myownsig
-class myapp
-{
+class myapp {
 public:
-  
-   myapp(context& context)
-      : context_(context)
-   {
-   }
 
-   ~myapp()
-   {
-      std::cout << "~myapp()" << std::endl;
-   }
+    myapp(context &context) : context_(context) {
+    }
 
-   void work_thread()
-   {
-      while(1)
-      {
-         boost::this_thread::sleep(boost::posix_time::seconds(2));
-         std::cout << "running" << std::endl;
-      }
-   }
+    ~myapp() {
+        std::cout << "~myapp()" << std::endl;
+    }
 
-   // param
-   int operator()()
-   {
-      std::cout << "operator()" << std::endl;
-	  
-      // launch a work thread
-      boost::thread thread(boost::bind(&myapp::work_thread, this));
-	  
-      context_.find<wait_for_termination_request>()->wait();
+    void work_thread() {
+        while (1) {
+            boost::this_thread::sleep(boost::posix_time::seconds(2));
+            std::cout << "running" << std::endl;
+        }
+    }
 
-      return 0;
-   }
+    // param
+    int operator()() {
+        std::cout << "operator()" << std::endl;
+
+        // launch a work thread
+        boost::thread
+        thread(boost::bind(&myapp::work_thread, this));
+
+        context_.find<wait_for_termination_request>()->wait();
+
+        return 0;
+    }
 
 private:
 
-   context& context_;
+    context &context_;
 
 };
 
 /*<< Inheriting of signal_manager >>*/
-class my_signal_manager : public signal_manager
-{
+class my_signal_manager : public signal_manager {
 public:
 
-   /*<< Customize SIGNALS bind >>*/
-   my_signal_manager(context &context)
-      : signal_manager(context)
-   {
-      handler<>::callback cb
-         = boost::bind(&my_signal_manager::stop, this);
+    /*<< Customize SIGNALS bind >>*/
+    my_signal_manager(context &context) : signal_manager(context) {
+        handler<>::callback cb = boost::bind(&my_signal_manager::stop, this);
 
-      // define my own signal / handler
+        // define my own signal / handler
 #if defined( BOOST_WINDOWS_API )
-      bind(SIGINT,  cb); // CTRL-C (2)
-#elif defined( BOOST_POSIX_API )      
-      /*<< Define signal bind >>*/
-      bind(SIGUSR2, cb); 
-#endif
-
-   }
-
-   /*<< Define signal callback >>*/
-   bool stop()
-   {
-      BOOST_APPLICATION_FEATURE_SELECT
-
-#if defined( BOOST_WINDOWS_API )
-      std::cout << "exiting..." << std::endl;
+        bind(SIGINT,  cb); // CTRL-C (2)
 #elif defined( BOOST_POSIX_API )
-      std::ofstream my_log_file;
-      my_log_file.open((context_.find<
-         path>()->executable_path().string() + "/log_stop.txt").c_str());
-      my_log_file << ":0)-" << std::endl;
-      my_log_file.close();
+        /*<< Define signal bind >>*/
+        bind(SIGUSR2, cb);
 #endif
 
-      shared_ptr<wait_for_termination_request> th 
-         = context_.find<wait_for_termination_request>();
+    }
 
-      th->proceed();
+    /*<< Define signal callback >>*/
+    bool stop() {
+        BOOST_APPLICATION_FEATURE_SELECT
 
-      return false;
-   }
+#if defined( BOOST_WINDOWS_API )
+        std::cout << "exiting..." << std::endl;
+#elif defined( BOOST_POSIX_API )
+        std::ofstream my_log_file;
+        my_log_file.open((context_.find<
+           path>()->executable_path().string() + "/log_stop.txt").c_str());
+        my_log_file << ":0)-" << std::endl;
+        my_log_file.close();
+#endif
+
+        shared_ptr <wait_for_termination_request> th = context_.find<wait_for_termination_request>();
+
+        th->proceed();
+
+        return false;
+    }
 
 };
 
 // main
 
-int main(int argc, char *argv[])
-{   
-   context app_context;
-   myapp app(app_context);
+int main(int argc, char *argv[]) {
+    context app_context;
+    myapp app(app_context);
 
-   // we will customize our signals behaviour
-   /*<< Instantiate your custon signal manager. >>*/
-   my_signal_manager sm(app_context);
-   
+    // we will customize our signals behaviour
+    /*<< Instantiate your custon signal manager. >>*/
+    my_signal_manager sm(app_context);
+
 #if defined( BOOST_WINDOWS_API )
-   /*<< Pass 'custon signal manager (sm)' to launch function. >>*/
-   return launch<common>(app, sm, app_context);
+    /*<< Pass 'custon signal manager (sm)' to launch function. >>*/
+    return launch<common>(app, sm, app_context);
 #elif defined( BOOST_POSIX_API )
-   return launch<server>(app, sm, app_context);
+    return launch<server>(app, sm, app_context);
 #endif
 
 }

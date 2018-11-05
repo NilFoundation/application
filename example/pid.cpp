@@ -22,42 +22,36 @@
 using namespace boost;
 
 //[pid
-class myapp
-{
+class myapp {
 public:
 
-   myapp(application::context& context)
-      : context_(context)
-   {
-   }
+    myapp(application::context &context) : context_(context) {
+    }
 
-   // param
-   int operator()()
-   {
-      std::cout << "Test" << std::endl;
+    // param
+    int operator()() {
+        std::cout << "Test" << std::endl;
 
-      boost::shared_ptr<application::process_id> pid 
-         = context_.find<application::process_id>();
+        boost::shared_ptr <application::process_id> pid = context_.find<application::process_id>();
 
-      std::cout << "pid : " << pid->pid()      << std::endl;
+        std::cout << "pid : " << pid->pid() << std::endl;
 
 
-      return 0;
-   }
+        return 0;
+    }
 
 private:
-   application::context& context_;
+    application::context &context_;
 
 };
 
 // main
 
-int main(int argc, char *argv[])
-{      
-   application::context app_context;
-   myapp app(app_context);
+int main(int argc, char *argv[]) {
+    application::context app_context;
+    myapp app(app_context);
 
-   return application::launch<application::common>(app, app_context);
+    return application::launch<application::common>(app, app_context);
 }
 
 //]

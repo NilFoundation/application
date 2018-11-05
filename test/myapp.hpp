@@ -6,15 +6,15 @@
 using namespace boost;
 
 inline application::global_context_ptr this_application() {
-   return application::global_context::get();
+    return application::global_context::get();
 }
 
-class myapp
-{
+class myapp {
 public:
-   myapp(void);
-   ~myapp(void);
+    myapp(void);
 
-   int operator()(void);
+    ~myapp(void);
+
+    int operator()(void);
 };
 

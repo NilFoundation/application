@@ -64,236 +64,215 @@ using namespace boost;
 
 BOOST_APPLICATION_FEATURE_SELECT
 
-class myapp
-{
+class myapp {
 
 public:
 
-   myapp(application::context& context)
-      : context_(context)
-   {
-   }
+    myapp(application::context &context) : context_(context) {
+    }
 
-   void worker()
-   {
-      // my application behaviour
+    void worker() {
+        // my application behaviour
 
-      // dump args
+        // dump args
 
-      std::vector<std::string> arg_vector =
-         context_.find<application::args>()->arg_vector();
+        std::vector <std::string> arg_vector = context_.find<application::args>()->arg_vector();
 
-      my_log_file_ << "-----------------------------" << std::endl;
-      my_log_file_ << "---------- Arg List ---------" << std::endl;
-      my_log_file_ << "-----------------------------" << std::endl;
+        my_log_file_ << "-----------------------------" << std::endl;
+        my_log_file_ << "---------- Arg List ---------" << std::endl;
+        my_log_file_ << "-----------------------------" << std::endl;
 
-      // only print args on screen
-      for(std::vector<std::string>::iterator it = arg_vector.begin();
-         it != arg_vector.end(); ++it) {
-         my_log_file_ << *it << std::endl;
-      }
+        // only print args on screen
+        for (std::vector<std::string>::iterator it = arg_vector.begin(); it != arg_vector.end(); ++it) {
+            my_log_file_ << *it << std::endl;
+        }
 
-      my_log_file_ << "-----------------------------" << std::endl;
+        my_log_file_ << "-----------------------------" << std::endl;
 
-      // run logic
+        // run logic
 
-      application::csbl::shared_ptr<application::status> st =
-         context_.find<application::status>();
+        application::csbl::shared_ptr <application::status> st = context_.find<application::status>();
 
-      int count = 0;
-      while(st->state() != application::status::stopped)
-      {
-         boost::this_thread::sleep(boost::posix_time::seconds(1));
+        int count = 0;
+        while (st->state() != application::status::stopped) {
+            boost::this_thread::sleep(boost::posix_time::seconds(1));
 
-         if(st->state() == application::status::paused)
-            my_log_file_ << count++ << ", paused..." << std::endl;
-         else
-            my_log_file_ << count++ << ", running..." << std::endl;
-      }
-   }
+            if (st->state() == application::status::paused) {
+                my_log_file_ << count++ << ", paused..." << std::endl;
+            } else {
+                my_log_file_ << count++ << ", running..." << std::endl;
+            }
+        }
+    }
 
-   // param
-   int operator()()
-   {
-      std::string logfile
-         = context_.find<application::path>()->executable_path().string() + "/log.txt";
+    // param
+    int operator()() {
+        std::string logfile = context_.find<application::path>()->executable_path().string() + "/log.txt";
 
-      my_log_file_.open(logfile.c_str());
-      my_log_file_ << "Start Log..." << std::endl;
+        my_log_file_.open(logfile.c_str());
+        my_log_file_ << "Start Log..." << std::endl;
 
-      // launch a work thread
-      application::csbl::thread thread(&myapp::worker, this);
+        // launch a work thread
+        application::csbl::thread thread(&myapp::worker, this);
 
-      context_.find<application::wait_for_termination_request>()->wait();
+        context_.find<application::wait_for_termination_request>()->wait();
 
-      // to run direct
-      // worker(&context);
+        // to run direct
+        // worker(&context);
 
-      return 0;
-   }
+        return 0;
+    }
 
-   // windows/posix
+    // windows/posix
 
-   bool stop()
-   {
-      my_log_file_ << "Stoping my application..." << std::endl;
-      my_log_file_.close();
+    bool stop() {
+        my_log_file_ << "Stoping my application..." << std::endl;
+        my_log_file_.close();
 
-      return true; // return true to stop, false to ignore
-   }
+        return true; // return true to stop, false to ignore
+    }
 
-   // windows specific (ignored on posix)
+    // windows specific (ignored on posix)
 
-   bool pause()
-   {
-      my_log_file_ << "Pause my application..." << std::endl;
-      return true; // return true to pause, false to ignore
-   }
+    bool pause() {
+        my_log_file_ << "Pause my application..." << std::endl;
+        return true; // return true to pause, false to ignore
+    }
 
-   bool resume()
-   {
-      my_log_file_ << "Resume my application..." << std::endl;
-      return true; // return true to resume, false to ignore
-   }
+    bool resume() {
+        my_log_file_ << "Resume my application..." << std::endl;
+        return true; // return true to resume, false to ignore
+    }
 
 private:
 
-   std::ofstream my_log_file_;
+    std::ofstream my_log_file_;
 
-   application::context& context_;
+    application::context &context_;
 
 };
 
 // my setup code for windows service
 
-bool setup(application::context& context)
-{
-   strict_lock<application::aspect_map> guard(context);
+bool setup(application::context &context) {
+    strict_lock <application::aspect_map> guard(context);
 
-   application::csbl::shared_ptr<application::args> myargs
-      = context.find<application::args>(guard);
+    application::csbl::shared_ptr <application::args> myargs = context.find<application::args>(guard);
 
-   application::csbl::shared_ptr<application::path> mypath
-      = context.find<application::path>(guard);
+    application::csbl::shared_ptr <application::path> mypath = context.find<application::path>(guard);
 
 // provide setup for windows service
 #if defined(BOOST_WINDOWS_API)
 #if !defined(__MINGW32__)
 
-   // get our executable path name
-   boost::filesystem::path executable_path_name = mypath->executable_path_name();
+    // get our executable path name
+    boost::filesystem::path executable_path_name = mypath->executable_path_name();
 
-   // define our simple installation schema options
-   po::options_description install("service options");
-   install.add_options()
-      ("help", "produce a help message")
-      (",i", "install service")
-      (",u", "unistall service")
-      ("name", po::value<std::string>()->default_value(mypath->executable_name().stem().string()), "service name")
-      ("display", po::value<std::string>()->default_value(""), "service display name (optional, installation only)")
-      ("description", po::value<std::string>()->default_value(""), "service description (optional, installation only)")
-      ;
+    // define our simple installation schema options
+    po::options_description install("service options");
+    install.add_options()
+       ("help", "produce a help message")
+       (",i", "install service")
+       (",u", "unistall service")
+       ("name", po::value<std::string>()->default_value(mypath->executable_name().stem().string()), "service name")
+       ("display", po::value<std::string>()->default_value(""), "service display name (optional, installation only)")
+       ("description", po::value<std::string>()->default_value(""), "service description (optional, installation only)")
+       ;
 
-      po::variables_map vm;
-      po::store(po::parse_command_line(myargs->argc(), myargs->argv(), install), vm);
-      boost::system::error_code ec;
+       po::variables_map vm;
+       po::store(po::parse_command_line(myargs->argc(), myargs->argv(), install), vm);
+       boost::system::error_code ec;
 
-      if (vm.count("help"))
-      {
-         std::cout << install << std::endl;
-         return true;
-      }
+       if (vm.count("help"))
+       {
+          std::cout << install << std::endl;
+          return true;
+       }
 
-      if (vm.count("-i"))
-      {
-         application::example::install_windows_service(
-         application::setup_arg(vm["name"].as<std::string>()),
-         application::setup_arg(vm["display"].as<std::string>()),
-         application::setup_arg(vm["description"].as<std::string>()),
-         application::setup_arg(executable_path_name)).install(ec);
+       if (vm.count("-i"))
+       {
+          application::example::install_windows_service(
+          application::setup_arg(vm["name"].as<std::string>()),
+          application::setup_arg(vm["display"].as<std::string>()),
+          application::setup_arg(vm["description"].as<std::string>()),
+          application::setup_arg(executable_path_name)).install(ec);
 
-         std::cout << ec.message() << std::endl;
+          std::cout << ec.message() << std::endl;
 
-         return true;
-      }
+          return true;
+       }
 
-      if (vm.count("-u"))
-      {
-         application::example::uninstall_windows_service(
-            application::setup_arg(vm["name"].as<std::string>()),
-            application::setup_arg(executable_path_name)).uninstall(ec);
+       if (vm.count("-u"))
+       {
+          application::example::uninstall_windows_service(
+             application::setup_arg(vm["name"].as<std::string>()),
+             application::setup_arg(executable_path_name)).uninstall(ec);
 
-         std::cout << ec.message() << std::endl;
+          std::cout << ec.message() << std::endl;
 
-         return true;
-      }
+          return true;
+       }
 
 #endif
 #endif
 
-   return false;
+    return false;
 }
 // main
 
-int main(int argc, char *argv[])
-{
+int main(int argc, char *argv[]) {
 
-   application::context app_context;
-   myapp app(app_context);
+    application::context app_context;
+    myapp app(app_context);
 
-   // my server aspects
+    // my server aspects
 
-   app_context.insert<application::args>(
-      application::csbl::make_shared<application::args>(argc, argv));
+    app_context.insert<application::args>(application::csbl::make_shared<application::args>(argc, argv));
 
-   // add termination handler
+    // add termination handler
 
-   application::handler<>::callback termination_callback
-      = boost::bind(&myapp::stop, &app);
+    application::handler<>::callback termination_callback = boost::bind(&myapp::stop, &app);
 
-   app_context.insert<application::termination_handler>(
-      application::csbl::make_shared<application::termination_handler_default_behaviour>(termination_callback));
+    app_context.insert<application::termination_handler>(
+            application::csbl::make_shared<application::termination_handler_default_behaviour>(termination_callback));
 
-   // To  "pause/resume" works, is required to add the 2 handlers.
+    // To  "pause/resume" works, is required to add the 2 handlers.
 
 #if defined(BOOST_WINDOWS_API)
 
-   // windows only : add pause handler
+    // windows only : add pause handler
 
-   application::handler<>::callback pause_callback
-      = boost::bind(&myapp::pause, &app);
+    application::handler<>::callback pause_callback
+       = boost::bind(&myapp::pause, &app);
 
-   app_context.insert<application::pause_handler>(
-      application::csbl::make_shared<application::pause_handler_default_behaviour>(pause_callback));
+    app_context.insert<application::pause_handler>(
+       application::csbl::make_shared<application::pause_handler_default_behaviour>(pause_callback));
 
-   // windows only : add resume handler
+    // windows only : add resume handler
 
-   application::handler<>::callback resume_callback
-      = boost::bind(&myapp::resume, &app);
+    application::handler<>::callback resume_callback
+       = boost::bind(&myapp::resume, &app);
 
-   app_context.insert<application::resume_handler>(
-      application::csbl::make_shared<application::resume_handler_default_behaviour>(resume_callback));
+    app_context.insert<application::resume_handler>(
+       application::csbl::make_shared<application::resume_handler_default_behaviour>(resume_callback));
 
 #endif
 
-   // check if we need setup
+    // check if we need setup
 
-   if(setup(app_context))
-   {
-      std::cout << "[I] Setup changed the current configuration." << std::endl;
-      return 0;
-   }
+    if (setup(app_context)) {
+        std::cout << "[I] Setup changed the current configuration." << std::endl;
+        return 0;
+    }
 
-   // my server instantiation
+    // my server instantiation
 
-   boost::system::error_code ec;
-   int result = application::launch<application::server>(app, app_context, ec);
+    boost::system::error_code ec;
+    int result = application::launch<application::server>(app, app_context, ec);
 
-   if(ec)
-   {
-      std::cout << "[E] " << ec.message()
-         << " <" << ec.value() << "> " << std::endl;
-   }
+    if (ec) {
+        std::cout << "[E] " << ec.message() << " <" << ec.value() << "> " << std::endl;
+    }
 
-   return result;
+    return result;
 }

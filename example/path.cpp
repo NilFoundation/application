@@ -23,66 +23,60 @@
 using namespace boost;
 
 //[path
-class myapp
-{
+class myapp {
 public:
 
-   myapp(application::context& context)
-      : context_(context)
-   {
-   }
+    myapp(application::context &context) : context_(context) {
+    }
 
-   // param
-   int operator()()
-   {
-      std::cout << "Test" << std::endl;
-      
-	    /*<< Use 'path' aspect on your logic. Note that path is added by default >>*/ 
-      
-      boost::shared_ptr<application::path> path 
-         = context_.find<application::path>();
+    // param
+    int operator()() {
+        std::cout << "Test" << std::endl;
 
-      std::cout << "executable_path      : " << path->executable_path()      << std::endl;
-      std::cout << "current_path         : " << path->current_path()         << std::endl;
-      std::cout << "executable_name      : " << path->executable_name()      << std::endl;
-      std::cout << "executable_full_name : " << path->executable_full_name() << std::endl;
-      std::cout << "executable_path_name : " << path->executable_path_name() << std::endl;
-      std::cout << "home_path            : " << path->home_path()	     << std::endl;
-      std::cout << "app_data_path        : " << path->app_data_path()	     << std::endl;
-      std::cout << "config_path          : " << path->config_path()          << std::endl;
-      std::cout << "temp_path            : " << path->temp_path()            << std::endl;
+        /*<< Use 'path' aspect on your logic. Note that path is added by default >>*/
 
-      // e.g.: "executable_path      : E:\project.boost.app.v4\libs\application\vc11ide\Debug"
-      // e.g.: "current_path         : E:\project.boost.app.v4\libs\application\vc11ide"
-      // e.g.: "executable_name      : path"
-      // e.g.: "executable_full_name : path.exe"
-      // e.g.: "executable_path_name : E:\project.boost.app.v4\libs\application\vc11ide\Debug\path.exe"
-      // e.g.: "home_path            : C:\Users\somebody"
-      // e.g.: "app_data_path        : C:\Users\somebody\AppData\Roaming"
-      // e.g.: "config_path          : C:\Users\somebody\AppData\Roaming"
-      // e.g.: "temp_path            : C:\Users\somebody\Local\Temp"
+        boost::shared_ptr <application::path> path = context_.find<application::path>();
 
-      return 0;
-     
-   }
+        std::cout << "executable_path      : " << path->executable_path() << std::endl;
+        std::cout << "current_path         : " << path->current_path() << std::endl;
+        std::cout << "executable_name      : " << path->executable_name() << std::endl;
+        std::cout << "executable_full_name : " << path->executable_full_name() << std::endl;
+        std::cout << "executable_path_name : " << path->executable_path_name() << std::endl;
+        std::cout << "home_path            : " << path->home_path() << std::endl;
+        std::cout << "app_data_path        : " << path->app_data_path() << std::endl;
+        std::cout << "config_path          : " << path->config_path() << std::endl;
+        std::cout << "temp_path            : " << path->temp_path() << std::endl;
+
+        // e.g.: "executable_path      : E:\project.boost.app.v4\libs\application\vc11ide\Debug"
+        // e.g.: "current_path         : E:\project.boost.app.v4\libs\application\vc11ide"
+        // e.g.: "executable_name      : path"
+        // e.g.: "executable_full_name : path.exe"
+        // e.g.: "executable_path_name : E:\project.boost.app.v4\libs\application\vc11ide\Debug\path.exe"
+        // e.g.: "home_path            : C:\Users\somebody"
+        // e.g.: "app_data_path        : C:\Users\somebody\AppData\Roaming"
+        // e.g.: "config_path          : C:\Users\somebody\AppData\Roaming"
+        // e.g.: "temp_path            : C:\Users\somebody\Local\Temp"
+
+        return 0;
+
+    }
 
 private:
-   application::context& context_;
+    application::context &context_;
 
 };
 
 // main
 
-int main(int argc, char *argv[])
-{      
-   application::context app_context;
-   //myapp app(app_context);
+int main(int argc, char *argv[]) {
+    application::context app_context;
+    //myapp app(app_context);
 
-   // std::cout <<  boost::has_trivial_copy<application::context>::value << std::endl; 
+    // std::cout <<  boost::has_trivial_copy<application::context>::value << std::endl;
 
-   application::auto_handler<myapp> app(app_context);
+    application::auto_handler <myapp> app(app_context);
 
-   return application::launch<application::common>(app, app_context);
+    return application::launch<application::common>(app, app_context);
 }
 
 //]

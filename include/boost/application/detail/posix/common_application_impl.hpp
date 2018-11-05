@@ -25,51 +25,45 @@
 #include <boost/thread/thread.hpp>
 #include <boost/lambda/lambda.hpp>
 
-namespace boost { namespace application {
+namespace boost {
+    namespace application {
 
-   template <typename CharType>
-   class common_application_impl_ : public application_impl
-   {
-   public:
+        template<typename CharType>
+        class common_application_impl_ : public application_impl {
+        public:
 
-      typedef csbl::function< int (void) > mainop;
+            typedef csbl::function<int(void)> mainop;
 
-      // string types to be used internaly to handle unicode on windows
-      typedef CharType char_type;
-      typedef std::basic_string<char_type> string_type;
+            // string types to be used internaly to handle unicode on windows
+            typedef CharType char_type;
+            typedef std::basic_string <char_type> string_type;
 
-      common_application_impl_(const mainop &main,
-                               signal_binder &sb,
-                               application::context &context,
-                               boost::system::error_code& ec)
-         : application_impl(context)
-         , main_(main)
-      {
-         sb.start();
-      }
+            common_application_impl_(const mainop &main, signal_binder &sb, application::context &context,
+                                     boost::system::error_code &ec) : application_impl(context), main_(main) {
+                sb.start();
+            }
 
-      virtual ~common_application_impl_()
-      {
-      }
+            virtual ~common_application_impl_() {
+            }
 
-      int run()
-      {
-          return main_(); 
-      }
+            int run() {
+                return main_();
+            }
 
-   private:
-      mainop main_;
+        private:
+            mainop main_;
 
-   };
+        };
 
-   /////////////////////////////////////////////////////////////////////////////
-   // server_application_impl
-   //
+        /////////////////////////////////////////////////////////////////////////////
+        // server_application_impl
+        //
 
-   // args versions for Multi-Byte string and Unicode string
-   typedef common_application_impl_<character_types::char_type> common_application_impl;
-   // wchar_t / char
+        // args versions for Multi-Byte string and Unicode string
+        typedef common_application_impl_<character_types::char_type> common_application_impl;
+        // wchar_t / char
 
-}} // boost::application
+    }
+} // boost::application
 
 #endif // BOOST_APPLICATION_COMMON_APPLICATION_IMPL_HPP

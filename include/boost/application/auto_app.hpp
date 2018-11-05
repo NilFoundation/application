@@ -31,169 +31,184 @@
 #include <boost/application/auto_handler.hpp>
 #include <boost/application/aspects/args.hpp>
 
-namespace boost { namespace application { 
+namespace boost {
+    namespace application {
 
 
+        /*!
+         * @brief This class tie a application and context, and simplifies the
+         *        creation of an application.
+         *
+         *        The default context is not global context, if you desire
+         *        to use global you need specify as second template param,
+         *        check example.
+         *
+         *        Using it you can start application with one line.
+         *
+         * \b Examples:
+         * @code
+         * launch< common, auto_app<myapp> >();
+         * launch< common, auto_app<myapp, global_context> >();
+         * @endcode
+         *
+         */
 
+        struct no_custom_type {
+        };
 
-   /*!
-    * \brief This class tie a application and context, and simplifies the 
-    *        creation of an application.
-    *
-    *        The default context is not global context, if you desire 
-    *        to use global you need specify as second template param,
-    *        check example.
-    *
-    *        Using it you can start application with one line.
-    *
-    * \b Examples:
-    * \code
-    * launch< common, auto_app<myapp> >();
-    * launch< common, auto_app<myapp, global_context> >();
-    * \endcode
-    *        
-    */
+        template<typename ApplicationMode, typename Application, typename Context = context,
+                typename CustomType = no_custom_type>
+        struct auto_app : noncopyable {
 
-   struct no_custom_type {};
+            static int start(system::error_code &ec) {
 
-   template <typename ApplicationMode, typename Application, typename Context = context, typename CustomType = no_custom_type>
-   struct auto_app : noncopyable {
+                if (boost::is_same<Context, global_context>::value) {
+                    global_context_ptr cxt = global_context::create(ec);
 
-      static int start(system::error_code& ec) {
+                    if (ec) {
+                        return 1;
+                    }
 
-         if(boost::is_same<Context, global_context>::value) {
-            global_context_ptr cxt = global_context::create(ec);
+                    auto_handler<Application> app(cxt);
+                    int ret = launch<ApplicationMode>(app, cxt, ec);
 
-            if(ec) return 1;
+                    global_context::destroy();
+                    return ret;
+                }
 
-            auto_handler<Application> app(cxt);
-            int ret = launch<ApplicationMode>(app, cxt, ec);
+                context cxt;
+                auto_handler<Application> dapp(cxt);
+                return launch<ApplicationMode>(dapp, cxt, ec);
+            }
 
-            global_context::destroy();
-            return ret;
-         }
+            static int start() {
 
-         context cxt;
-         auto_handler<Application> dapp(cxt);
-         return launch<ApplicationMode>(dapp, cxt, ec);
-      }
+                system::error_code ec;
+                int ret = 0;
+                ret = auto_app<ApplicationMode, Application, Context, CustomType>::start(ec);
 
-      static int start() {
+                if (ec) {
+                    BOOST_APPLICATION_THROW_LAST_SYSTEM_ERROR_USING_MY_EC("launch() failed", ec);
+                }
 
-         system::error_code ec; int ret = 0;
-         ret = auto_app<ApplicationMode, Application, Context, CustomType>::start(ec);
+                return ret;
+            }
 
-         if(ec) BOOST_APPLICATION_THROW_LAST_SYSTEM_ERROR_USING_MY_EC(
-            "launch() failed", ec);
+            static int start(const uuids::uuid &appid, system::error_code &ec) {
 
-         return ret;
-      }
+                if (boost::is_same<Context, global_context>::value) {
+                    global_context_ptr cxt = global_context::create(ec);
 
-      static int start(uuids::uuid& appid, system::error_code& ec) {
+                    if (ec) {
+                        return 1;
+                    }
 
-        if(boost::is_same<Context, global_context>::value) {
-            global_context_ptr cxt = global_context::create(ec);
+                    auto_handler<Application> app(cxt, appid);
+                    int ret = launch<ApplicationMode>(app, cxt, ec);
 
-            if(ec) return 1;
+                    global_context::destroy();
+                    return ret;
+                }
 
-            auto_handler<Application> app(cxt, appid);
-            int ret = launch<ApplicationMode>(app, cxt, ec);
+                context cxt;
+                auto_handler<Application> dapp(cxt, appid);
+                return launch<ApplicationMode>(dapp, cxt, ec);
 
-            global_context::destroy();
-            return ret;
-         }
+            }
 
-         context cxt;
-         auto_handler<Application> dapp(cxt, appid);
-         return launch<ApplicationMode>(dapp, cxt, ec);
-         
-      }
+            static int start(const uuids::uuid &appid) {
 
-      static int start(uuids::uuid& appid) {
+                system::error_code ec;
+                int ret = 0;
 
-         system::error_code ec; int ret = 0;
+                ret = auto_app<ApplicationMode, Application, Context, CustomType>::start(appid, ec);
 
-         ret = auto_app<ApplicationMode, Application, Context, CustomType>::start(appid, ec);
+                if (ec) {
+                    BOOST_APPLICATION_THROW_LAST_SYSTEM_ERROR_USING_MY_EC("launch() failed", ec);
+                }
 
-         if(ec) BOOST_APPLICATION_THROW_LAST_SYSTEM_ERROR_USING_MY_EC(
-	          "launch() failed", ec);
+                return ret;
+            }
 
-         return ret;
-      } 
+            static int start(int argc, character_types::char_type *argv[], system::error_code &ec) {
+                if (boost::is_same<Context, global_context>::value) {
+                    global_context_ptr cxt = global_context::create(ec);
 
-      static int start(int argc, character_types::char_type *argv[], system::error_code& ec) {
-            if(boost::is_same<Context, global_context>::value) {
-            global_context_ptr cxt = global_context::create(ec);
+                    if (ec) {
+                        return 1;
+                    }
 
-            if(ec) return 1;
+                    cxt->insert<args>(csbl::make_shared<args>(argc, argv));
 
-            cxt->insert<args>(
-               csbl::make_shared<args>(argc, argv));  
+                    auto_handler<Application> app(cxt);
+                    int ret = launch<ApplicationMode>(app, cxt, ec);
 
-            auto_handler<Application> app(cxt);
-            int ret = launch<ApplicationMode>(app, cxt, ec);
+                    global_context::destroy();
+                    return ret;
+                }
 
-            global_context::destroy();
-            return ret;
-         }
+                context cxt;
 
-         context cxt;
+                cxt.insert<args>(csbl::make_shared<args>(argc, argv));
 
-         cxt.insert<args>(
-            csbl::make_shared<args>(argc, argv));  
+                auto_handler<Application> dapp(cxt);
+                return launch<ApplicationMode>(dapp, cxt, ec);
+            }
 
-         auto_handler<Application> dapp(cxt);
-         return launch<ApplicationMode>(dapp, cxt, ec);
-      }
+            static int start(int argc, character_types::char_type *argv[]) {
 
-      static int start(int argc, character_types::char_type *argv[]) {
+                system::error_code ec;
+                int ret = 0;
+                ret = auto_app<ApplicationMode, Application, Context, CustomType>::start(argc, argv, ec);
 
-         system::error_code ec; int ret = 0;
-         ret = auto_app<ApplicationMode, Application, Context, CustomType>::start(argc, argv, ec);
+                if (ec) {
+                    BOOST_APPLICATION_THROW_LAST_SYSTEM_ERROR_USING_MY_EC("launch() failed", ec);
+                }
 
-         if(ec) BOOST_APPLICATION_THROW_LAST_SYSTEM_ERROR_USING_MY_EC(
-	          "launch() failed", ec);
+                return ret;
+            }
 
-         return ret;
-      }
+            static int start(int argc, character_types::char_type *argv[], const uuids::uuid &appid,
+                             system::error_code &ec) {
+                if (boost::is_same<Context, global_context>::value) {
+                    global_context_ptr cxt = global_context::create(ec);
 
-      static int start(int argc, character_types::char_type *argv[], uuids::uuid& appid, system::error_code& ec) {
-          if(boost::is_same<Context, global_context>::value) {
-            global_context_ptr cxt = global_context::create(ec);
+                    if (ec) {
+                        return 1;
+                    }
 
-            if(ec) return 1;
+                    cxt->insert<args>(csbl::make_shared<args>(argc, argv));
 
-            cxt->insert<args>(
-               csbl::make_shared<args>(argc, argv));  
+                    auto_handler<Application> app(cxt, appid);
+                    int ret = launch<ApplicationMode>(app, cxt, ec);
 
-            auto_handler<Application> app(cxt, appid);
-            int ret = launch<ApplicationMode>(app, cxt, ec);
+                    global_context::destroy();
+                    return ret;
+                }
 
-            global_context::destroy();
-            return ret;
-         }
+                context cxt;
 
-         context cxt;
+                cxt.insert<args>(csbl::make_shared<args>(argc, argv));
 
-         cxt.insert<args>(
-            csbl::make_shared<args>(argc, argv));  
+                auto_handler<Application> dapp(cxt, appid);
+                return launch<ApplicationMode>(dapp, cxt, ec);
+            }
 
-         auto_handler<Application> dapp(cxt, appid);
-         return launch<ApplicationMode>(dapp, cxt, ec);
-      }
+            static int start(int argc, character_types::char_type *argv[], const uuids::uuid &appid) {
 
-      static int start(int argc, character_types::char_type *argv[], uuids::uuid& appid) {
+                system::error_code ec;
+                int ret = 0;
+                ret = auto_app<ApplicationMode, Application, Context, CustomType>::start(argc, argv, appid, ec);
 
-         system::error_code ec; int ret = 0;
-         ret = auto_app<ApplicationMode, Application, Context, CustomType>::start(argc, argv, appid, ec);
+                if (ec) {
+                    BOOST_APPLICATION_THROW_LAST_SYSTEM_ERROR_USING_MY_EC("launch() failed", ec);
+                }
 
-         if(ec) BOOST_APPLICATION_THROW_LAST_SYSTEM_ERROR_USING_MY_EC(
-	          "launch() failed", ec);
+                return ret;
+            }
+        };
 
-         return ret;
-      }
-   };
-
-}} // boost::application
+    }
+} // boost::application
 
 #endif // BOOST_APPLICATION_AUTO_HANDLER_HPP

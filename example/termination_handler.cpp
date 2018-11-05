@@ -24,93 +24,82 @@
 
 using namespace boost::application;
 
-class myapp
-{
+class myapp {
 public:
 
-  myapp(context& context)
-      : context_(context)
-   {
-   }
+    myapp(context &context) : context_(context) {
+    }
 
-   ~myapp()
-   {
-      std::cout << "~myapp()" << std::endl;
-   }
+    ~myapp() {
+        std::cout << "~myapp()" << std::endl;
+    }
 
-   void work_thread()
-   {
-      while(1)
-      {
-         boost::this_thread::sleep(boost::posix_time::seconds(2));
-         std::cout << "running" << std::endl;
-      }
-   }
+    void work_thread() {
+        while (1) {
+            boost::this_thread::sleep(boost::posix_time::seconds(2));
+            std::cout << "running" << std::endl;
+        }
+    }
 
-   // param
-   int operator()()
-   {
-      std::cout << "operator()" << std::endl;
+    // param
+    int operator()() {
+        std::cout << "operator()" << std::endl;
 
-	  // using [state]
+        // using [state]
 
-      /*
-      std::shared_ptr<status> state =
-         context.get_aspect<status>();
+        /*
+        std::shared_ptr<status> state =
+           context.get_aspect<status>();
 
-      while(state->state() != status::stopped)
-      {
-         boost::this_thread::sleep(boost::posix_time::seconds(2));
-         std::cout << "running" << std::endl;
-      }
-      */
+        while(state->state() != status::stopped)
+        {
+           boost::this_thread::sleep(boost::posix_time::seconds(2));
+           std::cout << "running" << std::endl;
+        }
+        */
 
-      // or using [wait_for_termination_request]
+        // or using [wait_for_termination_request]
 
-      // launch a work thread
-      boost::thread thread(boost::bind(&myapp::work_thread, this));
+        // launch a work thread
+        boost::thread
+        thread(boost::bind(&myapp::work_thread, this));
 
-      context_.find<wait_for_termination_request>()->wait();
+        context_.find<wait_for_termination_request>()->wait();
 
-      return 0;
-   }
+        return 0;
+    }
 
-   bool stop()
-   {
-      char type;
-      do
-      {
-         std::cout << "Do you want to exit? [y/n]" << std::endl;
-         std::cin >> type;
-      }
-      while( !std::cin.fail() && type!='y' && type!='n' );
+    bool stop() {
+        char type;
+        do {
+            std::cout << "Do you want to exit? [y/n]" << std::endl;
+            std::cin >> type;
+        } while (!std::cin.fail() && type != 'y' && type != 'n');
 
-      if(type == 'y')
-          // tell to app to continue.
-         return true;
+        if (type == 'y') {
+            // tell to app to continue.
+            return true;
+        }
 
-      // tell to app to exit.
-      return false;
-   }
+        // tell to app to exit.
+        return false;
+    }
 
 private:
 
-   context& context_;
+    context &context_;
 
 };
 
 // main
 
-int main(int argc, char *argv[])
-{
-   context app_context;
-   myapp app(app_context);
+int main(int argc, char *argv[]) {
+    context app_context;
+    myapp app(app_context);
 
-   handler<>::callback stop
-      = boost::bind(&myapp::stop, &app);
+    handler<>::callback stop = boost::bind(&myapp::stop, &app);
 
-   app_context.insert<termination_handler>(
-      boost::make_shared<termination_handler_default_behaviour>(stop));
+    app_context.insert<termination_handler>(boost::make_shared<termination_handler_default_behaviour>(stop));
 
-   return launch<common>(app, app_context);
+    return launch<common>(app, app_context);
 }

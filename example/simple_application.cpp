@@ -23,65 +23,56 @@
 using namespace boost;
 
 /*<<Define application functor class>>*/
-class myapp
-{
+class myapp {
 public:
 
-   /*<<Define the constructor that will receive a application context>>*/
-   myapp(application::context& context)
-      : context_(context)
-   {
-   }
+    /*<<Define the constructor that will receive a application context>>*/
+    myapp(application::context &context) : context_(context) {
+    }
 
-   /*<<Define the application operator>>*/
-   int operator()()
-   {
+    /*<<Define the application operator>>*/
+    int operator()() {
 
-      /*<<Make use of an'aspect'>>*/
-      application::csbl::shared_ptr<application::args> myargs 
-         = context_.find<application::args>();
+        /*<<Make use of an'aspect'>>*/
+        application::csbl::shared_ptr <application::args> myargs = context_.find<application::args>();
 
-      if (myargs)
-      {
-         const std::vector<std::string> &arg_vector = myargs->arg_vector();
+        if (myargs) {
+            const std::vector <std::string> &arg_vector = myargs->arg_vector();
 
-         // only print args on screen
-         for(std::vector<std::string>::const_iterator it = arg_vector.begin(); 
-            it != arg_vector.end(); ++it) {
-            std::cout << *it << std::endl;
-         }
-      }
+            // only print args on screen
+            for (std::vector<std::string>::const_iterator it = arg_vector.begin(); it != arg_vector.end(); ++it) {
+                std::cout << *it << std::endl;
+            }
+        }
 
-      /*<<Add other application logic>>*/
-      // code your application
+        /*<<Add other application logic>>*/
+        // code your application
 
-      return 0;
-   }
+        return 0;
+    }
 
 private:
-   
-   /*<<Application context to hold aspects>>*/
-   application::context& context_;
+
+    /*<<Application context to hold aspects>>*/
+    application::context &context_;
 
 };
 
 // main
 
-int main(int argc, char *argv[])
-{  
+int main(int argc, char *argv[]) {
 
-   /*<<Create a context application aspect pool>>*/   
-   application::context app_context;
+    /*<<Create a context application aspect pool>>*/
+    application::context app_context;
 
-   /*<<Instantiate your application>>*/    
-   myapp app(app_context);
+    /*<<Instantiate your application>>*/
+    myapp app(app_context);
 
-   /*<<Add an aspect for future use. An 'aspect' can be customized, or new aspects can be created>>*/  
-   app_context.insert<application::args>(
-      application::csbl::make_shared<application::args>(argc, argv));
+    /*<<Add an aspect for future use. An 'aspect' can be customized, or new aspects can be created>>*/
+    app_context.insert<application::args>(application::csbl::make_shared<application::args>(argc, argv));
 
-   /*<<Start the application on the desired mode (common, server)>>*/  
-   return application::launch<application::common>(app, app_context);
+    /*<<Start the application on the desired mode (common, server)>>*/
+    return application::launch<application::common>(app, app_context);
 }
 //]
 

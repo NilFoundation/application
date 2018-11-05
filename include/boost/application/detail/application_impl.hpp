@@ -20,28 +20,26 @@
 #include <boost/application/config.hpp>
 #include <boost/application/context.hpp>
 
-namespace boost { namespace application {
+namespace boost {
+    namespace application {
 
-   // share context on modes
-   class application_impl : noncopyable
-   {
-   public:
+        // share context on modes
+        class application_impl : noncopyable {
+        public:
 
-      application_impl(context &cxt)
-         : context_(cxt)
-      {
-      }
+            application_impl(context &cxt) : context_(cxt) {
+            }
 
-      context &get_context()
-      {
-         return context_;
-      }
+            context &get_context() {
+                return context_;
+            }
 
-   protected:
-      context &context_;
+        protected:
+            context &context_;
 
-   };
+        };
 
-}} // boost::application
+    }
+} // boost::application
 
 #endif // BOOST_APPLICATION_DETAIL_APPLICATION_IMPL_HPP

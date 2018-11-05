@@ -7,47 +7,48 @@
 
 #define BOOST_APPLICATION_FEATURE_NS_SELECT_BOOST
 
+#define BOOST_TEST_MODULE simple_server_application_test
+
 #include <iostream>
 #include <boost/application.hpp>
-#include <boost/test/minimal.hpp>
+#include <boost/test/unit_test.hpp>
 
 using namespace boost;
 
-class myapp
-{
+class myapp {
 public:
-   myapp(application::context& context)
-      : context_(context) { }
-   
-   int operator()()
-   {
-      return 0;
-   }
-   
+    myapp(application::context &context) : context_(context) {
+    }
+
+    int operator()() {
+        return 0;
+    }
+
 private:
-   application::context& context_;
+    application::context &context_;
 };
 
-int test_main(int argc, char** argv)
-{   
-   application::context app_context; 
-   myapp app(app_context);
+BOOST_AUTO_TEST_SUITE(simple_server_application_test_suite)
 
-   boost::system::error_code ec;
-   int ret = application::launch<application::server>(app, app_context, ec);
+    BOOST_AUTO_TEST_CASE(test_case) {
+        application::context app_context;
+        myapp app(app_context);
 
-#if defined(BOOST_WINDOWS_API)   
-#if !defined(__MINGW32__)   
-   // 1063 (0x427)
-   // The service process could not connect to the service controller.
-   BOOST_CHECK(ec.value() == 1063);
-   // on windows we need run on SCM
+        boost::system::error_code ec;
+        int ret = application::launch<application::server>(app, app_context, ec);
+
+#if defined(BOOST_WINDOWS_API)
+#if !defined(__MINGW32__)
+        // 1063 (0x427)
+        // The service process could not connect to the service controller.
+        BOOST_CHECK(ec.value() == 1063);
+        // on windows we need run on SCM
 #endif
 #else
-   BOOST_CHECK(ret == 0);
+        BOOST_CHECK(ret == 0);
 #endif
+    }
 
-   return 0;
-}
+BOOST_AUTO_TEST_SUITE_END()
 
 

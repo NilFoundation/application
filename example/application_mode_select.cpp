@@ -19,100 +19,78 @@
 using namespace boost;
 namespace po = boost::program_options;
 
-class my_application_functor_class
-{
+class my_application_functor_class {
 public:
 
-   my_application_functor_class(application::context& context)
-      : context_(context)
-   {
-   }
+    my_application_functor_class(application::context &context) : context_(context) {
+    }
 
-   int operator()()
-   {
-      // your application logic here!
-      // use ctrl to get state of your application...
+    int operator()() {
+        // your application logic here!
+        // use ctrl to get state of your application...
 
-      boost::shared_ptr<application::run_mode> modes 
-         = context_.find<application::run_mode>();
+        boost::shared_ptr <application::run_mode> modes = context_.find<application::run_mode>();
 
-      if(modes->mode() == application::common::mode())
-      {
-         std::cout << "Yes am I a common application!" << std::endl;
-      }
+        if (modes->mode() == application::common::mode()) {
+            std::cout << "Yes am I a common application!" << std::endl;
+        }
 
-      if(modes->mode() == application::server::mode())
-      {
-         std::cout << "Yes am I a server application!" << std::endl;
-      }
+        if (modes->mode() == application::server::mode()) {
+            std::cout << "Yes am I a server application!" << std::endl;
+        }
 
-      std::cout << "your application logic!" << std::endl;
-      context_.find<application::wait_for_termination_request>()->wait();
+        std::cout << "your application logic!" << std::endl;
+        context_.find<application::wait_for_termination_request>()->wait();
 
-      return 0;
-   }
+        return 0;
+    }
 
-   bool stop()
-   {
-      std::cout << "stop!" << std::endl;
-      return true; // return true to stop, false to ignore
-   }
+    bool stop() {
+        std::cout << "stop!" << std::endl;
+        return true; // return true to stop, false to ignore
+    }
 
 private:
-   application::context& context_;
+    application::context &context_;
 
 };
 
-int main(int argc, char** argv)
-{
-   // select application mode
+int main(int argc, char **argv) {
+    // select application mode
 
-   po::variables_map vm;
-   po::options_description desc;
+    po::variables_map vm;
+    po::options_description desc;
 
-   desc.add_options()
-      (",f", "run on foreground")
-      ;
+    desc.add_options()(",f", "run on foreground");
 
-   po::store(po::parse_command_line(argc, argv, desc), vm);
+    po::store(po::parse_command_line(argc, argv, desc), vm);
 
-   application::context app_context;
-   my_application_functor_class app(app_context);
-   
-   // add termination handler
+    application::context app_context;
+    my_application_functor_class app(app_context);
 
-   application::handler<>::callback termination_callback 
-      = boost::bind(&my_application_functor_class::stop, &app);
+    // add termination handler
 
-   app_context.insert<application::termination_handler>(
-      boost::make_shared<
-         application::termination_handler_default_behaviour>(termination_callback));
+    application::handler<>::callback termination_callback = boost::bind(&my_application_functor_class::stop, &app);
 
-   int result = 0;
-   boost::system::error_code ec;
+    app_context.insert<application::termination_handler>(
+            boost::make_shared<application::termination_handler_default_behaviour>(termination_callback));
 
-   // we will run like a daemon or like a common application (foreground)
-   if (vm.count("-f")) 
-   {
-      result = 
-         application::launch<
-            application::common>(app, app_context, ec);
-   }
-   else
-   {  
-      result = 
-         application::launch<
-            application::server>(app, app_context, ec);
-   }
+    int result = 0;
+    boost::system::error_code ec;
 
-   // check for error
+    // we will run like a daemon or like a common application (foreground)
+    if (vm.count("-f")) {
+        result = application::launch<application::common>(app, app_context, ec);
+    } else {
+        result = application::launch<application::server>(app, app_context, ec);
+    }
 
-   if(ec)
-   {
-      std::cout << "[E] " << ec.message() 
-         << " <" << ec.value() << "> " << std::cout;
-   }
-   
-   return result;
+    // check for error
+
+    if (ec) {
+        std::cout << "[E] " << ec.message() << " <" << ec.value() << "> " << std::cout;
+    }
+
+    return result;
 }
 

@@ -27,40 +27,42 @@
 #error "Sorry, no boost application are available for this platform."
 #endif
 
-namespace boost { namespace application {
+namespace boost {
+    namespace application {
 
-   /*!
-    * \brief A class aspect to be used to obtain a PID of proccess.
-    *
-    */
-   class process_id 
-      : public detail::process_id_impl {
-      typedef detail::process_id_impl base_t;   
-      
-   public:
-   
-      typedef process_id_impl::native_pid_t native_pid_t;
-   
-      process_id() 
-      {}
-      
-      process_id(native_pid_t p) 
-         : base_t(p)
-      {}
-      
-      virtual ~process_id() 
-      {}
+        /*!
+         * \brief A class aspect to be used to obtain a PID of proccess.
+         *
+         */
+        class process_id : public detail::process_id_impl {
+            typedef detail::process_id_impl base_t;
 
-      /*!
-       * Obtain a PID of proccess.
-       *
-       */
-      native_pid_t pid() BOOST_NOEXCEPT {
-         return base_t::pid();
-      }
-   };
+        public:
 
-}} // boost::application
+            typedef process_id_impl::native_pid_t native_pid_t;
+
+            process_id() {
+            }
+
+            process_id(native_pid_t p) : base_t(p) {
+            }
+
+            virtual ~process_id() {
+            }
+
+            /*!
+             * Obtain a PID of proccess.
+             *
+             */
+            native_pid_t pid()
+
+            BOOST_NOEXCEPT {
+                return base_t::pid();
+            }
+        };
+
+    }
+} // boost::application
 
 #endif // BOOST_APPLICATION_PID_ASPECT_HPP
 

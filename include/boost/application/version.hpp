@@ -29,24 +29,26 @@
     BOOST_STRINGIZE(BOOST_APPLICATION_VERSION_BUILD)
 #endif // BOOST_APPLICATION_VERSION
 
-namespace boost { namespace application {
+namespace boost {
+    namespace application {
 
-   inline const char* library_version_string() {
-      return BOOST_APPLICATION_VERSION;
-   }
+        inline const char *library_version_string() {
+            return BOOST_APPLICATION_VERSION;
+        }
 
-   inline unsigned int library_major_version() {
-      return BOOST_APPLICATION_VERSION_MAJOR;
-   }
+        inline unsigned int library_major_version() {
+            return BOOST_APPLICATION_VERSION_MAJOR;
+        }
 
-   inline unsigned int library_minor_version() {
-      return BOOST_APPLICATION_VERSION_MINOR;
-   }
+        inline unsigned int library_minor_version() {
+            return BOOST_APPLICATION_VERSION_MINOR;
+        }
 
-   inline unsigned int library_build_version() {
-      return BOOST_APPLICATION_VERSION_BUILD;
-   }
+        inline unsigned int library_build_version() {
+            return BOOST_APPLICATION_VERSION_BUILD;
+        }
 
-}}// boost::application
+    }
+}// boost::application
 
 #endif // BOOST_APPLICATION_APPLICATION_VERSION_HPP

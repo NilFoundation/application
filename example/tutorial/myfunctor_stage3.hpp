@@ -19,32 +19,27 @@ using namespace boost;
 
 //[tutorials3
 
-class myapp
-{
+class myapp {
 public:
-   
-   myapp(application::context& context)
-      : context_(context)
-   {
-   }
 
-   int operator()()
-   {
-      context_.find<application::wait_for_termination_request>()->wait();
-      return 0;
-   }
+    myapp(application::context &context) : context_(context) {
+    }
 
-   /*<< Define your 'stop' handler that will be called when the 'stop' event will be fired. >>*/
-   bool stop()
-   {
-      std::cout << "Stoping my application..." << std::endl;
-	  
-      /*<< return true to stop, false to ignore >>*/
-      return true; 
-   }
+    int operator()() {
+        context_.find<application::wait_for_termination_request>()->wait();
+        return 0;
+    }
+
+    /*<< Define your 'stop' handler that will be called when the 'stop' event will be fired. >>*/
+    bool stop() {
+        std::cout << "Stoping my application..." << std::endl;
+
+        /*<< return true to stop, false to ignore >>*/
+        return true;
+    }
 
 private:
-   application::context& context_;
+    application::context &context_;
 
 };
 

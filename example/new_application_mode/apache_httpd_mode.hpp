@@ -38,59 +38,51 @@ class apache2_httpd_mod;
 // apache2_httpd_mod aspects
 //
 
-class http_get_verb_handler : public handler<std::string>
-{
+class http_get_verb_handler : public handler<std::string> {
 public:
-   http_get_verb_handler(const handler<std::string>::callback& cb)
-      : handler<std::string>(cb) {}
+    http_get_verb_handler(const handler<std::string>::callback &cb) : handler<std::string>(cb) {
+    }
 };
 
-class content_type
-{
-   friend class apache2_httpd_mod;
+class content_type {
+    friend class apache2_httpd_mod;
 
 public:
-   content_type(const std::string& my_content_type)
-      : content_type_ (my_content_type)
-   {}
+    content_type(const std::string &my_content_type) : content_type_(my_content_type) {
+    }
 
 private:
-   std::string content_type_;
+    std::string content_type_;
 };
 
-class web_app_name
-{
-   friend class apache2_httpd_mod;
+class web_app_name {
+    friend class apache2_httpd_mod;
 
 public:
-   web_app_name(const std::string& web_app_name)
-      : web_app_name_ (web_app_name)
-   {}
+    web_app_name(const std::string &web_app_name) : web_app_name_(web_app_name) {
+    }
 
 private:
-   std::string web_app_name_;
+    std::string web_app_name_;
 };
 
-class apache_log
-{
-   friend class apache2_httpd_mod;
+class apache_log {
+    friend class apache2_httpd_mod;
 
 public:
-   apache_log(request_rec *r)
-      : r_(r) { }
+    apache_log(request_rec *r) : r_(r) {
+    }
 
-   void error(const std::string& msg)
-   {
-      ap_log_error(APLOG_MARK, APLOG_NOERRNO | APLOG_ERR, 0, r_->server, msg.c_str());
-   }
+    void error(const std::string &msg) {
+        ap_log_error(APLOG_MARK, APLOG_NOERRNO | APLOG_ERR, 0, r_->server, msg.c_str());
+    }
 
-   void information(const std::string& msg)
-   {
-      ap_log_error(APLOG_MARK, APLOG_NOERRNO | APLOG_INFO, 0, r_->server, msg.c_str());
-   }
+    void information(const std::string &msg) {
+        ap_log_error(APLOG_MARK, APLOG_NOERRNO | APLOG_INFO, 0, r_->server, msg.c_str());
+    }
 
 private:
-   request_rec *r_;
+    request_rec *r_;
 
 };
 
@@ -98,106 +90,97 @@ private:
 // apache2_httpd_mod application mode
 //
 
-class apache2_httpd_mod
-{
+class apache2_httpd_mod {
 
 public:
 
-   static int mode()
-   {
-      static int id = new_run_mode<int>();
-      return id;
-   }
+    static int mode() {
+        static int id = new_run_mode<int>();
+        return id;
+    }
 
-   template <typename Application, typename RequestRec>
-   apache2_httpd_mod(Application& myapp, RequestRec &rr,
-      context& cxt, boost::system::error_code& ec)
-      : error_(OK)
-   {
-      handle_request(myapp, rr, cxt);
-   }
+    template<typename Application, typename RequestRec>
+    apache2_httpd_mod(Application &myapp, RequestRec &rr, context &cxt, boost::system::error_code &ec)
+            : error_(OK) {
+        handle_request(myapp, rr, cxt);
+    }
 
-   int run() { return error_; }
+    int run() {
+        return error_;
+    }
 
 protected:
 
-   template <typename Application, typename RequestRec>
-   void handle_request(Application& myapp, RequestRec &rr, context &cxt)
-   {
-      // default impl aspects
+    template<typename Application, typename RequestRec>
+    void handle_request(Application &myapp, RequestRec &rr, context &cxt) {
+        // default impl aspects
 
-      if(!cxt.find<run_mode>())
-      {
-         cxt.insert<run_mode>(
-            csbl::make_shared<run_mode>(mode()));
-      }
+        if (!cxt.find<run_mode>()) {
+            cxt.insert<run_mode>(csbl::make_shared<run_mode>(mode()));
+        }
 
-      if(!cxt.find<status>())
-      {
-         cxt.insert<status>(
-            csbl::make_shared<status>(status::running));
-      }
+        if (!cxt.find<status>()) {
+            cxt.insert<status>(csbl::make_shared<status>(status::running));
+        }
 
-      csbl::shared_ptr<web_app_name> appname = cxt.find<web_app_name>();
+        csbl::shared_ptr <web_app_name> appname = cxt.find<web_app_name>();
 
-      if(!appname)
-      {
-         error_ = DECLINED; return;
-      }
+        if (!appname) {
+            error_ = DECLINED;
+            return;
+        }
 
-      if (strcmp(rr.handler, appname->web_app_name_.c_str()))
-      {
-         error_ = DECLINED; return;
-      }
+        if (strcmp(rr.handler, appname->web_app_name_.c_str())) {
+            error_ = DECLINED;
+            return;
+        }
 
-      // we allow only GET
+        // we allow only GET
 
-      // Add other http verbs
-      // ...
+        // Add other http verbs
+        // ...
 
-      if(rr.method_number != M_GET)
-      {
-         error_ = HTTP_METHOD_NOT_ALLOWED; return;
-      }
+        if (rr.method_number != M_GET) {
+            error_ = HTTP_METHOD_NOT_ALLOWED;
+            return;
+        }
 
-      // GET
+        // GET
 
-      csbl::shared_ptr<http_get_verb_handler> http_get_verb =
-         cxt.find<http_get_verb_handler>();
+        csbl::shared_ptr <http_get_verb_handler> http_get_verb = cxt.find<http_get_verb_handler>();
 
-      if(http_get_verb)
-      {
-         // apache log
-         cxt.insert<apache_log>(csbl::make_shared<apache_log>(&rr));
+        if (http_get_verb) {
+            // apache log
+            cxt.insert<apache_log>(csbl::make_shared<apache_log>(&rr));
 
-         csbl::shared_ptr<content_type> contenttype =
-            cxt.find<content_type>();
+            csbl::shared_ptr <content_type> contenttype = cxt.find<content_type>();
 
-         if(contenttype)
-            ap_set_content_type(&rr, contenttype->content_type_.c_str());
-         else
-            ap_set_content_type(&rr, "text/html;charset=ascii");
+            if (contenttype) {
+                ap_set_content_type(&rr, contenttype->content_type_.c_str());
+            } else {
+                ap_set_content_type(&rr, "text/html;charset=ascii");
+            }
 
-         // check if we have any callback to call
+            // check if we have any callback to call
 
-         handler<std::string>::callback* cb = 0;
+            handler<std::string>::callback *cb = 0;
 
-         if(http_get_verb->get(cb))
-         {
-            ap_rputs((*cb)().c_str(), &rr); return;
-         }
-      }
+            if (http_get_verb->get(cb)) {
+                ap_rputs((*cb)().c_str(), &rr);
+                return;
+            }
+        }
 
-      // we need set application_state to stop
-      cxt.find<status>()->state(status::stopped);
+        // we need set application_state to stop
+        cxt.find<status>()->state(status::stopped);
 
-      // we cant find any handler, generate apache error
-      error_ = HTTP_INTERNAL_SERVER_ERROR;
-   }
+        // we cant find any handler, generate apache error
+        error_ = HTTP_INTERNAL_SERVER_ERROR;
+    }
 
 private:
 
-   int error_;
+    int error_;
 
 };
 

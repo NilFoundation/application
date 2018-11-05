@@ -19,23 +19,23 @@
 #include <boost/application/config.hpp>
 #include <boost/application/handler.hpp>
 
-namespace boost { namespace application {
+namespace boost {
+    namespace application {
 
-   class termination_handler : public handler<>
-   {
-   public:
-      termination_handler(const callback& cb)
-         : handler<>(cb) {}
-   };
+        class termination_handler : public handler<> {
+        public:
+            termination_handler(const callback &cb) : handler<>(cb) {
+            }
+        };
 
-   class termination_handler_default_behaviour : public termination_handler
-   {
-   public:
-      termination_handler_default_behaviour(const callback& cb)
-         : termination_handler(cb) {}
-   };
+        class termination_handler_default_behaviour : public termination_handler {
+        public:
+            termination_handler_default_behaviour(const callback &cb) : termination_handler(cb) {
+            }
+        };
 
-}} // boost::application
+    }
+} // boost::application
 
 #endif // BOOST_APPLICATION_ASPECT_TERMINATION_HANDLER_HPP
 

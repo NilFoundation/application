@@ -20,43 +20,37 @@
 #include <boost/filesystem/path.hpp>
 #include <boost/application/base_type.hpp>
 
-namespace boost { namespace application {
-  
-  // this is used by examples, check:
-   // example/setup for more detail 
-   template <typename String>
-   class setup_type
-      : public base_type<String>
-   {
-   public:
-      explicit setup_type(const String &s)
-         : base_type<String>(s) {}
-   };
-   
-   // setup session
-   inline setup_type<character_types::string_type>
-      setup_arg(const character_types::char_type *s)
-   {
-      return setup_type<character_types::string_type>(s);
-   }
+namespace boost {
+    namespace application {
 
-   inline setup_type<character_types::string_type>
-      setup_arg(const character_types::string_type &s)
-   {
-      return setup_type<character_types::string_type>(s);
-   }
+        // this is used by examples, check:
+        // example/setup for more detail
+        template<typename String>
+        class setup_type : public base_type<String> {
+        public:
+            explicit setup_type(const String &s) : base_type<String>(s) {
+            }
+        };
 
-   inline setup_type<character_types::string_type>
-      setup_arg(const boost::filesystem::path &p)
-   {
+        // setup session
+        inline setup_type<character_types::string_type> setup_arg(const character_types::char_type *s) {
+            return setup_type<character_types::string_type>(s);
+        }
+
+        inline setup_type<character_types::string_type> setup_arg(const character_types::string_type &s) {
+            return setup_type<character_types::string_type>(s);
+        }
+
+        inline setup_type<character_types::string_type> setup_arg(const boost::filesystem::path &p) {
 #if defined(BOOST_APPLICATION_STD_WSTRING)
-      return setup_type<character_types::string_type>(p.wstring());
+            return setup_type<character_types::string_type>(p.wstring());
 #else
-      return setup_type<character_types::string_type>(p.string());
+            return setup_type<character_types::string_type>(p.string());
 #endif
-   }
+        }
 
-}} // boost::application
+    }
+} // boost::application
 
 #endif // BOOST_APPLICATION_SHARED_LIBRARY_INITIALIZERS_HPP
 

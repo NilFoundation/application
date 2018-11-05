@@ -21,28 +21,32 @@
 // This enable we to use csbl:: and internally the library select correct
 // names, e.g. : csbl::unique_ptr will be boost::shared_ptr or std::shared_ptr
 
-namespace boost { namespace application { namespace csbl {
+namespace boost {
+    namespace application {
+        namespace csbl {
 // as common std-boost library
 
-BOOST_APPLICATION_FEATURE_SELECT
+            BOOST_APPLICATION_FEATURE_SELECT
 
-   template <class T>
-   inline type_index get_type_id() {
+            template<class T>
+            inline type_index get_type_id() {
 
 #if defined( BOOST_APPLICATION_FEATURE_NS_SELECT_STD )
-      return typeid(T);
+                return typeid(T);
 #elif defined( BOOST_APPLICATION_FEATURE_NS_SELECT_BOOST )
-      return BOOST_APPLICATION_TYPE_INDEX_NS_SELECT::type_id<T>();
+                return BOOST_APPLICATION_TYPE_INDEX_NS_SELECT::type_id<T>();
 #else // auto detect
 #   ifndef BOOST_NO_CXX11_HDR_TYPEINDEX
-      return typeid(T);
+                return typeid(T);
 #   else
-      return BOOST_APPLICATION_TYPE_INDEX_NS_SELECT::type_id<T>();
+                return BOOST_APPLICATION_TYPE_INDEX_NS_SELECT::type_id<T>();
 #   endif
 #endif
 
-   }
+            }
 
-}}} // boost::application::csbl
+        }
+    }
+} // boost::application::csbl
 
 #endif // BOOST_APPLICATION_DETAIL_CSBL_HPP
