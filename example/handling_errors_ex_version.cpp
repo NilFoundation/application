@@ -20,37 +20,31 @@
 
 using namespace boost;
 
-class myapp
-{
+class myapp {
 public:
 
-   // param
-   int operator()(application::context& context)
-   {
-      return 0;
-   }
+    // param
+    int operator()(application::context &context) {
+        return 0;
+    }
 };
 
 // main
 
 //[exver
 // ...
-int main(int argc, char *argv[])
-{   
-   try
-   {
-      myapp app;
-      application::context app_context;
+int main(int argc, char *argv[]) {
+    try {
+        myapp app;
+        application::context app_context;
 
-      return application::launch<application::common>(app, app_context);
-   }
-   catch(boost::system::system_error& se)
-   {
-      // error
-      std::cerr << se.what() << std::endl;
+        return application::launch<application::common>(app, app_context);
+    } catch (boost::system::system_error &se) {
+        // error
+        std::cerr << se.what() << std::endl;
 
-      return 1;
-   }
+        return 1;
+    }
 }
 //]
 

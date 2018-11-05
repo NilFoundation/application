@@ -22,71 +22,61 @@
 using namespace boost;
 
 //[mownwfr
-class myapp
-{
+class myapp {
 public:
 
-   myapp(application::context& context)
-      : context_(context)
-   {
-   }
+    myapp(application::context &context) : context_(context) {
+    }
 
-   // param
-   int operator()()
-   {
-      std::cout << "Test" << std::endl;
-	  
-	  /*<< Use your custon handler >>*/
-      context_.find<application::wait_for_termination_request>()->wait();
+    // param
+    int operator()() {
+        std::cout << "Test" << std::endl;
 
-      return 0;
-   }
+        /*<< Use your custon handler >>*/
+        context_.find<application::wait_for_termination_request>()->wait();
+
+        return 0;
+    }
 
 private:
 
-   application::context& context_;
+    application::context &context_;
 };
 
 // my made by hand behaviour
-class wait_for_termination_request_my_behaviour 
-   /*<< Inheriting of 'wait_for_termination_request' handler contract abstract class >>*/ 
-   : public application::wait_for_termination_request
-{
+class wait_for_termination_request_my_behaviour
+    /*<< Inheriting of 'wait_for_termination_request' handler contract abstract class >>*/
+        : public application::wait_for_termination_request {
 public:
 
-   /*<< Define your desired operation for 'wait' method >>*/ 
-   void wait(){
-      char type;
-      do
-      {
-         std::cout << "Exit? [y/n]" << std::endl;
-         std::cin >> type;
-      }
-      while( !std::cin.fail() && type!='y' );
-   }
+    /*<< Define your desired operation for 'wait' method >>*/
+    void wait() {
+        char type;
+        do {
+            std::cout << "Exit? [y/n]" << std::endl;
+            std::cin >> type;
+        } while (!std::cin.fail() && type != 'y');
+    }
 
-   void proceed(){
-      // do nothing
-   }
+    void proceed() {
+        // do nothing
+    }
 };
 
 // main
 
-int main(int argc, char *argv[])
-{   
-   application::context app_context;   
-   myapp app(app_context);
+int main(int argc, char *argv[]) {
+    application::context app_context;
+    myapp app(app_context);
 
-   app_context.insert<application::args>(
-      boost::make_shared<application::args>(argc, argv));
- 
-   // if user do this, the default behavoiur will be ignored, 
-   // and the user behaviour will be executed by application::server
-   /*<< Add your custon handler to context aspect pool of application >>*/ 
-   app_context.insert< application::wait_for_termination_request>(
-      shared_ptr<application::wait_for_termination_request>(
-         new wait_for_termination_request_my_behaviour));
+    app_context.insert<application::args>(boost::make_shared<application::args>(argc, argv));
 
-   return application::launch<application::common>(app, app_context);
+    // if user do this, the default behavoiur will be ignored,
+    // and the user behaviour will be executed by application::server
+    /*<< Add your custon handler to context aspect pool of application >>*/
+    app_context.insert<application::wait_for_termination_request>(
+            shared_ptr<application::wait_for_termination_request>(new wait_for_termination_request_my_behaviour));
+
+    return application::launch<application::common>(app, app_context);
 }
 //]

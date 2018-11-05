@@ -29,86 +29,77 @@
 
 #include <cstdlib>
 
-namespace boost { namespace application {
+namespace boost {
+    namespace application {
 
-   template <typename CharType>
-   class limit_single_instance_impl_ : noncopyable
-   {
+        template<typename CharType>
+        class limit_single_instance_impl_ : noncopyable {
 
-   public:
+        public:
 
-      typedef CharType char_type;
-      typedef std::basic_string<char_type> string_type;
+            typedef CharType char_type;
+            typedef std::basic_string <char_type> string_type;
 
-      limit_single_instance_impl_()
-         : owns_lock_(false)
-      {
-      }
+            limit_single_instance_impl_() : owns_lock_(false) {
+            }
 
-      ~limit_single_instance_impl_()
-      {
-         release();
-      }
+            ~limit_single_instance_impl_() {
+                release();
+            }
 
-      // If the thread acquires ownership of the mutex,
-      // returns true, if the another thread has ownership
-      // of the mutex, returns false.
-      bool lock(const uuids::uuid& instance_id, boost::system::error_code &ec)
-      {
-         name_ =
-            boost::to_upper_copy(boost::lexical_cast<string_type>(instance_id));
+            // If the thread acquires ownership of the mutex,
+            // returns true, if the another thread has ownership
+            // of the mutex, returns false.
+            bool lock(const uuids::uuid &instance_id, boost::system::error_code &ec) {
+                name_ = boost::to_upper_copy(boost::lexical_cast<string_type>(instance_id));
 
-         try
-         {
-            create_shared_memory_or_die_.reset(
-               new interprocess::shared_memory_object(
-               interprocess::create_only, name_.c_str(),
-               interprocess::read_write));
+                try {
+                    create_shared_memory_or_die_.reset(
+                            new interprocess::shared_memory_object(interprocess::create_only, name_.c_str(),
+                                                                   interprocess::read_write));
 
-            owns_lock_ = false; // we lock now
-         }
-         catch(...)
-         {
-            // executable is already running
-            owns_lock_ = true;
-         }
+                    owns_lock_ = false; // we lock now
+                } catch (...) {
+                    // executable is already running
+                    owns_lock_ = true;
+                }
 
-         return owns_lock_;
-      }
+                return owns_lock_;
+            }
 
-      void release(bool force = false)
-      {
-         if(force) {
-            interprocess::shared_memory_object::remove(name_.c_str()); owns_lock_ = false; return;
-         }
-         
-         // if I create it, I can remove it
-         if(owns_lock_ == true) {
-            interprocess::shared_memory_object::remove(name_.c_str());
-         }
+            void release(bool force = false) {
+                if (force) {
+                    interprocess::shared_memory_object::remove(name_.c_str());
+                    owns_lock_ = false;
+                    return;
+                }
 
-         owns_lock_ = false;
-      }
+                // if I create it, I can remove it
+                if (owns_lock_ == true) {
+                    interprocess::shared_memory_object::remove(name_.c_str());
+                }
 
-      bool is_another_instance_running()
-      {
-         return owns_lock_;
-      }
+                owns_lock_ = false;
+            }
 
-   private:
+            bool is_another_instance_running() {
+                return owns_lock_;
+            }
 
-      string_type name_;
+        private:
 
-      boost::
-         scoped_ptr<interprocess::shared_memory_object> create_shared_memory_or_die_;
+            string_type name_;
 
-      bool owns_lock_;
-   };
+            boost::scoped_ptr<interprocess::shared_memory_object> create_shared_memory_or_die_;
+
+            bool owns_lock_;
+        };
 
 
-   typedef limit_single_instance_impl_<character_types::char_type> limit_single_instance_impl;
+        typedef limit_single_instance_impl_<character_types::char_type> limit_single_instance_impl;
 
-}} // boost::application
+    }
+} // boost::application
 
 #endif // BOOST_APPLICATION_IMPL_POSIX_LIMIT_SINGLE_INSTANCE_IMPL_HPP
 

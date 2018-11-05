@@ -7,36 +7,35 @@
 
 #define BOOST_APPLICATION_FEATURE_NS_SELECT_BOOST
 
+#define BOOST_TEST_MODULE simple_common_application_test
+
 #include <iostream>
 #include <boost/application.hpp>
-#include <boost/test/minimal.hpp>
+#include <boost/test/unit_test.hpp>
 
 using namespace boost;
 
-class myapp
-{
+class myapp {
 public:
 
-   myapp(application::context& context)
-      : context_(context) { }
-   
-   int operator()()
-   {
-      return 0;
-   }
-   
+    myapp(application::context &context) : context_(context) {
+    }
+
+    int operator()() {
+        return 0;
+    }
+
 private:
-   application::context& context_;
+    application::context &context_;
 };
 
-int test_main(int argc, char** argv)
-{   
-   application::context app_context;
-   myapp app(app_context);
+BOOST_AUTO_TEST_SUITE(simple_common_application_test_suite)
 
-   BOOST_CHECK(application::launch<application::common>(app, app_context) == 0);
-   return 0;
-}
+    BOOST_AUTO_TEST_CASE(path_aspect1) {
+        application::context app_context;
+        myapp app(app_context);
 
+        BOOST_CHECK(application::launch<application::common>(app, app_context) == 0);
+    }
 
-
+BOOST_AUTO_TEST_SUITE_END()

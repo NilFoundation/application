@@ -31,54 +31,46 @@ using namespace boost;
 // limit_single_instance_named_mutex_behaviour never is called, this cause
 // to Named Mutex to not be released, need fix
 
-class myapp
-{
+class myapp {
 public:
 
-   myapp(application::context& context)
-      : context_(context)
-   {
-   }
+    myapp(application::context &context) : context_(context) {
+    }
 
-   // param
-   int operator()()
-   {
-      boost::shared_ptr<application::args> args =
-         context_.find<application::args>();
+    // param
+    int operator()() {
+        boost::shared_ptr <application::args> args = context_.find<application::args>();
 
-      if(args)
-      {
-         std::vector<std::string> &arg_vector = args->arg_vector();
+        if (args) {
+            std::vector <std::string> &arg_vector = args->arg_vector();
 
-         // only print args on screen
-         for(std::vector<std::string>::iterator it = arg_vector.begin(); 
-            it != arg_vector.end(); ++it) {
-            std::cout << *it << std::endl;
-         }
-      }
+            // only print args on screen
+            for (std::vector<std::string>::iterator it = arg_vector.begin(); it != arg_vector.end(); ++it) {
+                std::cout << *it << std::endl;
+            }
+        }
 
-      context_.find<application::wait_for_termination_request>()->wait();
+        context_.find<application::wait_for_termination_request>()->wait();
 
-      return 0;
-   }
+        return 0;
+    }
 
 private:
-   application::context& context_;
+    application::context &context_;
 
 };
 
 // main
 
-int main(int argc, char *argv[])
-{  
-   application::context app_context;
-   myapp app(app_context);
-   
-   boost::uuids::string_generator gen;
+int main(int argc, char *argv[]) {
+    application::context app_context;
+    myapp app(app_context);
 
-   app_context.insert<application::limit_single_instance>(
-      boost::make_shared<application::limit_single_instance_default_behaviour>(
-         gen("{0F1164AD-ECA5-175D-8784-4BAA329EF9F2}")));
+    boost::uuids::string_generator gen;
 
-   return application::launch<application::common>(app, app_context);
+    app_context.insert<application::limit_single_instance>(
+            boost::make_shared<application::limit_single_instance_default_behaviour>(
+                    gen("{0F1164AD-ECA5-175D-8784-4BAA329EF9F2}")));
+
+    return application::launch<application::common>(app, app_context);
 }

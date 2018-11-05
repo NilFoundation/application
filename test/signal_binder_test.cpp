@@ -7,82 +7,79 @@
 
 #define BOOST_APPLICATION_FEATURE_NS_SELECT_BOOST
 
+#define BOOST_TEST_MODULE signal_binder_test
+
 #include <iostream>
 #include <boost/application.hpp>
-#include <boost/test/minimal.hpp>
+
+#include <boost/test/unit_test.hpp>
 
 using namespace boost;
 
-struct handler_test
-{
-   int count_;
-   bool called_;
-   handler_test() : count_(0), called_(false) { }
+struct handler_test {
+    int count_;
+    bool called_;
 
-   bool signal_handler1()
-   {
-      called_ = true;
-      return false;
-   }
+    handler_test() : count_(0), called_(false) {
+    }
 
-   bool running()
-   {
-      count_++;
-	  return !called_;
-   }
+    bool signal_handler1() {
+        called_ = true;
+        return false;
+    }
+
+    bool running() {
+        count_++;
+        return !called_;
+    }
 };
 
-class my_signal_binder : public application::signal_binder
-{
+class my_signal_binder : public application::signal_binder {
 public:
-	my_signal_binder(application::context &app_context)
-	   : application::signal_binder(app_context){}
+    my_signal_binder(application::context &app_context) : application::signal_binder(app_context) {
+    }
 
-   void start()
-   {
-      signal_binder::start();
-   }
+    void start() {
+        signal_binder::start();
+    }
 };
 
-int test_main(int argc, char** argv)
-{
-   application::context app_context;
-   my_signal_binder app_signal_binder(app_context);
-   handler_test app_handler_test;
+BOOST_AUTO_TEST_SUITE(signal_binder_test_suite)
 
-   app_signal_binder.start();
+    BOOST_AUTO_TEST_CASE(signal_binder) {
+        application::context app_context;
+        my_signal_binder app_signal_binder(app_context);
+        handler_test app_handler_test;
 
-   application::handler<>::callback cb = boost::bind(
-               &handler_test::signal_handler1, &app_handler_test);
+        app_signal_binder.start();
 
-   boost::system::error_code ec;
-   app_signal_binder.bind(SIGABRT, cb, ec);
+        application::handler<>::callback cb = boost::bind(&handler_test::signal_handler1, &app_handler_test);
 
-   raise(SIGABRT);
+        boost::system::error_code ec;
+        app_signal_binder.bind(SIGABRT, cb, ec);
 
-   BOOST_CHECK(!ec);
+        raise(SIGABRT);
 
-   app_signal_binder.bind(SIGINT, cb, ec);
+        BOOST_CHECK(!ec);
 
-   BOOST_CHECK(!ec);
+        app_signal_binder.bind(SIGINT, cb, ec);
 
-   app_signal_binder.bind(SIGINT, cb, cb, ec);
+        BOOST_CHECK(!ec);
 
-   BOOST_CHECK(!ec);
-   BOOST_CHECK(app_signal_binder.is_bound(SIGINT));
+        app_signal_binder.bind(SIGINT, cb, cb, ec);
 
-   app_signal_binder.unbind(SIGINT, ec);
+        BOOST_CHECK(!ec);
+        BOOST_CHECK(app_signal_binder.is_bound(SIGINT));
 
-   BOOST_CHECK(!app_signal_binder.is_bound(SIGINT));
+        app_signal_binder.unbind(SIGINT, ec);
 
-   while(app_handler_test.running())
-      std::cerr << "waiting..." << std::endl;
+        BOOST_CHECK(!app_signal_binder.is_bound(SIGINT));
 
-   BOOST_CHECK(app_handler_test.count_ > 0);
+        while (app_handler_test.running()) {
+            std::cerr << "waiting..." << std::endl;
+        }
 
-   return 0;
-}
+        BOOST_CHECK(app_handler_test.count_ > 0);
+    }
 
-
-
-
+BOOST_AUTO_TEST_SUITE_END()

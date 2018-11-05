@@ -19,23 +19,23 @@
 #include <boost/application/config.hpp>
 #include <boost/application/handler.hpp>
 
-namespace boost { namespace application {
+namespace boost {
+    namespace application {
 
-   class resume_handler : public handler<>
-   {
-   public:
-      resume_handler(const callback& cb)
-         : handler<>(cb) {}
-   };
+        class resume_handler : public handler<> {
+        public:
+            resume_handler(const callback &cb) : handler<>(cb) {
+            }
+        };
 
-   class resume_handler_default_behaviour : public resume_handler
-   {
-   public:
-      resume_handler_default_behaviour(const callback& cb)
-         : resume_handler(cb) {}
-   };
+        class resume_handler_default_behaviour : public resume_handler {
+        public:
+            resume_handler_default_behaviour(const callback &cb) : resume_handler(cb) {
+            }
+        };
 
-}} // boost::application
+    }
+} // boost::application
 
 #endif // BOOST_APPLICATION_ASPECT_RESUME_HANDLER_HPP
 

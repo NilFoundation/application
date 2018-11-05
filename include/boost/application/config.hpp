@@ -73,7 +73,9 @@
 #else // auto detect
 //  The standard library header <memory> has no shared_ptr and unique_ptr.
 #   ifndef BOOST_NO_CXX11_SMART_PTR
+
 #      include <memory>
+
 #      define BOOST_APPLICATION_USE_CXX11_HDR_MEMORY
 #   else
 #      include <boost/shared_ptr.hpp>
@@ -81,28 +83,36 @@
 #   endif
 //  The standard library provide header <unordered_map>.
 #   ifndef BOOST_NO_CXX11_HDR_UNORDERED_MAP
+
 #      include <unordered_map>
+
 #      define BOOST_APPLICATION_USE_CXX11_HDR_UNORDERED_MAP
 #   else
 #      include <boost/unordered_map.hpp>
 #   endif
 //  The standard library provide header <thread>.
 #   ifndef BOOST_NO_CXX11_HDR_THREAD
+
 #      include <thread>
+
 #      define BOOST_APPLICATION_USE_CXX11_HDR_THREAD
 #   else
 #      include <boost/thread/thread.hpp>
 #   endif
 //  The standard library provide header <functional>.
 #   ifndef BOOST_NO_CXX11_HDR_FUNCTIONAL
+
 #      include <functional>
+
 #      define BOOST_APPLICATION_USE_CXX11_HDR_FUNCTIONAL
 #   else
 #      include <boost/bind.hpp>
 #      include <boost/function.hpp>
 #   endif
 #   ifndef BOOST_NO_CXX11_HDR_TYPEINDEX
+
 #      include <typeindex>
+
 #      define BOOST_APPLICATION_USE_CXX11_HDR_TYPEINDEX
 #   else
 #      include <boost/type_index.hpp>

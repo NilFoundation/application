@@ -15,72 +15,52 @@
 
 using namespace boost;
 
-BOOST_AUTO_TEST_CASE(create_global_context)
-{
-   application::global_context_ptr ctx =
-           application::global_context::create();
-   BOOST_CHECK(ctx.get()!=0);
+BOOST_AUTO_TEST_SUITE(global_context_test_suite)
 
-   application::global_context::destroy();
-}
+    BOOST_AUTO_TEST_CASE(create_global_context) {
+        application::global_context_ptr ctx = application::global_context::create();
+        BOOST_CHECK(ctx.get() != 0);
 
-BOOST_AUTO_TEST_CASE(get_global_context)
-{
-   application::global_context_ptr ctx =
-           application::global_context::create();
-   BOOST_CHECK(application::global_context::get());
+        application::global_context::destroy();
+    }
 
-   application::global_context::destroy();
-}
+    BOOST_AUTO_TEST_CASE(get_global_context) {
+        application::global_context_ptr ctx = application::global_context::create();
+        BOOST_CHECK(application::global_context::get());
 
-BOOST_AUTO_TEST_CASE(destroy_global_context)
-{
-   application::global_context_ptr ctx =
-           application::global_context::create();
+        application::global_context::destroy();
+    }
 
-   application::global_context::destroy();
-}
+    BOOST_AUTO_TEST_CASE(destroy_global_context) {
+        application::global_context_ptr ctx = application::global_context::create();
 
-BOOST_AUTO_TEST_CASE(throw_create_global_context_twice)
-{
-   application::global_context_ptr ctx = application::global_context::create();
+        application::global_context::destroy();
+    }
 
-   BOOST_CHECK_THROW(application::global_context::create(), boost::system::system_error);
+    BOOST_AUTO_TEST_CASE(throw_create_global_context_twice) {
+        application::global_context_ptr ctx = application::global_context::create();
 
-   application::global_context::destroy();
-}
+        BOOST_CHECK_THROW(application::global_context::create(), boost::system::system_error);
 
-BOOST_AUTO_TEST_CASE(throw_destroy_global_context_twice)
-{
-   application::global_context_ptr ctx =
-           application::global_context::create();
+        application::global_context::destroy();
+    }
 
-   application::global_context::destroy();
-   BOOST_CHECK_THROW(application::global_context::destroy(), boost::system::system_error);
-}
+    BOOST_AUTO_TEST_CASE(throw_destroy_global_context_twice) {
+        application::global_context_ptr ctx = application::global_context::create();
 
-BOOST_AUTO_TEST_CASE(throw_after_destroy_global_context)
-{
-   application::global_context_ptr ctx =
-           application::global_context::create();
+        application::global_context::destroy();
+        BOOST_CHECK_THROW(application::global_context::destroy(), boost::system::system_error);
+    }
 
-   application::global_context::destroy();
-   BOOST_CHECK_THROW(application::global_context::get(), boost::system::system_error);
-}
+    BOOST_AUTO_TEST_CASE(throw_after_destroy_global_context) {
+        application::global_context_ptr ctx = application::global_context::create();
 
-BOOST_AUTO_TEST_CASE(throw_before_create_global_context)
-{
-   BOOST_CHECK_THROW(application::global_context::get(), boost::system::system_error);
-}
+        application::global_context::destroy();
+        BOOST_CHECK_THROW(application::global_context::get(), boost::system::system_error);
+    }
 
+    BOOST_AUTO_TEST_CASE(throw_before_create_global_context) {
+        BOOST_CHECK_THROW(application::global_context::get(), boost::system::system_error);
+    }
 
-
-
-
-
-
-
-
-
-
-
+BOOST_AUTO_TEST_SUITE_END()

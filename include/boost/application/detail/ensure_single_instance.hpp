@@ -21,66 +21,64 @@
 #include <boost/application/detail/csbl.hpp>
 #include <boost/application/aspects/limit_single_instance.hpp>
 
-namespace boost { namespace application { namespace detail {
+namespace boost {
+    namespace application {
+        namespace detail {
 
-   // check single_instance aspect and runs the requested behavior,
-   // returns true to indicate that application needs exit.
+            // check single_instance aspect and runs the requested behavior,
+            // returns true to indicate that application needs exit.
 
-   inline bool check(context &cxt,
-      boost::system::error_code& ec)
-   { 
-      csbl::shared_ptr<limit_single_instance> ol =
-         cxt.find<limit_single_instance>();
-      
-      if(ol)
-      {
-         bool is_another_instance_running = ol->lock(ec);
+            inline bool check(context &cxt, boost::system::error_code &ec) {
+                csbl::shared_ptr <limit_single_instance> ol = cxt.find<limit_single_instance>();
 
-         if(ec) return false; // user need check by error
+                if (ol) {
+                    bool is_another_instance_running = ol->lock(ec);
 
-         if(!is_another_instance_running)
-            return false; // continue, no other instance running
+                    if (ec) {
+                        return false;
+                    } // user need check by error
 
-         // check if we have any callback to call
+                    if (!is_another_instance_running)
+                        return false; // continue, no other instance running
 
-         handler<>::callback* cb = 0;
+                    // check if we have any callback to call
 
-         if(ol->get(cb))
-         {
-            if((*cb)())
-            {
-               // user tell us to continue
-               return false;
+                    handler<>::callback *cb = 0;
+
+                    if (ol->get(cb)) {
+                        if ((*cb)()) {
+                            // user tell us to continue
+                            return false;
+                        }
+
+                        return true;
+                    }
+
+                    // default behaviour
+                    return true;
+                }
+
+                // continue / no restriction
+                return false;
             }
 
-            return true;
-         }
+            template<class T>
+            struct ensure_single_instance {
+                bool operator()(T &cxt, boost::system::error_code &ec) {
+                    return check(cxt, ec);
+                }
+            };
 
-         // default behaviour
-         return true;
-      }
+            template<>
+            struct ensure_single_instance<global_context_ptr> {
+                bool operator()(global_context_ptr cxt, boost::system::error_code &ec) {
+                    return check(*cxt.get(), ec);
+                }
+            };
 
-      // continue / no restriction
-      return false;
-   }
-
-   template <class T> struct ensure_single_instance {
-      bool operator()(T &cxt, boost::system::error_code& ec)
-      {
-         return check(cxt, ec);
-      }
-   };
-
-   template <> struct ensure_single_instance< 
-         global_context_ptr > {
-      bool operator()(global_context_ptr cxt,
-         boost::system::error_code& ec)
-      {
-         return check(*cxt.get(), ec);
-      }
-   };
-
-}}} // boost::application
+        }
+    }
+} // boost::application
 
 #endif // BOOST_APPLICATION_DETAIL_ENSURE_SINGLE_INSTANCE_HPP
 

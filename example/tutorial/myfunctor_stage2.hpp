@@ -20,40 +20,33 @@ using namespace boost;
 
 //[tutorials2
 
-class myapp
-{
+class myapp {
 public:
 
-   myapp(application::context& context)
-      : context_(context)
-   {
-   }
+    myapp(application::context &context) : context_(context) {
+    }
 
-   int operator()()
-   {
-      /*<< Retrieves 'status' aspect from your context >>*/
-      boost::shared_ptr<application::status> st =
-         context_.find<application::status>();
+    int operator()() {
+        /*<< Retrieves 'status' aspect from your context >>*/
+        boost::shared_ptr <application::status> st = context_.find<application::status>();
 
-      /*<< Check 'aspect' status 'state' >>*/
-      while(st->state() != application::status::stopped)
-      {
-	     /*<< Your application loop body >>*/
-         boost::this_thread::sleep(boost::posix_time::seconds(1));
-         // your application logic here!
-      }
+        /*<< Check 'aspect' status 'state' >>*/
+        while (st->state() != application::status::stopped) {
+            /*<< Your application loop body >>*/
+            boost::this_thread::sleep(boost::posix_time::seconds(1));
+            // your application logic here!
+        }
 
-      return 0;
-   }
+        return 0;
+    }
 
-   // check in next stage
-   bool stop()
-   {
-      return true;
-   }
+    // check in next stage
+    bool stop() {
+        return true;
+    }
 
 private:
-   application::context& context_;
+    application::context &context_;
 
 };
 

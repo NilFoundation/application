@@ -19,57 +19,58 @@
 // appication
 #include <boost/application/config.hpp>
 
-namespace boost { namespace application {
+namespace boost {
+    namespace application {
 
-   /*!
-    * \brief This aspect class is used internaly by applications types (modes)
-    *
-    * Indicates how the application was created.
-    *
-    */
-   class run_mode
-   {
-   public:
+        /*!
+         * \brief This aspect class is used internaly by applications types (modes)
+         *
+         * Indicates how the application was created.
+         *
+         */
+        class run_mode {
+        public:
 
-      /*!
-       * Constructs an run_mode aspect.
-       *
-       * \param run_mode The mode of application.
-       */
-      run_mode(int run_mode)
-         : application_run_mode_(run_mode) {}
+            /*!
+             * Constructs an run_mode aspect.
+             *
+             * \param run_mode The mode of application.
+             */
+            run_mode(int run_mode) : application_run_mode_(run_mode) {
+            }
 
-      /*!
-       * Retreaves current mode of application.
-       *
-       * \return the mode of application.
-       *
-       */
-      int mode() {
-         return application_run_mode_;
-      }
+            /*!
+             * Retreaves current mode of application.
+             *
+             * \return the mode of application.
+             *
+             */
+            int mode() {
+                return application_run_mode_;
+            }
 
-      /*!
-       * Sets the current mode of application.
-       *
-       * \param mode The mode of application.
-       *
-       */
-      void mode(int mode) {
-         application_run_mode_ = mode;
-      }
+            /*!
+             * Sets the current mode of application.
+             *
+             * \param mode The mode of application.
+             *
+             */
+            void mode(int mode) {
+                application_run_mode_ = mode;
+            }
 
-      bool operator==(int mode) const {
-         return mode == application_run_mode_;
-      }
+            bool operator==(int mode) const {
+                return mode == application_run_mode_;
+            }
 
-   private:
+        private:
 
-      int application_run_mode_;
+            int application_run_mode_;
 
-   };
+        };
 
-}} // boost::application
+    }
+} // boost::application
 
 #endif // BOOST_APPLICATION_RUN_MODE_ASPECT_HPP
 

@@ -7,23 +7,27 @@
 
 #define BOOST_APPLICATION_FEATURE_NS_SELECT_BOOST
 
+#define BOOST_TEST_MODULE args_aspect_test
+#define BOOST_TEST_NO_MAIN
+#define BOOST_TEST_ALTERNATIVE_INIT_API
+
 #include <iostream>
 #include <boost/application.hpp>
-#include <boost/test/minimal.hpp>
+
+#include <boost/test/unit_test.hpp>
 
 using namespace boost;
 
-int test_main(int argc, char** argv)
-{   
-   application::args myargs(argc, argv);
+int main(int argc, char *argv[]) {
+    application::args myargs(argc, argv);
 
-   BOOST_CHECK(myargs.argc());
-   
-   const std::vector< std::string > &argvec = myargs.arg_vector();
+    BOOST_CHECK(myargs.argc());
 
-   BOOST_CHECK(argvec.size());
+    const std::vector<std::string> &argvec = myargs.arg_vector();
 
-   return 0;
+    BOOST_CHECK(argvec.size());
+
+    return boost::unit_test::unit_test_main(init_unit_test, argc, argv);
 }
 
 

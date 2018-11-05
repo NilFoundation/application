@@ -24,90 +24,79 @@
 using namespace boost;
 
 //[lsic
-class myapp
-{
+class myapp {
 public:
-  
-   myapp(application::context& context)
-      : context_(context)
-   {
-   }
 
-   // param
-   int operator()()
-   {
-      boost::shared_ptr<application::args> args =
-         context_.find<application::args>();
-      
-      if(args)
-      {
-         std::vector<std::string> &arg_vector = 
-            args->arg_vector();
+    myapp(application::context &context) : context_(context) {
+    }
 
-         // only print args on screen
-         for(std::vector<std::string>::iterator it = arg_vector.begin(); 
-            it != arg_vector.end(); ++it) {
-            std::cout << *it << std::endl;
-         }
-      }
+    // param
+    int operator()() {
+        boost::shared_ptr <application::args> args = context_.find<application::args>();
 
-      context_.find<application::wait_for_termination_request>()->wait();
+        if (args) {
+            std::vector <std::string> &arg_vector = args->arg_vector();
 
-      return 0;
-   }
+            // only print args on screen
+            for (std::vector<std::string>::iterator it = arg_vector.begin(); it != arg_vector.end(); ++it) {
+                std::cout << *it << std::endl;
+            }
+        }
 
-   /*<< Define a cllback that will handle if a new instance of application should continue or exit >>*/
-   bool instace_aready_running()
-   {
-      char type;
-      do
-      {
-         std::cout << "An instance of this application is already running on "
-            "this operating system!" << std::endl;
-         std::cout << "Do you want to start another? [y/n]" << std::endl;
-         std::cin >> type;
-      }
-      while( !std::cin.fail() && type!='y' && type!='n' );
+        context_.find<application::wait_for_termination_request>()->wait();
 
-      if(type == 'y')
-          // tell to app to continue.
-         return true;
+        return 0;
+    }
 
-      // tell to app to exit.
-      return false;
-   }
+    /*<< Define a cllback that will handle if a new instance of application should continue or exit >>*/
+    bool instace_aready_running() {
+        char type;
+        do {
+            std::cout << "An instance of this application is already running on "
+                         "this operating system!" << std::endl;
+            std::cout << "Do you want to start another? [y/n]" << std::endl;
+            std::cin >> type;
+        } while (!std::cin.fail() && type != 'y' && type != 'n');
+
+        if (type == 'y') {
+            // tell to app to continue.
+            return true;
+        }
+
+        // tell to app to exit.
+        return false;
+    }
 
 private:
 
-   application::context& context_;
+    application::context &context_;
 
 };
 
 // main
 
-int main(int argc, char *argv[])
-{   
-   application::context app_context;
-   myapp app(app_context);
+int main(int argc, char *argv[]) {
+    application::context app_context;
+    myapp app(app_context);
 
-   boost::uuids::string_generator gen;
-   /*<< Define a unique identity to application >>*/
-   boost::uuids::uuid appuuid = gen("{9F66E4AD-ECA5-475D-8784-4BAA329EF9F2}");
+    boost::uuids::string_generator gen;
+    /*<< Define a unique identity to application >>*/
+    boost::uuids::uuid appuuid = gen("{9F66E4AD-ECA5-475D-8784-4BAA329EF9F2}");
 
-   // way 1
-   /*
-   application::handler<bool>::callback cb 
-      = boost::bind(&myapp::instace_aready_running, &app);
+    // way 1
+    /*
+    application::handler<bool>::callback cb
+       = boost::bind(&myapp::instace_aready_running, &app);
 
-   app_context.insert<application::limit_single_instance>(
-      boost::make_shared<application::limit_single_instance_default_behaviour>(appuuid, cb));
-   */
+    app_context.insert<application::limit_single_instance>(
+       boost::make_shared<application::limit_single_instance_default_behaviour>(appuuid, cb));
+    */
 
-   // way 2
-   app_context.insert<application::limit_single_instance>(
-      boost::make_shared<application::limit_single_instance_default_behaviour>(appuuid, 
-         application::handler<bool>::make_callback(app, &myapp::instace_aready_running)));
+    // way 2
+    app_context.insert<application::limit_single_instance>(
+            boost::make_shared<application::limit_single_instance_default_behaviour>(appuuid, application::handler<
+                    bool>::make_callback(app, &myapp::instace_aready_running)));
 
-   return application::launch<application::common>(app, app_context);
+    return application::launch<application::common>(app, app_context);
 }
 //]

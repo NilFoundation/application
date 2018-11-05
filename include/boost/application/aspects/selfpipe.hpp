@@ -29,100 +29,94 @@
 #include <fcntl.h>
 #endif
 
-namespace boost { namespace application { 
+namespace boost {
+    namespace application {
 
-   namespace posix {
+        namespace posix {
 
-      /*!
-       * \brief POSIX platform specific aspect that implement self-pipe trick.
-       *        
-       */
-      class selfpipe : noncopyable
-      {
-      
-      public:
-      
-         selfpipe()
-         {
-            boost::system::error_code ec;
+            /*!
+             * \brief POSIX platform specific aspect that implement self-pipe trick.
+             *
+             */
+            class selfpipe : noncopyable {
 
-            setup(ec);
+            public:
 
-            if(ec) BOOST_APPLICATION_THROW_LAST_SYSTEM_ERROR_USING_MY_EC(
-               "selfpipe() failed", ec);
-         }
-         
-         selfpipe(boost::system::error_code &ec)
-         {
-            setup(ec);
-         }
-         
-         virtual ~selfpipe()
-         {
-            teardown();
-         }
-      
-      protected:
+                selfpipe() {
+                    boost::system::error_code ec;
 
-         void setup(boost::system::error_code &ec)
-         {
-            if (pipe(fd_) == -1)
-            {
-               ec = last_error_code(); return;
-            }
+                    setup(ec);
 
-            fcntl(fd_[readfd], F_SETFL,
-               fcntl(fd_[readfd], F_GETFL) | O_NONBLOCK);
+                    if (ec) {
+                        BOOST_APPLICATION_THROW_LAST_SYSTEM_ERROR_USING_MY_EC("selfpipe() failed", ec);
+                    }
+                }
 
-            fcntl(fd_[writefd], F_SETFL,
-               fcntl(fd_[writefd], F_GETFL) | O_NONBLOCK);
-         }
+                selfpipe(boost::system::error_code &ec) {
+                    setup(ec);
+                }
 
-         void teardown()
-         {
-            close(fd_[readfd]);
-            close(fd_[writefd]);
-         }
+                virtual ~selfpipe() {
+                    teardown();
+                }
 
-      public:
+            protected:
 
-         int read_fd() const
-         {
-            return fd_[readfd];
-         }
+                void setup(boost::system::error_code &ec) {
+                    if (pipe(fd_) == -1) {
+                        ec = last_error_code();
+                        return;
+                    }
 
-         int write_fd() const
-         {
-            return fd_[writefd];
-         }
+                    fcntl(fd_[readfd], F_SETFL, fcntl(fd_[readfd], F_GETFL) | O_NONBLOCK);
 
-         void poke()
-         {
-            write(fd_[writefd], "", 1);
-         }
+                    fcntl(fd_[writefd], F_SETFL, fcntl(fd_[writefd], F_GETFL) | O_NONBLOCK);
+                }
 
-      private:
-      
-         enum { readfd = 0, writefd = 1 };
+                void teardown() {
+                    close(fd_[readfd]);
+                    close(fd_[writefd]);
+                }
 
-         int fd_[2];
+            public:
 
-      }; // selfpipe
+                int read_fd() const {
+                    return fd_[readfd];
+                }
 
-   } // posix
+                int write_fd() const {
+                    return fd_[writefd];
+                }
+
+                void poke() {
+                    write(fd_[writefd], "", 1);
+                }
+
+            private:
+
+                enum {
+                    readfd = 0, writefd = 1
+                };
+
+                int fd_[2];
+
+            }; // selfpipe
+
+        } // posix
 
 // platform usage
 #if defined( BOOST_WINDOWS_API )
-// not available
-// using windows::self_pipe;
+        // not available
+        // using windows::self_pipe;
 #   error "Sorry, the Windows platform don't support 'selfpipe' aspect."
 #elif defined( BOOST_POSIX_API )
-   using posix::selfpipe;
+        using posix::selfpipe;
 #else
 #   error "Sorry, selfpipe are available for this platform."
 #endif
 
-}} // boost::application::posix
+    }
+} // boost::application::posix
 
 #endif // BOOST_APPLICATION_SELFPIPE_ASPECT_HPP
 

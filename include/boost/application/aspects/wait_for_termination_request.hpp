@@ -18,6 +18,7 @@
 
 #include <boost/application/config.hpp>
 #include <boost/application/detail/csbl.hpp>
+
 #if defined( BOOST_WINDOWS_API )
 #include <boost/application/detail/windows/wait_for_termination_request_impl.hpp>
 #elif defined( BOOST_POSIX_API )
@@ -26,68 +27,70 @@
 #error "Sorry, no boost application are available for this platform."
 #endif
 
-namespace boost { namespace application {
+namespace boost {
+    namespace application {
 
-   /*!
-    * \brief A contract class to be used by the user on your own
-    *        class implementation of wait_for_termination_request aspect.
-    *
-    */
-   class wait_for_termination_request : noncopyable
-   {
-   public:
-      wait_for_termination_request() {}
-      virtual ~wait_for_termination_request() {}
+        /*!
+         * \brief A contract class to be used by the user on your own
+         *        class implementation of wait_for_termination_request aspect.
+         *
+         */
+        class wait_for_termination_request : noncopyable {
+        public:
+            wait_for_termination_request() {
+            }
 
-      /*!
-       * Wait for termination request that need be
-       * implemented on derived class.
-       *
-       */
-      virtual void wait() = 0;
+            virtual ~wait_for_termination_request() {
+            }
 
-      /*!
-       * Continue, that need be implemented on derived class.
-       *
-       */
-      virtual void proceed() = 0;
-   };
+            /*!
+             * Wait for termination request that need be
+             * implemented on derived class.
+             *
+             */
+            virtual void wait() = 0;
 
-   /*!
-    * \brief This aspect class handle termination request of application.
-    *        User can override this behavior and define your own.
-    *
-    */
-   class wait_for_termination_request_default_behaviour
-      : public wait_for_termination_request
-   {
-   public:
-      wait_for_termination_request_default_behaviour()
-         : impl_(new wait_for_termination_request_impl()){}
+            /*!
+             * Continue, that need be implemented on derived class.
+             *
+             */
+            virtual void proceed() = 0;
+        };
 
-      /*!
-       * Wait for termination request.
-       *
-       */
-      void wait() {
-         impl_->wait();
-      }
+        /*!
+         * \brief This aspect class handle termination request of application.
+         *        User can override this behavior and define your own.
+         *
+         */
+        class wait_for_termination_request_default_behaviour : public wait_for_termination_request {
+        public:
+            wait_for_termination_request_default_behaviour() : impl_(new wait_for_termination_request_impl()) {
+            }
 
-      /*!
-       * Continue, cause wait to be relesed
-       *
-       */
-      void proceed() {
-         impl_->proceed();
-      }
+            /*!
+             * Wait for termination request.
+             *
+             */
+            void wait() {
+                impl_->wait();
+            }
 
-   private:
+            /*!
+             * Continue, cause wait to be relesed
+             *
+             */
+            void proceed() {
+                impl_->proceed();
+            }
 
-      csbl::shared_ptr<wait_for_termination_request_impl> impl_;
+        private:
 
-   };
+            csbl::shared_ptr <wait_for_termination_request_impl> impl_;
 
-}} // boost::application
+        };
+
+    }
+} // boost::application
 
 #endif // BOOST_APPLICATION_WAIT_FOR_TERMINATION_REQUEST_ASPECT_HPP
 

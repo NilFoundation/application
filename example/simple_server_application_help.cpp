@@ -20,59 +20,54 @@ using namespace boost;
 //[simplesrvrhelp
 /*<< Define a 'functor' myapp class for our application >>*/
 class myapp // [[a]]
-{   
+{
 public:
 
-   /*<<Define the constructor that will receive a application context>>*/
-   myapp(application::context& context)
-      : context_(context)
-   {
-   }
-   
-   /*<< Define a application operator using 'param' signature >>*/
-   int operator()() // [[a]]
-   {
-      // Do some thing
+    /*<<Define the constructor that will receive a application context>>*/
+    myapp(application::context &context) : context_(context) {
+    }
 
-      // [[k]]
-      context_.find<application::wait_for_termination_request>()->wait();
+    /*<< Define a application operator using 'param' signature >>*/
+    int operator()() // [[a]]
+    {
+        // Do some thing
 
-      return 0;
-   }
+        // [[k]]
+        context_.find<application::wait_for_termination_request>()->wait();
 
-   // [[d]]
-   /*<< Optionally, define a 'stop callback' handler, using 'param' signature >>*/
-   bool stop()
-   {
-      // Do some thing
-      return true; // return true to stop, false to ignore
-   }
-   
+        return 0;
+    }
+
+    // [[d]]
+    /*<< Optionally, define a 'stop callback' handler, using 'param' signature >>*/
+    bool stop() {
+        // Do some thing
+        return true; // return true to stop, false to ignore
+    }
+
 private:
-   
-   /*<<Application context to hold aspects>>*/
-   application::context& context_;
+
+    /*<<Application context to hold aspects>>*/
+    application::context &context_;
 };
 
-int main(int argc, char *argv[])
-{   
+int main(int argc, char *argv[]) {
 
-   /*<< Create a local 'context' for application that will hold our aspects >>*/
-   application::context app_context; // [[b]]
-   
-   /*<< Instatntiate our application using auto_handler, the 'stop' method will be automatically handled >>*/
-   application::auto_handler<myapp> app(app_context); // [[a]]
+    /*<< Create a local 'context' for application that will hold our aspects >>*/
+    application::context app_context; // [[b]]
 
-   // my server aspects
+    /*<< Instatntiate our application using auto_handler, the 'stop' method will be automatically handled >>*/
+    application::auto_handler <myapp> app(app_context); // [[a]]
 
-   // [[c]]
-   /*<< Add 'args aspect' to application context >>*/
-   app_context.insert<application::args>(
-      boost::make_shared<application::args>(argc, argv));
+    // my server aspects
 
-   // [[h]]
-   /*<< Launch an application using server application mode >>*/
-   return application::launch<application::server>(app, app_context);
+    // [[c]]
+    /*<< Add 'args aspect' to application context >>*/
+    app_context.insert<application::args>(boost::make_shared<application::args>(argc, argv));
+
+    // [[h]]
+    /*<< Launch an application using server application mode >>*/
+    return application::launch<application::server>(app, app_context);
 }
 //]
 

@@ -21,96 +21,96 @@
 
 #include <boost/application/aspects/selfpipe.hpp>
 
-namespace boost { namespace application {
+namespace boost {
+    namespace application {
 
 #if defined( USE_POSIX_WAIT_FOR_TERMINATION_REQUEST_YELD_BASED )
-   class wait_for_termination_request_impl : noncopyable
-   {
-   public:
+        class wait_for_termination_request_impl : noncopyable
+        {
+        public:
 
-      wait_for_termination_request_impl()
-         : run_(true)
-      {
-      }
+           wait_for_termination_request_impl()
+              : run_(true)
+           {
+           }
 
-      // will wait for termination request
-      void wait()
-      {
-         while (run_) { boost::this_thread::yield(); }
-      }
+           // will wait for termination request
+           void wait()
+           {
+              while (run_) { boost::this_thread::yield(); }
+           }
 
-      void proceed() 
-      {
-         run_ = false;
-      }
+           void proceed()
+           {
+              run_ = false;
+           }
 
-   private:
+        private:
 
-      bool run_;
+           bool run_;
 
-   }; 
+        };
 #elif defined( USE_POSIX_WAIT_FOR_TERMINATION_REQUEST_SIGUSR1_BASED )
-   class wait_for_termination_request_impl : noncopyable
-      // http://www.cs.kent.edu/~farrell/sp/lectures/signals.html
-   {
-   public:
+        class wait_for_termination_request_impl : noncopyable
+           // http://www.cs.kent.edu/~farrell/sp/lectures/signals.html
+        {
+        public:
 
-      // will wait for termination request
-      void wait()
-      {
-         sigset_t sset;
+           // will wait for termination request
+           void wait()
+           {
+              sigset_t sset;
 
-         sigemptyset(&sset);
+              sigemptyset(&sset);
 
-         //sigaddset(&sset, SIGINT);
-         //sigaddset(&sset, SIGQUIT);
-         //sigaddset(&sset, SIGTERM);
+              //sigaddset(&sset, SIGINT);
+              //sigaddset(&sset, SIGQUIT);
+              //sigaddset(&sset, SIGTERM);
 
-         sigaddset(&sset, SIGUSR1);
+              sigaddset(&sset, SIGUSR1);
 
-         sigprocmask(SIG_BLOCK, &sset, NULL);
+              sigprocmask(SIG_BLOCK, &sset, NULL);
 
-         int sig;
-         sigwait(&sset, &sig);
-      }
+              int sig;
+              sigwait(&sset, &sig);
+           }
 
-      void proceed() 
-	    {
-         raise(SIGUSR1);
-      }
-   };
+           void proceed()
+             {
+              raise(SIGUSR1);
+           }
+        };
 #else // DRFAULT WAY
-   class wait_for_termination_request_impl : noncopyable
-   {
-   public:
 
-      // will wait for termination request
-      void wait()
-      {
-         fd_set readfds;
-         FD_ZERO(&readfds);
-         FD_SET(selfpipe_.read_fd(), &readfds);
+        class wait_for_termination_request_impl : noncopyable {
+        public:
 
-         // block and wait
-         while(select(selfpipe_.read_fd() + 1, &readfds, 0, 0, 0) == -1 && errno == EINTR)
-         {
-            // nothing here, restart when signal is catch
-         }
-      }
+            // will wait for termination request
+            void wait() {
+                fd_set readfds;
+                FD_ZERO(&readfds);
+                FD_SET(selfpipe_.read_fd(), &readfds);
 
-      void proceed() 
-      {
-         selfpipe_.poke();
-      }
+                // block and wait
+                while (select(selfpipe_.read_fd() + 1, &readfds, 0, 0, 0) == -1 && errno == EINTR) {
+                    // nothing here, restart when signal is catch
+                }
+            }
 
-   private:
+            void proceed() {
+                selfpipe_.poke();
+            }
 
-      application::selfpipe selfpipe_;
+        private:
 
-   };
+            application::selfpipe selfpipe_;
+
+        };
+
 #endif
 
-}} // boost::application
+    }
+} // boost::application
 
 #endif // BOOST_APPLICATION_WAIT_FOR_TERMINATION_REQUEST_IMPL_HPP
 

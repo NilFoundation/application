@@ -22,54 +22,46 @@
 
 using namespace boost;
 
-class myapp
-{
+class myapp {
 public:
 
-   myapp(application::context& context)
-      : context_(context)
-   {
-   }
+    myapp(application::context &context) : context_(context) {
+    }
 
-   // param
-   int operator()()
-   {
-      boost::shared_ptr<application::args> args =
-         context_.find<application::args>();
+    // param
+    int operator()() {
+        boost::shared_ptr <application::args> args = context_.find<application::args>();
 
-      if(args)
-      {
-         const std::vector<std::string> &arg_vector = args->arg_vector();
+        if (args) {
+            const std::vector <std::string> &arg_vector = args->arg_vector();
 
-         // only print args on screen
-         for(std::vector<std::string>::const_iterator it = arg_vector.begin(); 
-            it != arg_vector.end(); ++it) {
-            std::cout << *it << std::endl;
-         }
-      }
+            // only print args on screen
+            for (std::vector<std::string>::const_iterator it = arg_vector.begin(); it != arg_vector.end(); ++it) {
+                std::cout << *it << std::endl;
+            }
+        }
 
-      context_.find<application::wait_for_termination_request>()->wait();
+        context_.find<application::wait_for_termination_request>()->wait();
 
-      return 0;
-   }
+        return 0;
+    }
 
 private:
 
-   application::context& context_;
+    application::context &context_;
 };
 
 // main
 
-int main(int argc, char *argv[])
-{   
-   application::context app_context;
-   myapp app(app_context);
+int main(int argc, char *argv[]) {
+    application::context app_context;
+    myapp app(app_context);
 
-   boost::uuids::string_generator gen;
+    boost::uuids::string_generator gen;
 
-   app_context.insert<application::limit_single_instance>(
-      boost::make_shared<application::limit_single_instance_default_behaviour>(
-         gen("{2F66E4AD-ECA5-475D-8784-4BAA329EF9F1}")));
+    app_context.insert<application::limit_single_instance>(
+            boost::make_shared<application::limit_single_instance_default_behaviour>(
+                    gen("{2F66E4AD-ECA5-475D-8784-4BAA329EF9F1}")));
 
-   return application::launch<application::common>(app, app_context);
+    return application::launch<application::common>(app, app_context);
 }

@@ -14,77 +14,56 @@
 
 using namespace boost;
 
-class my_apache2_httpd_content_generator_mod
-{
+class my_apache2_httpd_content_generator_mod {
 public:
 
-   my_apache2_httpd_content_generator_mod(application::context& context)
-      : context_(context) { }
+    my_apache2_httpd_content_generator_mod(application::context &context) : context_(context) {
+    }
 
-   int operator()() 
-   {
-      return 0; 
-   }
+    int operator()() {
+        return 0;
+    }
 
-   std::string get()
-   {
-      context_.insert<content_type>(
-         boost::make_shared<content_type>("text/html;charset=ascii"));
+    std::string get() {
+        context_.insert<content_type>(boost::make_shared<content_type>("text/html;charset=ascii"));
 
-      std::stringstream htm;
+        std::stringstream htm;
 
-      htm.str("");
-      htm << "<html>"
-          << "   <head>"
-          << "      <title>Boost.Application Test</title>"
-          << "   </head>"
-          << ""
-          << "   <body>"
-          << "      <h1> Hello Boost.Application Version " 
-          << application::library_version_string() << "!"
-          << "      </h1>"
-          << "      <br/>"
-          << "      Apache HTTPd Mod."
-          << "      <br/>"
-          << "   </body>"
-          << "</html>"
-          ;
+        htm.str("");
+        htm << "<html>" << "   <head>" << "      <title>Boost.Application Test</title>" << "   </head>" << ""
+            << "   <body>" << "      <h1> Hello Boost.Application Version " << application::library_version_string()
+            << "!" << "      </h1>" << "      <br/>" << "      Apache HTTPd Mod." << "      <br/>" << "   </body>"
+            << "</html>";
 
-      boost::shared_ptr<apache_log> apachelog = context_.find<apache_log>();
-      if(apachelog)
-      {
-         // log something on apache log file
-         apachelog->information("Page requested!");
-      }
+        boost::shared_ptr <apache_log> apachelog = context_.find<apache_log>();
+        if (apachelog) {
+            // log something on apache log file
+            apachelog->information("Page requested!");
+        }
 
-      return htm.str();
-   }
+        return htm.str();
+    }
 
 private:
 
-   application::context& context_;
+    application::context &context_;
 
 };
 
 // an application will be launched to handle each request that arrives.
-extern "C" int myhandle(request_rec *r)
-{     
-   application::context app_context;
+extern "C" int myhandle(request_rec *r) {
+    application::context app_context;
 
-   my_apache2_httpd_content_generator_mod app(app_context);
+    my_apache2_httpd_content_generator_mod app(app_context);
 
-   app_context.insert<web_app_name>(
-      boost::make_shared<web_app_name>("boostapp"));
+    app_context.insert<web_app_name>(boost::make_shared<web_app_name>("boostapp"));
 
-   application::handler<std::string>::callback my_http_get_verb
-      = boost::bind(
-         &my_apache2_httpd_content_generator_mod::get, &app);
+    application::handler<std::string>::callback my_http_get_verb = boost::bind(
+            &my_apache2_httpd_content_generator_mod::get, &app);
 
-   app_context.insert<http_get_verb_handler>(
-      boost::make_shared<
-         http_get_verb_handler>(my_http_get_verb));
+    app_context.insert<http_get_verb_handler>(boost::make_shared<http_get_verb_handler>(my_http_get_verb));
 
-   return application::launch<apache2_httpd_mod>(app, *r, app_context);
+    return application::launch<apache2_httpd_mod>(app, *r, app_context);
 }
 
 // register request function and mod on apache server
