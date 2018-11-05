@@ -7,8 +7,8 @@
 #ifndef BOOST_APPLICATION_CONTEXT_HPP
 #define BOOST_APPLICATION_CONTEXT_HPP
 
-/// \file boost/application/context.hpp
-/// \brief This file hold a context of application.
+/// @file boost/application/context.hpp
+/// @brief This file hold a context of application.
 /// 
 /// The library user has 2 options to use context, use a global context or local context that
 /// are passed through application constructor as parameter.
@@ -70,7 +70,7 @@ namespace boost {
         } // application::detail
 
         /*!
-         * \brief This class is the base of Boost.Application.
+         * @brief This class is the base of Boost.Application.
          *        This class can hold any apect, and user can add one,
          *        or use some application modes that will add specifics
          *        aspects to it.

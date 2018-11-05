@@ -30,7 +30,7 @@ namespace boost {
         //
 
         /*!
-         * \brief This is a fundamental type for Boost.Application.
+         * @brief This is a fundamental type for Boost.Application.
          *
          * It is used to pack string, args, paths values,
          * with it we can handle unicode (windows) and others
@@ -52,7 +52,7 @@ namespace boost {
         };
 
         /*!
-         * \brief Pack for characters types used by Boost.Application.
+         * @brief Pack for characters types used by Boost.Application.
          *
          * It is used to pack string, args, paths values,
          * with it we can handle unicode (windows) and others

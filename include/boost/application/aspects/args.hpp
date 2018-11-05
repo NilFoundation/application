@@ -23,7 +23,7 @@ namespace boost {
     namespace application {
 
         /*!
-         * \brief This aspect class handle application args in more friedly way.
+         * @brief This aspect class handle application args in more friedly way.
          *
          * An aspect that will hold args, and provide a easy way to access they
          * or user can extrat args from it to use with Program_options,

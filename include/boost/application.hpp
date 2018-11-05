@@ -7,8 +7,8 @@
 #ifndef BOOST_APPLICATION_HPP
 #define BOOST_APPLICATION_HPP
 
-/// \file boost/application.hpp
-/// \brief Includes all the headers of the Boost.Application library.
+/// @file boost/application.hpp
+/// @brief Includes all the headers of the Boost.Application library.
 
 // config
 #include <boost/config.hpp>

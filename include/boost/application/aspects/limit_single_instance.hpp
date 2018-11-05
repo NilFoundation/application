@@ -38,7 +38,7 @@ namespace boost {
     namespace application {
 
         /*!
-         * \brief A contract class to be used by the user on your own
+         * @brief A contract class to be used by the user on your own
          *        class implementation of wait_for_termination_request aspect.
          *
          */
@@ -70,7 +70,7 @@ namespace boost {
         };
 
         /*!
-         * \brief This aspect class ensure that only a single instance of
+         * @brief This aspect class ensure that only a single instance of
          *        application (process) is running on a given operating system.
          *
          * Note that the automatic behavior of limit single instance is just
@@ -90,7 +90,7 @@ namespace boost {
 #if defined( ENABLE_BOOST_INTERPROCESS_NAMED_MUTEX )
 
         /*!
-         * \brief This aspect class ensure that only a single instance of
+         * @brief This aspect class ensure that only a single instance of
          *        application (process) is running on a given operating system.
          *
          * Note that this inplementation use Boost.Interprocess to create a

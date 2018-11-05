@@ -29,7 +29,7 @@ namespace boost {
             // returns true to indicate that application needs exit.
 
             inline bool check(context &cxt, boost::system::error_code &ec) {
-                csbl::shared_ptr <limit_single_instance> ol = cxt.find<limit_single_instance>();
+                csbl::shared_ptr<limit_single_instance> ol = cxt.find<limit_single_instance>();
 
                 if (ol) {
                     bool is_another_instance_running = ol->lock(ec);
@@ -38,20 +38,17 @@ namespace boost {
                         return false;
                     } // user need check by error
 
-                    if (!is_another_instance_running)
-                        return false; // continue, no other instance running
+                    if (!is_another_instance_running) {
+                        return false;
+                    } // continue, no other instance running
 
                     // check if we have any callback to call
 
                     handler<>::callback *cb = 0;
 
                     if (ol->get(cb)) {
-                        if ((*cb)()) {
-                            // user tell us to continue
-                            return false;
-                        }
+                        return !(*cb)();
 
-                        return true;
                     }
 
                     // default behaviour

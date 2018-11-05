@@ -35,7 +35,7 @@ namespace boost {
         namespace posix {
 
             /*!
-             * \brief POSIX platform specific aspect that implement self-pipe trick.
+             * @brief POSIX platform specific aspect that implement self-pipe trick.
              *
              */
             class selfpipe : noncopyable {

@@ -31,7 +31,7 @@ namespace boost {
     namespace application {
 
         /*!
-         * \brief A class aspect to be used to obtain a PID of proccess.
+         * @brief A class aspect to be used to obtain a PID of proccess.
          *
          */
         class process_id : public detail::process_id_impl {

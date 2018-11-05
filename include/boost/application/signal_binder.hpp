@@ -43,7 +43,7 @@ namespace boost {
         class server_application_impl_;
 
         /*!
-         * \brief This class is the base of signal_manager class.
+         * @brief This class is the base of signal_manager class.
          *        User can extend of signal_manager to customize SIGANAL/Handlers
          *        of your application.
          *
@@ -245,7 +245,7 @@ namespace boost {
         };
 
         /*!
-         * \brief This class hold the default behaviour of SIGNALS
+         * @brief This class hold the default behaviour of SIGNALS
          *        used by application.
          *
          */

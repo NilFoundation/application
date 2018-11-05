@@ -125,7 +125,7 @@ namespace boost {
         } // detail
 
         /*!
-         * \brief This class hold a 'auto_handler' mechanism allowing
+         * @brief This class hold a 'auto_handler' mechanism allowing
          *        the user make the "bind" to the main handlers automatically.
          *
          * Use:

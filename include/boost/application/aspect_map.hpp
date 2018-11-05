@@ -22,8 +22,8 @@
 # pragma once
 #endif
 
-/// \file boost/application/aspect_map.hpp
-/// \brief Contains only the boost::application::aspect_map container class that is capable of
+/// @file boost/application/aspect_map.hpp
+/// @brief Contains only the boost::application::aspect_map container class that is capable of
 /// store any application aspects in thread safe way. 
 /// Internal locking and external locking support.
 
@@ -31,7 +31,7 @@ namespace boost {
     namespace application {
 
         /*!
-         * \brief The aspect_map class implementation.
+         * @brief The aspect_map class implementation.
          *
          * This is a base class for application context.
          * This class provides all methods to aspects manipulation available

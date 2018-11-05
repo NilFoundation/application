@@ -13,8 +13,8 @@
 # pragma once
 #endif
 
-/// \file boost/application/application_mode_register.hpp
-/// \brief Contains a template function that generate a unique identifier
+/// @file boost/application/application_mode_register.hpp
+/// @brief Contains a template function that generate a unique identifier
 /// for each application mode
 
 namespace boost {

@@ -23,7 +23,7 @@ namespace boost {
     namespace application {
 
         /*!
-         * \brief A class to be used by the classes that need execulte callback.
+         * @brief A class to be used by the classes that need execulte callback.
          *
          * This callback is used on all handlers that application can define.
          *

@@ -7,8 +7,8 @@
 #ifndef BOOST_APPLICATION_LAUNCH_HPP
 #define BOOST_APPLICATION_LAUNCH_HPP
 
-/// \file boost/application/launch.hpp
-/// \brief This file has a list of free function to launch an aplication using
+/// @file boost/application/launch.hpp
+/// @brief This file has a list of free function to launch an aplication using
 /// a specifyc mode.
 ///
 /// In this version 2 flavors of application are supported:

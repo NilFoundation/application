@@ -31,7 +31,7 @@ namespace boost {
     namespace application {
 
         /*!
-         * \brief A contract class to be used by the user on your own
+         * @brief A contract class to be used by the user on your own
          *        class implementation of wait_for_termination_request aspect.
          *
          */
@@ -58,7 +58,7 @@ namespace boost {
         };
 
         /*!
-         * \brief This aspect class handle termination request of application.
+         * @brief This aspect class handle termination request of application.
          *        User can override this behavior and define your own.
          *
          */

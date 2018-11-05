@@ -11,8 +11,8 @@
 # pragma once
 #endif
 
-/// \file boost/application/version.hpp
-/// \brief Hold a set of functions to inspect the version of library.
+/// @file boost/application/version.hpp
+/// @brief Hold a set of functions to inspect the version of library.
 /// The BOOST_APPLICATION_VERSION_MAJOR value will be incremented whenever a 
 /// change is made which might cause compilation errors for existing client code.
 

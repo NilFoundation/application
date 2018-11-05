@@ -41,7 +41,7 @@ namespace boost {
     namespace application {
 
         /*!
-         * \brief This class hold a 'server' application mode system.
+         * @brief This class hold a 'server' application mode system.
          *
          * server : Can be seen as Server (log-time duration)
          *          aplication type.

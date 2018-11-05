@@ -40,7 +40,7 @@ namespace boost {
     namespace application {
 
         /*!
-         * \brief This class hold a 'common' application mode system.
+         * @brief This class hold a 'common' application mode system.
          *
          * common : Can be seen as Terminal/Console/Interactive
          *          aplication type.

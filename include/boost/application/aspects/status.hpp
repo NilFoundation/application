@@ -23,7 +23,7 @@ namespace boost {
     namespace application {
 
         /*!
-         * \brief This aspect class is used internaly by applications types (modes)
+         * @brief This aspect class is used internaly by applications types (modes)
          *
          * Indicates the current state of application,
          * 3 ways are possible:
