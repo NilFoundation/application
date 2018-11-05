@@ -12,7 +12,6 @@ language: cpp
 
 git:
   depth: false
-  quiet: true
 
 env:
 - CXX_STANDARD=c++98
