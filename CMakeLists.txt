@@ -9,7 +9,7 @@ include(CMSetupVersion)
 option(BUILD_SHARED_LIBS "Build shared libraries" TRUE)
 
 if(NOT CMAKE_WORKSPACE_NAME)
-    cm_workspace(nil)
+    cm_workspace(boost)
 
     macro(find_package NAME)
         if(NOT "${NAME}" MATCHES "^${CMAKE_WORKSPACE_NAME}_.*$" AND NOT "${NAME}" STREQUAL CM)
