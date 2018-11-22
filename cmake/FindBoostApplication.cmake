@@ -1,8 +1,8 @@
-# Try to find Nil Application headers and libraries.
+# Try to find Boost Application headers and libraries.
 #
 # Use this module as follows:
 #
-#     find_package(Nil [COMPONENTS <core|io|opencl|...>*] [REQUIRED])
+#     find_package(Boost [COMPONENTS <core|io|opencl|...>*] [REQUIRED])
 #
 # Variables used by this module (they can change the default behaviour and need
 # to be set before calling find_package):
@@ -19,7 +19,7 @@
 #  NIL_APPLICATION_INCLUDE_DIR_$C     Include path for component $C
 
 if(NIL_APPLICATION_FIND_COMPONENTS STREQUAL "")
-    message(FATAL_ERROR "FindNilApplicationrequires at least one COMPONENT.")
+    message(FATAL_ERROR "FindBoostApplication requires at least one COMPONENT.")
 endif()
 
 # iterate over user-defined components
