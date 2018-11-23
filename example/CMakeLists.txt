@@ -1,5 +1,6 @@
-if(NOT Boost_THREAD_FOUND)
-    cm_find_package(Boost REQUIRED COMPONENTS thread)
+if(NOT Boost_FOUND OR NOT Boost_THREAD_FOUND OR NOT Boost_DATE_TIME_FOUND OR NOT Boost_SYSTEM_FOUND OR NOT
+   Boost_FILESYSTEM_FOUND)
+    cm_find_package(Boost REQUIRED COMPONENTS thread date_time system filesystem)
 endif()
 
 set(${CMAKE_PROJECT_NAME}_EXAMPLES)
