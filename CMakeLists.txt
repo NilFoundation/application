@@ -6,25 +6,25 @@ include(CMConfig)
 include(CMDeploy)
 include(CMSetupVersion)
 
-option(BUILD_SHARED_LIBS "Build shared libraries" TRUE)
-
 cm_workspace(boost)
 
-macro(find_package NAME)
+macro(cm_find_package NAME)
     if(NOT "${NAME}" MATCHES "^${CMAKE_WORKSPACE_NAME}_.*$" AND NOT "${NAME}" STREQUAL CM)
-        _find_package(${ARGV})
+        find_package(${ARGV})
     else()
         set(${ARGV0}_FOUND ON CACHE BOOL "")
     endif()
 endmacro()
 
-find_package(CM)
+cm_find_package(CM)
 
-find_package(Boost COMPONENTS date_time filesystem thread program_options system regex atomic unit_test_framework)
+cm_find_package(Boost COMPONENTS date_time filesystem thread program_options system regex atomic unit_test_framework)
 
 cm_project(${CMAKE_WORKSPACE_NAME} application)
 
 cm_setup_version(VERSION 0.1.0)
+
+option(BUILD_SHARED_LIBS "Build shared libraries" TRUE)
 
 add_library(${CMAKE_WORKSPACE_NAME}_${CURRENT_PROJECT_NAME} INTERFACE)
 set_property(TARGET ${CMAKE_WORKSPACE_NAME}_${CURRENT_PROJECT_NAME} PROPERTY EXPORT_NAME application)
