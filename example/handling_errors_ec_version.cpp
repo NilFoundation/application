@@ -41,7 +41,7 @@ int main(int argc, char *argv[]) {
     int result = application::launch<application::common>(app, app_context, ec);
 
     if (ec) {
-        std::cerr << "[E] " << ec.message() << " <" << ec.value() << "> " << std::cout;
+        std::cerr << "[E] " << ec.message() << " <" << ec.value() << "> " << std::endl;
     }
 
     return result;

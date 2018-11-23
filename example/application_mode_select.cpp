@@ -88,7 +88,7 @@ int main(int argc, char **argv) {
     // check for error
 
     if (ec) {
-        std::cout << "[E] " << ec.message() << " <" << ec.value() << "> " << std::cout;
+        std::cout << "[E] " << ec.message() << " <" << ec.value() << "> " << std::endl;
     }
 
     return result;

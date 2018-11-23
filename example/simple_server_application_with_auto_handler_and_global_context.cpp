@@ -179,7 +179,7 @@ bool setup(application::context &context) {
 
        if (vm.count("help"))
        {
-          std::cout << install << std::cout;
+          std::cout << install << std::endl;
           return true;
        }
 
@@ -222,7 +222,7 @@ int main(int argc, char *argv[]) {
     application::global_context_ptr ctx = application::global_context::create(ec);
 
     if (ec) {
-        std::cout << "[E] " << ec.message() << " <" << ec.value() << "> " << std::cout;
+        std::cout << "[E] " << ec.message() << " <" << ec.value() << "> " << std::endl;
 
         return 1;
     }
@@ -252,13 +252,13 @@ int main(int argc, char *argv[]) {
     int result = application::launch<application::server>(app, ctx, ec);
 
     if (ec) {
-        std::cout << "[E] " << ec.message() << " <" << ec.value() << "> " << std::cout;
+        std::cout << "[E] " << ec.message() << " <" << ec.value() << "> " << std::endl;
     }
 
     application::global_context::destroy(ec);
 
     if (ec) {
-        std::cout << "[E] " << ec.message() << " <" << ec.value() << "> " << std::cout;
+        std::cout << "[E] " << ec.message() << " <" << ec.value() << "> " << std::endl;
 
         return 1;
     }

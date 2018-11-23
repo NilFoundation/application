@@ -194,7 +194,7 @@ bool setup(application::context &context) {
 
        if (vm.count("help"))
        {
-          std::cout << install << std::cout;
+          std::cout << install << std::endl;
           return true;
        }
 
@@ -255,7 +255,7 @@ int main(int argc, char *argv[]) {
     int result = application::launch<application::server>(app, app_context, ec);
 
     if (ec) {
-        std::cout << "[E] " << ec.message() << " <" << ec.value() << "> " << std::cout;
+        std::cout << "[E] " << ec.message() << " <" << ec.value() << "> " << std::endl;
     }
 
     return result;
