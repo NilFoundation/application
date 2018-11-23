@@ -29,7 +29,7 @@ public:
         // your application logic here!
         // use ctrl to get state of your application...
 
-        boost::shared_ptr <application::run_mode> modes = context_.find<application::run_mode>();
+        boost::shared_ptr<application::run_mode> modes = context_.find<application::run_mode>();
 
         if (modes->mode() == application::common::mode()) {
             std::cout << "Yes am I a common application!" << std::endl;

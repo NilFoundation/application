@@ -76,7 +76,7 @@ public:
 
         // dump args
 
-        std::vector <std::string> arg_vector = context_.find<application::args>()->arg_vector();
+        std::vector<std::string> arg_vector = context_.find<application::args>()->arg_vector();
 
         my_log_file_ << "-----------------------------" << std::endl;
         my_log_file_ << "---------- Arg List ---------" << std::endl;
@@ -91,7 +91,7 @@ public:
 
         // run logic
 
-        application::csbl::shared_ptr <application::status> st = context_.find<application::status>();
+        application::csbl::shared_ptr<application::status> st = context_.find<application::status>();
 
         int count = 0;
         while (st->state() != application::status::stopped) {
@@ -155,11 +155,11 @@ private:
 // my setup code for windows service
 
 bool setup(application::context &context) {
-    strict_lock <application::aspect_map> guard(context);
+    strict_lock<application::aspect_map> guard(context);
 
-    application::csbl::shared_ptr <application::args> myargs = context.find<application::args>(guard);
+    application::csbl::shared_ptr<application::args> myargs = context.find<application::args>(guard);
 
-    application::csbl::shared_ptr <application::path> mypath = context.find<application::path>(guard);
+    application::csbl::shared_ptr<application::path> mypath = context.find<application::path>(guard);
 
 // provide setup for windows service
 #if defined(BOOST_WINDOWS_API)

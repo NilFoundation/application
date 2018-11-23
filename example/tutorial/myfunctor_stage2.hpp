@@ -28,7 +28,7 @@ public:
 
     int operator()() {
         /*<< Retrieves 'status' aspect from your context >>*/
-        boost::shared_ptr <application::status> st = context_.find<application::status>();
+        boost::shared_ptr<application::status> st = context_.find<application::status>();
 
         /*<< Check 'aspect' status 'state' >>*/
         while (st->state() != application::status::stopped) {

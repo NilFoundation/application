@@ -35,7 +35,7 @@ public:
 
         /*<< Use 'path' aspect on your logic. Note that path is added by default >>*/
 
-        boost::shared_ptr <application::path> path = context_.find<application::path>();
+        boost::shared_ptr<application::path> path = context_.find<application::path>();
 
         std::cout << "executable_path      : " << path->executable_path() << std::endl;
         std::cout << "current_path         : " << path->current_path() << std::endl;
@@ -74,7 +74,7 @@ int main(int argc, char *argv[]) {
 
     // std::cout <<  boost::has_trivial_copy<application::context>::value << std::endl;
 
-    application::auto_handler <myapp> app(app_context);
+    application::auto_handler<myapp> app(app_context);
 
     return application::launch<application::common>(app, app_context);
 }

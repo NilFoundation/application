@@ -144,7 +144,7 @@ namespace boost {
 
                             // now traverse each service to get information
                             for (unsigned iIndex = 0; iIndex < dwServicesReturned; iIndex++) {
-                                std::basic_string <char_type> service;
+                                std::basic_string<char_type> service;
                                 service = (pServices + iIndex)->lpServiceName;
 
                                 if (service == service_name_) {
@@ -166,7 +166,7 @@ namespace boost {
                     return false;
                 }
 
-                std::basic_string <char_type> service_name_;
+                std::basic_string<char_type> service_name_;
 
             }; // check_windows_service
 
@@ -245,7 +245,7 @@ namespace boost {
                        L"SOFTWARE\\Microsoft\\Windows\\CurrentVersion\\App Paths\\" + service_path_name_;
 
 #else
-                    std::basic_string <char_type> subKey =
+                    std::basic_string<char_type> subKey =
                             "SOFTWARE\\Microsoft\\Windows\\CurrentVersion\\App Paths\\" + service_path_name_;
 #endif
 
@@ -256,8 +256,8 @@ namespace boost {
                     }
                 }
 
-                std::basic_string <char_type> service_name_;
-                std::basic_string <char_type> service_path_name_;
+                std::basic_string<char_type> service_name_;
+                std::basic_string<char_type> service_path_name_;
 
             }; // uninstall_windows_service
 
@@ -325,7 +325,7 @@ namespace boost {
                         return;
                     }
 
-                    std::basic_string <char_type> pathname = service_path_name_;
+                    std::basic_string<char_type> pathname = service_path_name_;
                     // Append the switch that causes the process to run as a service.
                     if (service_option_string_.size()) {
                         pathname += char_type(' ') + service_option_string_;
@@ -338,7 +338,7 @@ namespace boost {
                     }
 
                     // e.g. the format of service depends str is "service1\0services2\0services3\0\0"
-                    std::vector <char_type> create_service_depends(service_depends_.length() + 2, 0);
+                    std::vector<char_type> create_service_depends(service_depends_.length() + 2, 0);
                     std::copy(service_depends_.begin(), service_depends_.end(), create_service_depends.begin());
                     std::replace(create_service_depends.begin(), create_service_depends.end(), '\\', '\0');
 
@@ -359,7 +359,7 @@ namespace boost {
 
                     // grant user "Login as a Service" permission.
                     if (!service_user_.empty()) {
-                        std::basic_string <char_type> actual_service_user;
+                        std::basic_string<char_type> actual_service_user;
                         if (service_user_.find(std::basic_string<char_type>("\\")) ==
                             std::basic_string<char_type>::npos) {
                             actual_service_user = std::basic_string<char_type>(".\\") + service_user_;
@@ -410,7 +410,7 @@ namespace boost {
                 void register_application(boost::system::error_code &ec) {
                     boost::filesystem::path path(service_path_name_);
 
-                    std::basic_string <char_type> sub_key, path_entry, default_entry;
+                    std::basic_string<char_type> sub_key, path_entry, default_entry;
 
                     HKEY hkey = NULL;
 
@@ -474,16 +474,16 @@ namespace boost {
                     }
                 }
 
-                std::basic_string <char_type> service_name_;
-                std::basic_string <char_type> service_display_name_;
-                std::basic_string <char_type> service_description_;
-                std::basic_string <char_type> service_path_name_;
-                std::basic_string <char_type> service_option_string_;
-                std::basic_string <char_type> service_start_mode_;
-                std::basic_string <char_type> service_depends_;
+                std::basic_string<char_type> service_name_;
+                std::basic_string<char_type> service_display_name_;
+                std::basic_string<char_type> service_description_;
+                std::basic_string<char_type> service_path_name_;
+                std::basic_string<char_type> service_option_string_;
+                std::basic_string<char_type> service_start_mode_;
+                std::basic_string<char_type> service_depends_;
 
-                std::basic_string <char_type> service_user_;
-                std::basic_string <char_type> service_password_;
+                std::basic_string<char_type> service_user_;
+                std::basic_string<char_type> service_password_;
 
             }; // install_windows_service
 

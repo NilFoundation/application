@@ -18,7 +18,7 @@ int main(int argc, char *argv[]) {
     application::context app_context;
 
     /*<< Tie stop, pause, resume handlers using default behaviour >>*/
-    application::auto_handler <myapp> app(app_context);
+    application::auto_handler<myapp> app(app_context);
 
     /*<< Path manipulation aspect, to be used to get executable module path to use in log >>*/
     app_context.insert<application::path>(boost::make_shared<application::path>());

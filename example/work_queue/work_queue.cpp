@@ -28,7 +28,7 @@ using namespace boost;
 // http://en.wikipedia.org/wiki/Gaussian_blur
 template<int kernelRadius = 3>
 struct gaussian_blur {
-    typedef boost::function<void(vector < vector < double > > )> callback;
+    typedef boost::function<void(vector<vector<double> >)> callback;
 
     gaussian_blur(const callback &cb) : callback_(cb) {
     }
@@ -51,9 +51,9 @@ protected:
         return exp(-(((x - mu) / (sigma)) * ((x - mu) / (sigma))) / 2.0);
     }
 
-    vector <vector<double>> produce_gaussian_kernel(int internalKernelRadius) {
+    vector<vector<double>> produce_gaussian_kernel(int internalKernelRadius) {
         // get kernel matrix
-        vector <vector<double>> kernel2d(2 * internalKernelRadius + 1, vector<double>(2 * internalKernelRadius + 1));
+        vector<vector<double>> kernel2d(2 * internalKernelRadius + 1, vector<double>(2 * internalKernelRadius + 1));
 
         // determine sigma
         double sigma = internalKernelRadius / 2.;
@@ -81,7 +81,7 @@ protected:
 private:
 
     callback callback_;
-    vector <vector<double>> kernel2d_;
+    vector<vector<double>> kernel2d_;
 };
 
 // application class
@@ -91,8 +91,8 @@ public:
     myapp(application::context &context) : context_(context) {
     }
 
-    void add_result(vector <vector<double>> kernel2d) {
-        boost::lock_guard <boost::mutex> lock(mutex_);
+    void add_result(vector<vector<double>> kernel2d) {
+        boost::lock_guard<boost::mutex> lock(mutex_);
 
         task_count_++;
 
@@ -123,7 +123,7 @@ public:
         for (int i = 0; i < result_.size(); ++i) {
             cout << i << " : -----------------------" << std::endl;
 
-            vector <vector<double>> &kernel2d = result_[i];
+            vector<vector<double>> &kernel2d = result_[i];
 
             for (int row = 0; row < kernel2d.size(); row++) {
                 for (int col = 0; col < kernel2d[row].size(); col++) {
@@ -139,8 +139,7 @@ public:
 private:
 
     boost::mutex mutex_;
-    vector <vector<vector < double>> >
-    result_;
+    vector<vector<vector<double>>> result_;
 
     int task_count_;
 

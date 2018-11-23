@@ -52,7 +52,7 @@ namespace boost {
 
             typedef csbl::type_index key_type;
             typedef csbl::shared_ptr<void> value_type;
-            typedef csbl::unordered_map <key_type, value_type> map_type;
+            typedef csbl::unordered_map<key_type, value_type> map_type;
 
             map_type aspects_;
 
@@ -78,8 +78,8 @@ namespace boost {
              * \throw Nothing.
              */
             template<class T>
-            csbl::shared_ptr <T> find() {
-                strict_lock <aspect_map> guard(*this);
+            csbl::shared_ptr<T> find() {
+                strict_lock<aspect_map> guard(*this);
                 return find<T>(guard);
             }
 
@@ -97,7 +97,7 @@ namespace boost {
              *        Does not owns correct lock.
              */
             template<class T>
-            csbl::shared_ptr <T> find(strict_lock <aspect_map> &guard) {
+            csbl::shared_ptr<T> find(strict_lock<aspect_map> &guard) {
                 ensure_correct_lock(guard);
                 map_type::const_iterator it = aspects_.find(aspec_id<T>());
 
@@ -124,7 +124,7 @@ namespace boost {
              */
             template<class T>
             size_type count() {
-                strict_lock <aspect_map> guard(*this);
+                strict_lock<aspect_map> guard(*this);
                 return count<T>(guard);
             }
 
@@ -143,7 +143,7 @@ namespace boost {
              * \throw Nothing.
              */
             template<class T>
-            size_type count(strict_lock <aspect_map> &guard) {
+            size_type count(strict_lock<aspect_map> &guard) {
                 // this is not needed
                 // ensure_correct_lock(guard);
                 if (find<T>(guard)) {
@@ -170,8 +170,8 @@ namespace boost {
              * \throw Any exception throw due to resources unavailable.
              */
             template<class T>
-            csbl::shared_ptr <T> insert(csbl::shared_ptr <T> asp) {
-                strict_lock <aspect_map> guard(*this);
+            csbl::shared_ptr<T> insert(csbl::shared_ptr<T> asp) {
+                strict_lock<aspect_map> guard(*this);
                 return insert<T>(asp, guard);
             }
 
@@ -194,11 +194,11 @@ namespace boost {
              *        resources unavailable.
              */
             template<class T>
-            csbl::shared_ptr <T> insert(csbl::shared_ptr <T> asp, strict_lock <aspect_map> &guard) {
+            csbl::shared_ptr<T> insert(csbl::shared_ptr<T> asp, strict_lock<aspect_map> &guard) {
                 ensure_correct_lock(guard);
                 key_type ti = aspec_id<T>();
 
-                csbl::shared_ptr <T> temp = find<T>(guard);
+                csbl::shared_ptr<T> temp = find<T>(guard);
 
                 if (temp) {
                     return temp;
@@ -226,8 +226,8 @@ namespace boost {
              * \throw Nothing.
              */
             template<class T>
-            csbl::shared_ptr <T> exchange(csbl::shared_ptr <T> asp) {
-                strict_lock <aspect_map> guard(*this);
+            csbl::shared_ptr<T> exchange(csbl::shared_ptr<T> asp) {
+                strict_lock<aspect_map> guard(*this);
                 return exchange(asp, guard);
             }
 
@@ -250,11 +250,11 @@ namespace boost {
              *        Does not owns correct lock.
              */
             template<class T>
-            csbl::shared_ptr <T> exchange(csbl::shared_ptr <T> asp, strict_lock <aspect_map> &guard) {
+            csbl::shared_ptr<T> exchange(csbl::shared_ptr<T> asp, strict_lock<aspect_map> &guard) {
                 ensure_correct_lock(guard);
                 key_type ti = aspec_id<T>();
 
-                csbl::shared_ptr <T> temp = find<T>(guard);
+                csbl::shared_ptr<T> temp = find<T>(guard);
 
                 if (temp) {
                     aspects_.erase(ti);
@@ -277,8 +277,8 @@ namespace boost {
              * \throw Nothing.
              */
             template<class T>
-            csbl::shared_ptr <T> erase() {
-                strict_lock <aspect_map> guard(*this);
+            csbl::shared_ptr<T> erase() {
+                strict_lock<aspect_map> guard(*this);
                 return erase<T>(guard);
             }
 
@@ -296,12 +296,12 @@ namespace boost {
              *        Does not owns correct lock.
              */
             template<class T>
-            csbl::shared_ptr <T> erase(strict_lock <aspect_map> &guard) {
+            csbl::shared_ptr<T> erase(strict_lock<aspect_map> &guard) {
                 ensure_correct_lock(guard);
 
                 key_type ti = aspec_id<T>();
 
-                csbl::shared_ptr <T> temp = find<T>(guard);
+                csbl::shared_ptr<T> temp = find<T>(guard);
 
                 if (temp) {
                     aspects_.erase(ti);
@@ -332,8 +332,8 @@ namespace boost {
              * \throw Any exception throw due to resources unavailable.
              */
             template<class T, class F>
-            shared_ptr <T> reduce(shared_ptr <T> asp, F f) {
-                strict_lock <aspect_map> guard(*this);
+            shared_ptr<T> reduce(shared_ptr<T> asp, F f) {
+                strict_lock<aspect_map> guard(*this);
                 return reduce<T, F>(asp, f, guard);
             }
 
@@ -359,14 +359,14 @@ namespace boost {
              *        resources unavailable.
              */
             template<class T, class F>
-            shared_ptr <T> reduce(shared_ptr <T> asp, F f, strict_lock <aspect_map> &guard) {
+            shared_ptr<T> reduce(shared_ptr<T> asp, F f, strict_lock<aspect_map> &guard) {
                 ensure_correct_lock(guard);
                 key_type ti = aspec_id<T>();
 
-                csbl::shared_ptr <T> tmp = find<T>(guard);
+                csbl::shared_ptr<T> tmp = find<T>(guard);
 
                 if (tmp) {
-                    csbl::shared_ptr <T> red = f(tmp, asp);
+                    csbl::shared_ptr<T> red = f(tmp, asp);
                     aspects_.erase(ti);
                     aspects_.insert(std::make_pair(ti, red));
 
@@ -414,7 +414,7 @@ namespace boost {
              * \throw Nothing.
              */
             void clear() {
-                strict_lock <aspect_map> guard(*this);
+                strict_lock<aspect_map> guard(*this);
                 aspects_.clear();
             }
 

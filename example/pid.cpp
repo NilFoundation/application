@@ -32,7 +32,7 @@ public:
     int operator()() {
         std::cout << "Test" << std::endl;
 
-        boost::shared_ptr <application::process_id> pid = context_.find<application::process_id>();
+        boost::shared_ptr<application::process_id> pid = context_.find<application::process_id>();
 
         std::cout << "pid : " << pid->pid() << std::endl;
 

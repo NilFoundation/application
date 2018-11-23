@@ -123,7 +123,7 @@ protected:
             cxt.insert<status>(csbl::make_shared<status>(status::running));
         }
 
-        csbl::shared_ptr <web_app_name> appname = cxt.find<web_app_name>();
+        csbl::shared_ptr<web_app_name> appname = cxt.find<web_app_name>();
 
         if (!appname) {
             error_ = DECLINED;
@@ -147,13 +147,13 @@ protected:
 
         // GET
 
-        csbl::shared_ptr <http_get_verb_handler> http_get_verb = cxt.find<http_get_verb_handler>();
+        csbl::shared_ptr<http_get_verb_handler> http_get_verb = cxt.find<http_get_verb_handler>();
 
         if (http_get_verb) {
             // apache log
             cxt.insert<apache_log>(csbl::make_shared<apache_log>(&rr));
 
-            csbl::shared_ptr <content_type> contenttype = cxt.find<content_type>();
+            csbl::shared_ptr<content_type> contenttype = cxt.find<content_type>();
 
             if (contenttype) {
                 ap_set_content_type(&rr, contenttype->content_type_.c_str());
