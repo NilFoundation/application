@@ -30,10 +30,10 @@ public:
     // param
     int operator()() {
         std::cout << "Test" << std::endl;
-        boost::shared_ptr <application::args> myargs = context_.find<application::args>();
+        boost::shared_ptr<application::args> myargs = context_.find<application::args>();
 
         if (myargs) {
-            const std::vector <std::string> &arg_vector = myargs->arg_vector();
+            const std::vector<std::string> &arg_vector = myargs->arg_vector();
 
             // only print args on screen
             for (std::vector<std::string>::const_iterator it = arg_vector.begin(); it != arg_vector.end(); ++it) {

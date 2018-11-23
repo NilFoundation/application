@@ -57,7 +57,7 @@ int main(int argc, char *argv[]) {
     application::context app_context; // [[b]]
 
     /*<< Instatntiate our application using auto_handler, the 'stop' method will be automatically handled >>*/
-    application::auto_handler <myapp> app(app_context); // [[a]]
+    application::auto_handler<myapp> app(app_context); // [[a]]
 
     // my server aspects
 

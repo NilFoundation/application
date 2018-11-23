@@ -39,17 +39,17 @@ public:
     }
 
     void signal() {
-        boost::lock_guard <boost::mutex> lock(mutex_);
+        boost::lock_guard<boost::mutex> lock(mutex_);
         state_ = true;
     }
 
     void error() {
-        boost::lock_guard <boost::mutex> lock(mutex_);
+        boost::lock_guard<boost::mutex> lock(mutex_);
         state_ = boost::logic::indeterminate;
     }
 
     boost::logic::tribool state() {
-        boost::lock_guard <boost::mutex> lock(mutex_);
+        boost::lock_guard<boost::mutex> lock(mutex_);
         return state_;
     }
 
@@ -59,7 +59,7 @@ class myapp {
 public:
 
     int operator()() {
-        boost::shared_ptr <application::selfpipe> selfpipe = this_application()->find<application::selfpipe>();
+        boost::shared_ptr<application::selfpipe> selfpipe = this_application()->find<application::selfpipe>();
 
         fd_set readfds;
         FD_ZERO(&readfds);
@@ -139,7 +139,7 @@ public:
     bool signal_usr2_handler() {
         std::cout << "signal_usr2_handler" << std::endl;
 
-        boost::shared_ptr <application::selfpipe> selfpipe = this_application()->find<application::selfpipe>();
+        boost::shared_ptr<application::selfpipe> selfpipe = this_application()->find<application::selfpipe>();
 
         /*<<Notify application in case of reception of SIGUSR2 signal, unsing self-pipe>>*/
         selfpipe->poke();

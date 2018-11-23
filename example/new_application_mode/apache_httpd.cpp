@@ -35,7 +35,7 @@ public:
             << "!" << "      </h1>" << "      <br/>" << "      Apache HTTPd Mod." << "      <br/>" << "   </body>"
             << "</html>";
 
-        boost::shared_ptr <apache_log> apachelog = context_.find<apache_log>();
+        boost::shared_ptr<apache_log> apachelog = context_.find<apache_log>();
         if (apachelog) {
             // log something on apache log file
             apachelog->information("Page requested!");

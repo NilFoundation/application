@@ -39,14 +39,14 @@ public:
 
     // param
     int operator()() {
-        boost::shared_ptr <application::args> args = context_.find<application::args>();
+        boost::shared_ptr<application::args> args = context_.find<application::args>();
 
         if (args) {
-            std::vector <std::string> &arg_vector = args->arg_vector();
+            const std::vector<std::string> &arg_vector = args->arg_vector();
 
             // only print args on screen
-            for (std::vector<std::string>::iterator it = arg_vector.begin(); it != arg_vector.end(); ++it) {
-                std::cout << *it << std::endl;
+            for (const auto &it : arg_vector) {
+                std::cout << it << std::endl;
             }
         }
 

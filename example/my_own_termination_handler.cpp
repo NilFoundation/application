@@ -49,8 +49,7 @@ public:
         std::cout << "operator()" << std::endl;
 
         // launch a work thread
-        boost::thread
-        thread(boost::bind(&myapp::work_thread, this));
+        boost::thread thread(boost::bind(&myapp::work_thread, this));
 
         context_.find<wait_for_termination_request>()->wait();
 
@@ -89,13 +88,12 @@ public:
         std::cout << "exiting..." << std::endl;
 #elif defined( BOOST_POSIX_API )
         std::ofstream my_log_file;
-        my_log_file.open((context_.find<
-           path>()->executable_path().string() + "/log_stop.txt").c_str());
+        my_log_file.open((context_.find<path>()->executable_path().string() + "/log_stop.txt").c_str());
         my_log_file << ":0)-" << std::endl;
         my_log_file.close();
 #endif
 
-        shared_ptr <wait_for_termination_request> th = context_.find<wait_for_termination_request>();
+        shared_ptr<wait_for_termination_request> th = context_.find<wait_for_termination_request>();
 
         th->proceed();
 

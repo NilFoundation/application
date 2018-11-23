@@ -41,10 +41,10 @@ public:
         BOOST_APPLICATION_FEATURE_SELECT
 
         std::cout << "Test" << std::endl;
-        shared_ptr <application::args> myargs = this_application()->find<application::args>();
+        shared_ptr<application::args> myargs = this_application()->find<application::args>();
 
         if (myargs) {
-            const std::vector <std::string> &arg_vector = myargs->arg_vector();
+            const std::vector<std::string> &arg_vector = myargs->arg_vector();
 
             // only print args on screen
             for (std::vector<std::string>::const_iterator it = arg_vector.begin(); it != arg_vector.end(); ++it) {

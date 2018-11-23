@@ -72,7 +72,7 @@ public:
 
         // dump args
 
-        const std::vector <std::string> &arg_vector = this_application()->find<application::args>()->arg_vector();
+        const std::vector<std::string> &arg_vector = this_application()->find<application::args>()->arg_vector();
 
         my_log_file_ << "-----------------------------" << std::endl;
         my_log_file_ << "---------- Arg List ---------" << std::endl;
@@ -87,7 +87,7 @@ public:
 
         // run logic
 
-        boost::shared_ptr <application::status> st = this_application()->find<application::status>();
+        boost::shared_ptr<application::status> st = this_application()->find<application::status>();
 
         int count = 0;
         while (st->state() != application::status::stopped) {
@@ -149,11 +149,11 @@ private:
 // my setup code for windows service
 
 bool setup(application::context &context) {
-    strict_lock <application::aspect_map> guard(context);
+    strict_lock<application::aspect_map> guard(context);
 
-    boost::shared_ptr <application::args> myargs = context.find<application::args>(guard);
+    boost::shared_ptr<application::args> myargs = context.find<application::args>(guard);
 
-    boost::shared_ptr <application::path> mypath = context.find<application::path>(guard);
+    boost::shared_ptr<application::path> mypath = context.find<application::path>(guard);
 
 // provide setup for windows service
 #if defined(BOOST_WINDOWS_API)
@@ -228,7 +228,7 @@ int main(int argc, char *argv[]) {
     }
 
     // auto_handler will automatically add termination, pause and resume (windows) handlers
-    application::auto_handler <myapp> app(ctx);
+    application::auto_handler<myapp> app(ctx);
     // application::detail::handler_auto_set<myapp> app(app_context);
 
     // my server aspects

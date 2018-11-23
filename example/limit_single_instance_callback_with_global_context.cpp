@@ -38,10 +38,10 @@ public:
     // singleton, no param
     int operator()() {
         std::cout << "Test" << std::endl;
-        boost::shared_ptr <args> myargs = this_application()->find<args>();
+        boost::shared_ptr<args> myargs = this_application()->find<args>();
 
         if (myargs) {
-            const std::vector <std::string> &arg_vector = myargs->arg_vector();
+            const std::vector<std::string> &arg_vector = myargs->arg_vector();
 
             // only print args on screen
             for (std::vector<std::string>::const_iterator it = arg_vector.begin(); it != arg_vector.end(); ++it) {

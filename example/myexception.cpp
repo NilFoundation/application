@@ -26,6 +26,10 @@ public:
     explicit myexception_base(const std::string &msg, unsigned int code) : message_(msg), code_(code) {
     }
 
+    virtual ~myexception_base() _NOEXCEPT {
+
+    }
+
     virtual const char *what() const throw() {
         return message_.c_str();
     }

@@ -66,8 +66,7 @@ public:
         // or using [wait_for_termination_request]
 
         // launch a work thread
-        boost::thread
-        thread(boost::bind(&myapp::work_thread, this));
+        boost::thread thread(boost::bind(&myapp::work_thread, this));
 
         this_application()->find<application::wait_for_termination_request>()->wait();
 

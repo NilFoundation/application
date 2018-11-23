@@ -80,7 +80,7 @@ public:
 
         // dump args
 
-        std::vector <std::string> arg_vector = context_.find<application::args>()->arg_vector();
+        std::vector<std::string> arg_vector = context_.find<application::args>()->arg_vector();
 
         my_log_file_ << "-----------------------------" << std::endl;
         my_log_file_ << "---------- Arg List ---------" << std::endl;
@@ -93,7 +93,7 @@ public:
 
         my_log_file_ << "-----------------------------" << std::endl;
 
-        boost::shared_ptr <application::process_id> pid = context_.find<application::process_id>();
+        boost::shared_ptr<application::process_id> pid = context_.find<application::process_id>();
 
         my_log_file_ << "PID: " << pid->pid() << std::endl;
 
@@ -101,7 +101,7 @@ public:
 
         // run logic
 
-        boost::shared_ptr <application::status> st = context_.find<application::status>();
+        boost::shared_ptr<application::status> st = context_.find<application::status>();
 
         int count = 0;
         while (st->state() != application::status::stopped) {
@@ -164,11 +164,11 @@ private:
 // my setup code for windows service
 
 bool setup(application::context &context) {
-    strict_lock <application::aspect_map> guard(context);
+    strict_lock<application::aspect_map> guard(context);
 
-    boost::shared_ptr <application::args> myargs = context.find<application::args>(guard);
+    boost::shared_ptr<application::args> myargs = context.find<application::args>(guard);
 
-    boost::shared_ptr <application::path> mypath = context.find<application::path>(guard);
+    boost::shared_ptr<application::path> mypath = context.find<application::path>(guard);
 
 // provide setup for windows service
 #if defined(BOOST_WINDOWS_API)
@@ -233,7 +233,7 @@ int main(int argc, char *argv[]) {
     application::context app_context;
 
     // auto_handler will automatically add termination, pause and resume (windows) handlers
-    application::auto_handler <myapp> app(app_context);
+    application::auto_handler<myapp> app(app_context);
     // application::detail::handler_auto_set<myapp> app(app_context);
 
     // my server aspects

@@ -26,6 +26,9 @@ cm_project(${CMAKE_WORKSPACE_NAME} application)
 
 cm_setup_version(VERSION 0.1.0)
 
+option(BUILD_SHARED_LIBS "Build shared libraries" TRUE)
+option(BUILD_EXAMPLES "Build tests" TRUE)
+
 add_library(${CMAKE_WORKSPACE_NAME}_${CURRENT_PROJECT_NAME} INTERFACE)
 set_property(TARGET ${CMAKE_WORKSPACE_NAME}_${CURRENT_PROJECT_NAME} PROPERTY EXPORT_NAME application)
 
@@ -33,4 +36,10 @@ target_include_directories(${CMAKE_WORKSPACE_NAME}_${CURRENT_PROJECT_NAME} INTER
 
 cm_deploy(TARGETS ${CMAKE_WORKSPACE_NAME}_${CURRENT_PROJECT_NAME} INCLUDE include NAMESPACE ${CMAKE_WORKSPACE_NAME}::)
 
-add_subdirectory(test)
+if(BUILD_TESTS)
+    add_subdirectory(test)
+endif()
+
+if(BUILD_EXAMPLES)
+    add_subdirectory(example)
+endif()
