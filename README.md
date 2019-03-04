@@ -1,5 +1,7 @@
 # Nil Application Framework (0.4.12) [![Build Status](https://travis-ci.com/nemo1369/application.svg?token=DHGZQ8ocJtbnXsTs61qE&branch=master)](https://travis-ci.com/nemo1369/application)
 
+This library is derived from Boost.Application (https://github.com/retf/Boost.Application).
+
 ### Caution
 
 This is not yet an official Boost C++ library. It wasn't reviewed and can't be downloaded from www.boost.org. This beta is available to boost community to know real interest and get comments for refinement.The intention is to submit library to formal review, if community think that it is interesting!
