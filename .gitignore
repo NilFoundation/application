@@ -626,17 +626,3 @@ lcov-out/
 # Profiler outputs
 cachegrind.*
 callgrind.*
-
-# Ignore stuff in the top level dir that shouldn't be checked in
-/*.c
-/*.cpp
-/*.h
-/*.py
-/*.key
-/*.pem
-/*.der
-/*.ber
-/*.gpg
-/*.pub
-/*.crt
-/*.txt

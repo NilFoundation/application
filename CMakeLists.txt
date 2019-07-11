@@ -20,7 +20,7 @@ cm_find_package(CM)
 
 cm_find_package(Boost COMPONENTS date_time filesystem thread program_options system regex atomic unit_test_framework)
 
-cm_project(${CMAKE_WORKSPACE_NAME} application)
+cm_project(application WORKSPACE_NAME ${CMAKE_WORKSPACE_NAME})
 
 cm_setup_version(VERSION 0.1.0)
 
