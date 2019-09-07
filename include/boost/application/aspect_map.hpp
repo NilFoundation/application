@@ -19,12 +19,12 @@
 #include <boost/thread/lockable_adapter.hpp>
 
 #ifdef BOOST_HAS_PRAGMA_ONCE
-# pragma once
+#pragma once
 #endif
 
 /// @file boost/application/aspect_map.hpp
 /// @brief Contains only the boost::application::aspect_map container class that is capable of
-/// store any application aspects in thread safe way. 
+/// store any application aspects in thread safe way.
 /// Internal locking and external locking support.
 
 namespace boost {
@@ -64,7 +64,6 @@ namespace boost {
             /// @endcond
 
         public:
-
             /*!
              * Lookup a aspect and return the shared_ptr<T> of it.
              * Internal locking Version.
@@ -419,7 +418,6 @@ namespace boost {
             }
 
         private:
-
             /// @cond
             inline void ensure_correct_lock(boost::strict_lock<aspect_map> &guard) {
                 if (!guard.owns_lock(this)) {
@@ -428,9 +426,9 @@ namespace boost {
             }
             /// @endcond
 
-        }; // aspect_map
+        };    // aspect_map
 
-    }
-}  // boost::application
+    }    // namespace application
+}    // namespace boost
 
-#endif // BOOST_APPLICATION_ASPECT_MAP_HPP
+#endif    // BOOST_APPLICATION_ASPECT_MAP_HPP

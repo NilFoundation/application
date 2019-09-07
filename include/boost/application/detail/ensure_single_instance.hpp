@@ -36,11 +36,11 @@ namespace boost {
 
                     if (ec) {
                         return false;
-                    } // user need check by error
+                    }    // user need check by error
 
                     if (!is_another_instance_running) {
                         return false;
-                    } // continue, no other instance running
+                    }    // continue, no other instance running
 
                     // check if we have any callback to call
 
@@ -48,7 +48,6 @@ namespace boost {
 
                     if (ol->get(cb)) {
                         return !(*cb)();
-
                     }
 
                     // default behaviour
@@ -73,9 +72,8 @@ namespace boost {
                 }
             };
 
-        }
-    }
-} // boost::application
+        }    // namespace detail
+    }        // namespace application
+}    // namespace boost
 
-#endif // BOOST_APPLICATION_DETAIL_ENSURE_SINGLE_INSTANCE_HPP
-
+#endif    // BOOST_APPLICATION_DETAIL_ENSURE_SINGLE_INSTANCE_HPP

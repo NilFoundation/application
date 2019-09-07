@@ -16,7 +16,7 @@
 #include <unistd.h>
 
 #ifdef BOOST_HAS_PRAGMA_ONCE
-# pragma once
+#pragma once
 #endif
 
 namespace boost {
@@ -36,7 +36,6 @@ namespace boost {
                 }
 
             public:
-
                 filesystem::path current_path(void) {
                     return filesystem::current_path();
                 }
@@ -113,13 +112,13 @@ namespace boost {
                     boost::filesystem::path path = getenv("TMPDIR");
                     if (path.empty()) {
                         return "/tmp";
-                    } // Fallback if TMPDIR not available
+                    }    // Fallback if TMPDIR not available
                     return path;
                 }
             };
 
-        }
-    }
-} // namespace boost::dll::detail
+        }    // namespace detail
+    }        // namespace application
+}    // namespace boost
 
-#endif // BOOST_APPLICATION_DETAIL_POSIX_PATH_FROM_ME_HPP
+#endif    // BOOST_APPLICATION_DETAIL_POSIX_PATH_FROM_ME_HPP

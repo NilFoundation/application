@@ -16,7 +16,7 @@
 
 //
 // *****************************************************************************
-// note that this is a experimental module 
+// note that this is a experimental module
 // note that construcor can not be explicit
 // *****************************************************************************
 //
@@ -34,26 +34,26 @@
 #include <boost/type_traits.hpp>
 #include <boost/static_assert.hpp>
 
-// This macro check if a ctrl handler exists in child class 
+// This macro check if a ctrl handler exists in child class
 // Based on:
 // http://en.wikibooks.org/w/index.php?title=More_C%2B%2B_Idioms%2FMember_Detector
-// 
-#define MEMBER_HANDLER_EXIST(func, name)                                   \
-template<typename T, typename R>                                           \
-struct name                                                                \
-{                                                                          \
-   typedef char yes[1];                                                    \
-   typedef char no [2];                                                    \
-                                                                           \
-   template <typename U, U>                                                \
-   struct type_check;                                                      \
-                                                                           \
-   template <typename _1> static yes &chk(type_check<R, &_1::func> *);     \
-   template <typename   > static no  &chk(...);                            \
-                                                                           \
-   static bool const value =                                               \
-   sizeof(chk<T>(0)) == sizeof(yes);                                       \
-}
+//
+#define MEMBER_HANDLER_EXIST(func, name)                            \
+    template<typename T, typename R>                                \
+    struct name {                                                   \
+        typedef char yes[1];                                        \
+        typedef char no[2];                                         \
+                                                                    \
+        template<typename U, U>                                     \
+        struct type_check;                                          \
+                                                                    \
+        template<typename _1>                                       \
+        static yes &chk(type_check<R, &_1::func> *);                \
+        template<typename>                                          \
+        static no &chk(...);                                        \
+                                                                    \
+        static bool const value = sizeof(chk<T>(0)) == sizeof(yes); \
+    }
 
 namespace boost {
     namespace application {
@@ -81,17 +81,17 @@ namespace boost {
         namespace detail {
 
             // handler detector
-            class handler_detector : noncopyable {
+            class handler_detector : private boost::noncopyable {
             public:
                 // handlers that we will check
                 // (look for, rule)
                 MEMBER_HANDLER_EXIST(stop, has_stop);
                 // platform dependent
                 // pause and resume is only available on windows
-#        if defined( BOOST_WINDOWS_API )
+#if defined(BOOST_WINDOWS_API)
                 MEMBER_HANDLER_EXIST(pause, has_pause);
                 MEMBER_HANDLER_EXIST(resume, has_resume);
-#        endif
+#endif
 
                 MEMBER_HANDLER_EXIST(instace_aready_running, has_single_instance);
             };
@@ -122,7 +122,7 @@ namespace boost {
                 }
             };
 
-        } // detail
+        }    // namespace detail
 
         /*!
          * @brief This class hold a 'auto_handler' mechanism allowing
@@ -164,22 +164,23 @@ namespace boost {
 
         template<typename Application>
         class auto_handler
-                : public detail::handler_detector,
-                  public boost::conditional<boost::is_convertible<context &, Application>::value,
-                          detail::handler_auto_set_c<Application, auto_handler<Application> >,
-                          detail::handler_auto_set_u<Application, auto_handler<Application> > >::type {
+            : public detail::handler_detector,
+              public boost::conditional<boost::is_convertible<context &, Application>::value,
+                                        detail::handler_auto_set_c<Application, auto_handler<Application> >,
+                                        detail::handler_auto_set_u<Application, auto_handler<Application> > >::type {
 
-            template<typename, typename> friend
-            struct detail::handler_auto_set_u;
+            template<typename, typename>
+            friend struct detail::handler_auto_set_u;
 
-            template<typename, typename> friend
-            struct detail::handler_auto_set_c;
+            template<typename, typename>
+            friend struct detail::handler_auto_set_c;
 
         public:
-
-            typedef typename boost::conditional<boost::is_convertible<context &, Application>::value,
-                    detail::handler_auto_set_c<Application, auto_handler<Application> >,
-                    detail::handler_auto_set_u<Application, auto_handler<Application> > >::type base_selector;
+            typedef
+                typename boost::conditional<boost::is_convertible<context &, Application>::value,
+                                            detail::handler_auto_set_c<Application, auto_handler<Application> >,
+                                            detail::handler_auto_set_u<Application, auto_handler<Application> > >::type
+                    base_selector;
 
             auto_handler(context &cxt) : base_selector(cxt) {
             }
@@ -194,9 +195,8 @@ namespace boost {
             }
 
         protected:
-
             // setup context fro common handlers
-//@formatter:off
+            //@formatter:off
             void setup(context &cxt) {
                 if(has_stop<Application, bool(Application::*)()>::value) {
                     cxt.insert<termination_handler>(
@@ -207,28 +207,23 @@ namespace boost {
                                                                  >)));
                 }
 //@formatter:on
-                // platform dependent
-                // pause and resume is only available on windows
-#        if defined( BOOST_WINDOWS_API )
-                if(has_pause<Application, bool(Application::*)()>::value) {
-                   cxt.insert<pause_handler>(
-                      csbl::make_shared<pause_handler_default_behaviour>(
-                         handler<bool>::make_callback(*this,
-                            &auto_handler::pause_handler_<
-                               has_pause<Application, bool(Application::*)()>::value
-                                  > )));
+// platform dependent
+// pause and resume is only available on windows
+#if defined(BOOST_WINDOWS_API)
+                if (has_pause<Application, bool (Application::*)()>::value) {
+                    cxt.insert<pause_handler>(
+                        csbl::make_shared<pause_handler_default_behaviour>(handler<bool>::make_callback(
+                            *this,
+                            &auto_handler::pause_handler_<has_pause<Application, bool (Application::*)()>::value>)));
                 }
 
-                if(has_resume<Application, bool(Application::*)()>::value) {
-                   cxt.insert<resume_handler>(
-                      csbl::make_shared<resume_handler_default_behaviour>(
-                         handler<bool>::make_callback(*this,
-                            &auto_handler::resume_handler_<
-                               has_resume<Application, bool(Application::*)()>::value
-                                  > )));
+                if (has_resume<Application, bool (Application::*)()>::value) {
+                    cxt.insert<resume_handler>(
+                        csbl::make_shared<resume_handler_default_behaviour>(handler<bool>::make_callback(
+                            *this,
+                            &auto_handler::resume_handler_<has_resume<Application, bool (Application::*)()>::value>)));
                 }
-#        endif
-
+#endif
             }
 
             //@formatter:off
@@ -259,35 +254,31 @@ namespace boost {
 
             // platform dependent
             // pause and resume is only available on windows
-#     if defined( BOOST_WINDOWS_API )
+#if defined(BOOST_WINDOWS_API)
             // pause
 
             template<bool Enable>
-            typename boost::enable_if_c< Enable, bool>::type
-               pause_handler_() {
-               return Application::pause();
+            typename boost::enable_if_c<Enable, bool>::type pause_handler_() {
+                return Application::pause();
             }
 
-            template<bool Enable> // never called
-            typename boost::enable_if_c<!Enable, bool>::type
-               pause_handler_() {
-               return false;
+            template<bool Enable>    // never called
+            typename boost::enable_if_c<!Enable, bool>::type pause_handler_() {
+                return false;
             }
 
             // resume
 
             template<bool Enable>
-            typename boost::enable_if_c< Enable, bool>::type
-               resume_handler_() {
-               return Application::resume();
+            typename boost::enable_if_c<Enable, bool>::type resume_handler_() {
+                return Application::resume();
             }
 
-            template<bool Enable> // never called
-            typename boost::enable_if_c<!Enable, bool>::type
-               resume_handler_() {
-               return false;
+            template<bool Enable>    // never called
+            typename boost::enable_if_c<!Enable, bool>::type resume_handler_() {
+                return false;
             }
-#     endif
+#endif
 
             // single_instance
 
@@ -303,8 +294,8 @@ namespace boost {
             }
         };
 
-    }
-} // boost::application
+    }    // namespace application
+}    // namespace boost
 
 /*
 
@@ -329,15 +320,15 @@ public:
       return 0;
    }
 
-   bool instace_aready_running() 
-   { 
-      std::cout << "instace aready running!" << std::endl; 
+   bool instace_aready_running()
+   {
+      std::cout << "instace aready running!" << std::endl;
       return false;
-   } 
+   }
 
    bool stop()
    {
-      std::cout << "stop app!" << std::endl; 
+      std::cout << "stop app!" << std::endl;
       return true;
    }
 
@@ -350,25 +341,25 @@ private:
 --------------------------------------------------------------------------------
 
 int main()
-{  
+{
    myapp app;
 
    boost::uuids::string_generator gen;
    boost::uuids::uuid appuuid = gen("{9F66E4AD-ECA5-475D-8784-4BAA329EF9F2}");
 
    boost::application::context app_context;
-   
+
    // add limit_single_instance handler
 
-   application::handler<bool>::parameter_context_callback callback 
+   application::handler<bool>::parameter_context_callback callback
       = boost::bind(&myapp::instace_aready_running, &app, _1);
 
    app_context.insert<application::limit_single_instance>(
       csbl::make_shared<application::limit_single_instance_default_behaviour>(appuuid, callback));
 
    // add termination handler
-  
-   application::handler<>::parameter_callback termination_callback 
+
+   application::handler<>::parameter_callback termination_callback
       = boost::bind(&myapp::stop, &app, _1);
 
    app_context.insert<application::termination_handler>(
@@ -381,7 +372,7 @@ int main()
 --------------------------------------------------------------------------------
 
 int main()
-{  
+{
    boost::uuids::string_generator gen;
    boost::uuids::uuid appuuid = gen("{9F66E4AD-ECA5-475D-8784-4BAA329EF9F2}");
 
@@ -411,15 +402,15 @@ public:
       return 0;
    }
 
-   bool instace_aready_running() 
-   { 
-      std::cout << "instace aready running!" << std::endl; 
+   bool instace_aready_running()
+   {
+      std::cout << "instace aready running!" << std::endl;
       return false;
-   } 
+   }
 
    bool stop()
    {
-      std::cout << "stop app!" << std::endl; 
+      std::cout << "stop app!" << std::endl;
       return true;
    }
 };
@@ -428,21 +419,21 @@ public:
 --------------------------------------------------------------------------------
 
 int main()
-{  
+{
    application::global_context_ptr ctx = application::global_context::create();
 
-   myapp app;   
+   myapp app;
 
    boost::uuids::string_generator gen;
    boost::uuids::uuid appuuid = gen("{9F66E4AD-ECA5-475D-8784-4BAA329EF9F2}");
 
-    handler<>::global_context_callback limit_single_instance_callback 
+    handler<>::global_context_callback limit_single_instance_callback
       = boost::bind(&myapp::instace_aready_running, &app);
 
    this_application()->insert<limit_single_instance>(
       csbl::make_shared<limit_single_instance_default_behaviour>(appuuid, limit_single_instance_callback));
 
-   handler<>::global_context_callback termination_callback 
+   handler<>::global_context_callback termination_callback
       = boost::bind(&myapp::stop, &app);
 
    this_application()->insert<termination_handler>(
@@ -457,7 +448,7 @@ int main()
 --------------------------------------------------------------------------------
 
 int main()
-{  
+{
    application::global_context_ptr ctx = application::global_context::create();
 
    boost::uuids::string_generator gen;
@@ -472,4 +463,4 @@ int main()
 
 */
 
-#endif // BOOST_APPLICATION_AUTO_HANDLER_HPP
+#endif    // BOOST_APPLICATION_AUTO_HANDLER_HPP

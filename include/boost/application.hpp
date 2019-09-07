@@ -28,7 +28,7 @@
 #include <boost/application/aspects/process_id.hpp>
 
 #ifdef BOOST_HAS_PRAGMA_ONCE
-# pragma once
+#pragma once
 #endif
 
-#endif // BOOST_APPLICATION_HPP
+#endif    // BOOST_APPLICATION_HPP

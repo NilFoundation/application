@@ -8,12 +8,12 @@
 #define BOOST_APPLICATION_APPLICATION_VERSION_HPP
 
 #ifdef BOOST_HAS_PRAGMA_ONCE
-# pragma once
+#pragma once
 #endif
 
 /// @file boost/application/version.hpp
 /// @brief Hold a set of functions to inspect the version of library.
-/// The BOOST_APPLICATION_VERSION_MAJOR value will be incremented whenever a 
+/// The BOOST_APPLICATION_VERSION_MAJOR value will be incremented whenever a
 /// change is made which might cause compilation errors for existing client code.
 
 #define BOOST_APPLICATION_VERSION_MAJOR 0
@@ -23,11 +23,10 @@
 // major.minor.build
 
 #ifndef BOOST_APPLICATION_VERSION
-#define BOOST_APPLICATION_VERSION \
-    BOOST_STRINGIZE(BOOST_APPLICATION_VERSION_MAJOR) "." \
-    BOOST_STRINGIZE(BOOST_APPLICATION_VERSION_MINOR) "." \
-    BOOST_STRINGIZE(BOOST_APPLICATION_VERSION_BUILD)
-#endif // BOOST_APPLICATION_VERSION
+#define BOOST_APPLICATION_VERSION                    \
+    BOOST_STRINGIZE(BOOST_APPLICATION_VERSION_MAJOR) \
+    "." BOOST_STRINGIZE(BOOST_APPLICATION_VERSION_MINOR) "." BOOST_STRINGIZE(BOOST_APPLICATION_VERSION_BUILD)
+#endif    // BOOST_APPLICATION_VERSION
 
 namespace boost {
     namespace application {
@@ -48,7 +47,7 @@ namespace boost {
             return BOOST_APPLICATION_VERSION_BUILD;
         }
 
-    }
-}// boost::application
+    }    // namespace application
+}    // namespace boost
 
-#endif // BOOST_APPLICATION_APPLICATION_VERSION_HPP
+#endif    // BOOST_APPLICATION_APPLICATION_VERSION_HPP

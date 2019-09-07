@@ -28,12 +28,12 @@
 #include <boost/application/aspects/process_id.hpp>
 
 // platform dependent
-#if defined( BOOST_WINDOWS_API )
-#   include <boost/application/detail/windows/common_application_impl.hpp>
-#elif defined( BOOST_POSIX_API )
-#   include <boost/application/detail/posix/common_application_impl.hpp>
+#if defined(BOOST_WINDOWS_API)
+#include <boost/application/detail/windows/common_application_impl.hpp>
+#elif defined(BOOST_POSIX_API)
+#include <boost/application/detail/posix/common_application_impl.hpp>
 #else
-#   error "Sorry, no boost application are available for this platform."
+#error "Sorry, no boost application are available for this platform."
 #endif
 
 namespace boost {
@@ -56,7 +56,6 @@ namespace boost {
         class common {
 
         public:
-
             /*!
              * Retrieves a id that identify application run mode.
              *
@@ -85,9 +84,9 @@ namespace boost {
              *
              */
             template<typename Application, typename SignalManager>
-            common(Application &myapp, SignalManager &sm, application::context &context, boost::system::error_code &ec)
-                    : impl_(
-                    new common_application_impl(boost::bind(&Application::operator(), &myapp), sm, context, ec)) {
+            common(Application &myapp, SignalManager &sm, application::context &context,
+                   boost::system::error_code &ec) :
+                impl_(new common_application_impl(boost::bind(&Application::operator(), &myapp), sm, context, ec)) {
                 if (ec) {
                     return;
                 }
@@ -128,12 +127,10 @@ namespace boost {
             }
 
         private:
-
-            csbl::shared_ptr <common_application_impl> impl_;
+            csbl::shared_ptr<common_application_impl> impl_;
         };
 
-    }
-} // boost::application
+    }    // namespace application
+}    // namespace boost
 
-#endif // BOOST_APPLICATION_COMMON_APPLICATION_HPP
-
+#endif    // BOOST_APPLICATION_COMMON_APPLICATION_HPP

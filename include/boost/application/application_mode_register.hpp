@@ -10,7 +10,7 @@
 #include <boost/atomic.hpp>
 
 #ifdef BOOST_HAS_PRAGMA_ONCE
-# pragma once
+#pragma once
 #endif
 
 /// @file boost/application/application_mode_register.hpp
@@ -43,7 +43,7 @@ namespace boost {
             return ++id;
         }
 
-    }
-} // boost::application
+    }    // namespace application
+}    // namespace boost
 
-#endif // BOOST_APPLICATION_MODES_REGISTER_HPP
+#endif    // BOOST_APPLICATION_MODES_REGISTER_HPP

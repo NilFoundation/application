@@ -44,7 +44,6 @@ namespace boost {
         template<class HandlerReturnType = bool>
         class handler {
         public:
-
             typedef csbl::function<HandlerReturnType(void)> callback;
 
             /*!
@@ -153,7 +152,7 @@ namespace boost {
         // usual handler
         typedef handler<bool> dafault_handler;
 
-    }
-} // boost::application
+    }    // namespace application
+}    // namespace boost
 
-#endif // BOOST_APPLICATION_HANDLER_HPP
+#endif    // BOOST_APPLICATION_HANDLER_HPP

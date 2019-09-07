@@ -24,7 +24,7 @@
 #include <shlobj.h>
 
 #ifdef BOOST_HAS_PRAGMA_ONCE
-# pragma once
+#pragma once
 #endif
 
 namespace boost {
@@ -76,14 +76,14 @@ namespace boost {
                     std::size_t req_size = 0;
 
                     ::getenv_s(&req_size, NULL, 0, env_name);
-                    if(req_size == 0)
+                    if (req_size == 0)
                         return boost::filesystem::path();
 
-                    if(buf.size() < req_size)
+                    if (buf.size() < req_size)
                         buf.resize(req_size);
 
                     ::getenv_s(&req_size, buf.data(), buf.size(), env_name);
-                    if(req_size < buf.size())
+                    if (req_size < buf.size())
                         buf.resize(req_size);
 
                     return buf.data();
@@ -97,14 +97,13 @@ namespace boost {
                     PWSTR res = NULL;
                     if (SUCCEEDED(::SHGetKnownFolderPath(_Id, KF_FLAG_CREATE, NULL, &res))) {
                         out = res;
-                        CoTaskMemFree(static_cast<void *>( res ));
+                        CoTaskMemFree(static_cast<void *>(res));
                         return true;
                     }
                     return false;
                 }
 
             public:
-
                 filesystem::path current_path(void) {
                     return filesystem::current_path();
                 }
@@ -152,10 +151,8 @@ namespace boost {
                 }
             };
 
+        }    // namespace detail
+    }        // namespace application
+}    // namespace boost
 
-        }
-    }
-} // namespace boost::dll::detail
-
-#endif // BOOST_APPLICATION_DETAIL_WINDOWS_PATH_FROM_ME_HPP
-
+#endif    // BOOST_APPLICATION_DETAIL_WINDOWS_PATH_FROM_ME_HPP

@@ -33,10 +33,9 @@ namespace boost {
         template<typename CharType>
         class args_ {
         public:
-
             // string types to be used internaly to handle unicode on windows
             typedef CharType char_type;
-            typedef std::basic_string <char_type> string_type;
+            typedef std::basic_string<char_type> string_type;
 
             /*!
              * Constructs an args_.
@@ -57,7 +56,7 @@ namespace boost {
              *
              */
             int argc() const {
-                return (int) arguments_.size();
+                return (int)arguments_.size();
             }
 
             /*!
@@ -76,8 +75,8 @@ namespace boost {
              * \return an vector of args.
              *
              */
-            std::vector <string_type> arg_vector() {
-                std::vector <string_type> args;
+            std::vector<string_type> arg_vector() {
+                std::vector<string_type> args;
                 for (int i = 0; i < argc(); ++i) {
                     args.push_back(argv()[i]);
                 }
@@ -86,9 +85,7 @@ namespace boost {
             }
 
         private:
-
             std::vector<char_type *> arguments_;
-
         };
 
         /////////////////////////////////////////////////////////////////////////////
@@ -99,8 +96,7 @@ namespace boost {
         typedef args_<character_types::char_type> args;
         // wchar_t / char
 
-    }
-} // boost::application
+    }    // namespace application
+}    // namespace boost
 
-#endif // BOOST_APPLICATION_ARGS_ASPECT_HPP
-
+#endif    // BOOST_APPLICATION_ARGS_ASPECT_HPP

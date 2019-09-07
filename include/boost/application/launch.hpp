@@ -12,13 +12,13 @@
 /// a specifyc mode.
 ///
 /// In this version 2 flavors of application are supported:
-/// 
+///
 /// - common
 /// - server
-/// 
+///
 /// The "launch" function can create any of this types, and launch
 /// will aready setup/add default control aspects to application context.
-/// 
+///
 /// Two version of "launch" are available, the first receive a
 /// boost::system::error_code variable 'ec' that would be set
 /// to the result of the operation, and the other thrown an exception of
@@ -36,7 +36,7 @@
 #include <boost/application/detail/csbl.hpp>
 
 #ifdef BOOST_HAS_PRAGMA_ONCE
-# pragma once
+#pragma once
 #endif
 
 namespace boost {
@@ -118,7 +118,7 @@ namespace boost {
          */
         template<typename ApplicationMode, typename Application, typename Context>
         inline int launch(Application &app, Context &cxt, system::error_code &ec) {
-            signal_manager ct(cxt, ec); // our default custom type
+            signal_manager ct(cxt, ec);    // our default custom type
 
             if (ec) {
                 return 0;
@@ -206,7 +206,7 @@ namespace boost {
             return launch<ApplicationMode>(app, *cxt.get());
         }
 
-    }
-} // boost::application
+    }    // namespace application
+}    // namespace boost
 
-#endif // BOOST_APPLICATION_LAUNCH_HPP
+#endif    // BOOST_APPLICATION_LAUNCH_HPP

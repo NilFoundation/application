@@ -24,29 +24,28 @@
 namespace boost {
     namespace application {
         namespace csbl {
-// as common std-boost library
+            // as common std-boost library
 
             BOOST_APPLICATION_FEATURE_SELECT
 
             template<class T>
             inline type_index get_type_id() {
 
-#if defined( BOOST_APPLICATION_FEATURE_NS_SELECT_STD )
+#if defined(BOOST_APPLICATION_FEATURE_NS_SELECT_STD)
                 return typeid(T);
-#elif defined( BOOST_APPLICATION_FEATURE_NS_SELECT_BOOST )
+#elif defined(BOOST_APPLICATION_FEATURE_NS_SELECT_BOOST)
                 return BOOST_APPLICATION_TYPE_INDEX_NS_SELECT::type_id<T>();
-#else // auto detect
-#   ifndef BOOST_NO_CXX11_HDR_TYPEINDEX
+#else    // auto detect
+#ifndef BOOST_NO_CXX11_HDR_TYPEINDEX
                 return typeid(T);
-#   else
+#else
                 return BOOST_APPLICATION_TYPE_INDEX_NS_SELECT::type_id<T>();
-#   endif
 #endif
-
+#endif
             }
 
-        }
-    }
-} // boost::application::csbl
+        }    // namespace csbl
+    }        // namespace application
+}    // namespace boost
 
-#endif // BOOST_APPLICATION_DETAIL_CSBL_HPP
+#endif    // BOOST_APPLICATION_DETAIL_CSBL_HPP

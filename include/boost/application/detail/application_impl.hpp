@@ -24,9 +24,8 @@ namespace boost {
     namespace application {
 
         // share context on modes
-        class application_impl : noncopyable {
+        class application_impl : private boost::noncopyable {
         public:
-
             application_impl(context &cxt) : context_(cxt) {
             }
 
@@ -36,10 +35,9 @@ namespace boost {
 
         protected:
             context &context_;
-
         };
 
-    }
-} // boost::application
+    }    // namespace application
+}    // namespace boost
 
-#endif // BOOST_APPLICATION_DETAIL_APPLICATION_IMPL_HPP
+#endif    // BOOST_APPLICATION_DETAIL_APPLICATION_IMPL_HPP

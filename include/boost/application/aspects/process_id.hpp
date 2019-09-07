@@ -19,9 +19,9 @@
 #include <boost/application/config.hpp>
 #include <boost/application/detail/csbl.hpp>
 
-#if defined( BOOST_WINDOWS_API )
+#if defined(BOOST_WINDOWS_API)
 #include <boost/application/detail/windows/process_id_impl.hpp>
-#elif defined( BOOST_POSIX_API )
+#elif defined(BOOST_POSIX_API)
 #include <boost/application/detail/posix/process_id_impl.hpp>
 #else
 #error "Sorry, no boost application are available for this platform."
@@ -38,7 +38,6 @@ namespace boost {
             typedef detail::process_id_impl base_t;
 
         public:
-
             typedef process_id_impl::native_pid_t native_pid_t;
 
             process_id() {
@@ -56,13 +55,12 @@ namespace boost {
              */
             native_pid_t pid()
 
-            BOOST_NOEXCEPT {
+                BOOST_NOEXCEPT {
                 return base_t::pid();
             }
         };
 
-    }
-} // boost::application
+    }    // namespace application
+}    // namespace boost
 
-#endif // BOOST_APPLICATION_PID_ASPECT_HPP
-
+#endif    // BOOST_APPLICATION_PID_ASPECT_HPP

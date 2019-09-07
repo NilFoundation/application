@@ -30,7 +30,6 @@ namespace boost {
          */
         class run_mode {
         public:
-
             /*!
              * Constructs an run_mode aspect.
              *
@@ -64,13 +63,10 @@ namespace boost {
             }
 
         private:
-
             int application_run_mode_;
-
         };
 
-    }
-} // boost::application
+    }    // namespace application
+}    // namespace boost
 
-#endif // BOOST_APPLICATION_RUN_MODE_ASPECT_HPP
-
+#endif    // BOOST_APPLICATION_RUN_MODE_ASPECT_HPP

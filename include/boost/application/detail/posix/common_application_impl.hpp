@@ -31,15 +31,16 @@ namespace boost {
         template<typename CharType>
         class common_application_impl_ : public application_impl {
         public:
-
             typedef csbl::function<int(void)> mainop;
 
             // string types to be used internaly to handle unicode on windows
             typedef CharType char_type;
-            typedef std::basic_string <char_type> string_type;
+            typedef std::basic_string<char_type> string_type;
 
             common_application_impl_(const mainop &main, signal_binder &sb, application::context &context,
-                                     boost::system::error_code &ec) : application_impl(context), main_(main) {
+                                     boost::system::error_code &ec) :
+                application_impl(context),
+                main_(main) {
                 sb.start();
             }
 
@@ -52,7 +53,6 @@ namespace boost {
 
         private:
             mainop main_;
-
         };
 
         /////////////////////////////////////////////////////////////////////////////
@@ -63,7 +63,7 @@ namespace boost {
         typedef common_application_impl_<character_types::char_type> common_application_impl;
         // wchar_t / char
 
-    }
-} // boost::application
+    }    // namespace application
+}    // namespace boost
 
-#endif // BOOST_APPLICATION_COMMON_APPLICATION_IMPL_HPP
+#endif    // BOOST_APPLICATION_COMMON_APPLICATION_IMPL_HPP

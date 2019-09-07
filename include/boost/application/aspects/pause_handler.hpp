@@ -34,8 +34,7 @@ namespace boost {
             }
         };
 
-    }
-} // boost::application
+    }    // namespace application
+}    // namespace boost
 
-#endif // BOOST_APPLICATION_ASPECT_PAUSE_HANDLER_HPP
-
+#endif    // BOOST_APPLICATION_ASPECT_PAUSE_HANDLER_HPP

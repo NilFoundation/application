@@ -19,9 +19,9 @@
 #include <boost/application/config.hpp>
 #include <boost/application/detail/csbl.hpp>
 
-#if defined( BOOST_WINDOWS_API )
+#if defined(BOOST_WINDOWS_API)
 #include <boost/application/detail/windows/wait_for_termination_request_impl.hpp>
-#elif defined( BOOST_POSIX_API )
+#elif defined(BOOST_POSIX_API)
 #include <boost/application/detail/posix/wait_for_termination_request_impl.hpp>
 #else
 #error "Sorry, no boost application are available for this platform."
@@ -35,7 +35,7 @@ namespace boost {
          *        class implementation of wait_for_termination_request aspect.
          *
          */
-        class wait_for_termination_request : noncopyable {
+        class wait_for_termination_request : private boost::noncopyable {
         public:
             wait_for_termination_request() {
             }
@@ -84,13 +84,10 @@ namespace boost {
             }
 
         private:
-
-            csbl::shared_ptr <wait_for_termination_request_impl> impl_;
-
+            csbl::shared_ptr<wait_for_termination_request_impl> impl_;
         };
 
-    }
-} // boost::application
+    }    // namespace application
+}    // namespace boost
 
-#endif // BOOST_APPLICATION_WAIT_FOR_TERMINATION_REQUEST_ASPECT_HPP
-
+#endif    // BOOST_APPLICATION_WAIT_FOR_TERMINATION_REQUEST_ASPECT_HPP

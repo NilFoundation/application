@@ -25,7 +25,8 @@ cm_project(application WORKSPACE_NAME ${CMAKE_WORKSPACE_NAME})
 cm_setup_version(VERSION 0.1.0)
 
 option(BUILD_SHARED_LIBS "Build shared libraries" TRUE)
-option(BUILD_EXAMPLES "Build tests" TRUE)
+option(BUILD_EXAMPLES "Build examples" TRUE)
+option(BUILD_TESTS "Build tests" TRUE)
 
 add_library(${CMAKE_WORKSPACE_NAME}_${CURRENT_PROJECT_NAME} INTERFACE)
 set_property(TARGET ${CMAKE_WORKSPACE_NAME}_${CURRENT_PROJECT_NAME} PROPERTY EXPORT_NAME application)

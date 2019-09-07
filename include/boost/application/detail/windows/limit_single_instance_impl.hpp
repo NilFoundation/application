@@ -30,12 +30,11 @@ namespace boost {
         // This code is from Q243953 in case you lose the article and wonder
         // where this code came from.
         template<typename CharType>
-        class limit_single_instance_impl_ : noncopyable {
+        class limit_single_instance_impl_ : private boost::noncopyable {
 
         public:
-
             typedef CharType char_type;
-            typedef std::basic_string <char_type> string_type;
+            typedef std::basic_string<char_type> string_type;
 
             limit_single_instance_impl_() : mutex_(0) {
             }
@@ -59,7 +58,7 @@ namespace boost {
                     return false;
                 } else {
                     last_error_ = GetLastError();
-                } //save for use later...
+                }    // save for use later...
 
                 return is_another_instance_running();
             }
@@ -78,15 +77,13 @@ namespace boost {
             }
 
         private:
-
             DWORD last_error_;
             HANDLE mutex_;
-
         };
 
         typedef limit_single_instance_impl_<character_types::char_type> limit_single_instance_impl;
 
-    }
-}  // boost::application::win
+    }    // namespace application
+}    // namespace boost
 
-#endif // BOOST_APPLICATION_IMPL_WINDOWS_LIMIT_SINGLE_INSTANCE_IMPL_HPP
+#endif    // BOOST_APPLICATION_IMPL_WINDOWS_LIMIT_SINGLE_INSTANCE_IMPL_HPP

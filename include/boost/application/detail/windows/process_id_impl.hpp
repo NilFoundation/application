@@ -15,7 +15,7 @@
 #include <boost/detail/winapi/process.hpp>
 
 #ifdef BOOST_HAS_PRAGMA_ONCE
-# pragma once
+#pragma once
 #endif
 
 namespace boost {
@@ -35,7 +35,7 @@ namespace boost {
 
                 native_pid_t pid()
 
-                BOOST_NOEXCEPT {
+                    BOOST_NOEXCEPT {
                     if (pid_) {
                         return pid_;
                     }
@@ -48,9 +48,8 @@ namespace boost {
                 native_pid_t pid_;
             };
 
-        }
-    }
-} // namespace boost::application::detail
+        }    // namespace detail
+    }        // namespace application
+}    // namespace boost
 
-#endif // BOOST_APPLICATION_DETAIL_WINDOWS_PATH_FROM_ME_HPP
-
+#endif    // BOOST_APPLICATION_DETAIL_WINDOWS_PATH_FROM_ME_HPP

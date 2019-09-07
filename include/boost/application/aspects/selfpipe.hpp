@@ -2,8 +2,8 @@
 // -----------------------------------------------------------------------------
 
 // Copyright 2011-2014 Renato Tegon Forti
-// Copyright 2013 Stanislav Ivochkin 
-// Part of this file was contributed by Stanislav Ivochkin 
+// Copyright 2013 Stanislav Ivochkin
+// Part of this file was contributed by Stanislav Ivochkin
 
 // Distributed under the Boost Software License, Version 1.0.
 // See http://www.boost.org/LICENSE_1_0.txt
@@ -24,7 +24,7 @@
 #include <boost/application/base_type.hpp>
 
 // platform usage
-#if defined( BOOST_POSIX_API )
+#if defined(BOOST_POSIX_API)
 #include <unistd.h>
 #include <fcntl.h>
 #endif
@@ -38,10 +38,9 @@ namespace boost {
              * @brief POSIX platform specific aspect that implement self-pipe trick.
              *
              */
-            class selfpipe : noncopyable {
+            class selfpipe : private boost::noncopyable {
 
             public:
-
                 selfpipe() {
                     boost::system::error_code ec;
 
@@ -61,7 +60,6 @@ namespace boost {
                 }
 
             protected:
-
                 void setup(boost::system::error_code &ec) {
                     if (pipe(fd_) == -1) {
                         ec = last_error_code();
@@ -79,7 +77,6 @@ namespace boost {
                 }
 
             public:
-
                 int read_fd() const {
                     return fd_[readfd];
                 }
@@ -93,30 +90,26 @@ namespace boost {
                 }
 
             private:
-
-                enum {
-                    readfd = 0, writefd = 1
-                };
+                enum { readfd = 0, writefd = 1 };
 
                 int fd_[2];
 
-            }; // selfpipe
+            };    // selfpipe
 
-        } // posix
+        }    // namespace posix
 
 // platform usage
-#if defined( BOOST_WINDOWS_API )
+#if defined(BOOST_WINDOWS_API)
         // not available
         // using windows::self_pipe;
-#   error "Sorry, the Windows platform don't support 'selfpipe' aspect."
-#elif defined( BOOST_POSIX_API )
+#error "Sorry, the Windows platform don't support 'selfpipe' aspect."
+#elif defined(BOOST_POSIX_API)
         using posix::selfpipe;
 #else
-#   error "Sorry, selfpipe are available for this platform."
+#error "Sorry, selfpipe are available for this platform."
 #endif
 
-    }
-} // boost::application::posix
+    }    // namespace application
+}    // namespace boost
 
-#endif // BOOST_APPLICATION_SELFPIPE_ASPECT_HPP
-
+#endif    // BOOST_APPLICATION_SELFPIPE_ASPECT_HPP

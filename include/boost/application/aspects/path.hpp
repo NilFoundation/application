@@ -12,9 +12,9 @@
 #include <boost/filesystem/path.hpp>
 #include <boost/filesystem/operations.hpp>
 
-#if defined( BOOST_WINDOWS_API )
+#if defined(BOOST_WINDOWS_API)
 #include <boost/application/detail/windows/path_impl.hpp>
-#elif defined( BOOST_POSIX_API )
+#elif defined(BOOST_POSIX_API)
 #include <boost/application/detail/posix/path_impl.hpp>
 #else
 #error "Sorry, no boost application are available for this platform."
@@ -22,7 +22,6 @@
 
 namespace boost {
     namespace application {
-
 
         class path {
         public:
@@ -90,11 +89,10 @@ namespace boost {
             }
 
         private:
-            csbl::shared_ptr <detail::default_path_impl> impl_;
+            csbl::shared_ptr<detail::default_path_impl> impl_;
         };
 
-    }
-} // boost::application
+    }    // namespace application
+}    // namespace boost
 
-#endif // BOOST_APPLICATION_PATH_ASPECT_HPP
-
+#endif    // BOOST_APPLICATION_PATH_ASPECT_HPP

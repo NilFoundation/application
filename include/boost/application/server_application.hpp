@@ -29,12 +29,12 @@
 #include <boost/application/aspects/process_id.hpp>
 
 // platform dependent
-#if defined( BOOST_WINDOWS_API )
-#   include <boost/application/detail/windows/server_application_impl.hpp>
-#elif defined( BOOST_POSIX_API )
-#   include <boost/application/detail/posix/server_application_impl.hpp>
+#if defined(BOOST_WINDOWS_API)
+#include <boost/application/detail/windows/server_application_impl.hpp>
+#elif defined(BOOST_POSIX_API)
+#include <boost/application/detail/posix/server_application_impl.hpp>
 #else
-#   error "Sorry, no boost application are available for this platform."
+#error "Sorry, no boost application are available for this platform."
 #endif
 
 namespace boost {
@@ -55,7 +55,6 @@ namespace boost {
          */
         class server {
         public:
-
             /*!
              * Retrieves a id that identify application run mode.
              *
@@ -107,7 +106,7 @@ namespace boost {
                 // need be created after run_mode, status
 
                 impl_.reset(
-                        new server_application_impl(boost::bind(&Application::operator(), &myapp), sm, context, ec));
+                    new server_application_impl(boost::bind(&Application::operator(), &myapp), sm, context, ec));
             }
 
             /*!
@@ -127,12 +126,10 @@ namespace boost {
             }
 
         private:
-
-            csbl::shared_ptr <server_application_impl> impl_;
+            csbl::shared_ptr<server_application_impl> impl_;
         };
 
-    }
-} // boost::application
+    }    // namespace application
+}    // namespace boost
 
-#endif // BOOST_APPLICATION_SERVER_APPLICATION_HPP
-
+#endif    // BOOST_APPLICATION_SERVER_APPLICATION_HPP

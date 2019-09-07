@@ -41,7 +41,9 @@ namespace boost {
         public:
             // application current state
             enum application_state {
-                stopped = 0, running, paused // Windows Service
+                stopped = 0,
+                running,
+                paused    // Windows Service
             };
 
             /*!
@@ -81,13 +83,10 @@ namespace boost {
             }
 
         private:
-
             application_state application_state_;
-
         };
 
-    }
-} // boost::application
+    }    // namespace application
+}    // namespace boost
 
-#endif // BOOST_APPLICATION_STATUS_ASPECT_HPP
-
+#endif    // BOOST_APPLICATION_STATUS_ASPECT_HPP

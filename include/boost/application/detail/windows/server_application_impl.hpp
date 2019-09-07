@@ -32,8 +32,8 @@
 //#include <boost/lambda/lambda.hpp>
 
 #ifdef BOOST_MSVC
-#  pragma warning(push)
-#  pragma warning(disable : 4251 4231 4660)
+#pragma warning(push)
+#pragma warning(disable : 4251 4231 4660)
 #endif
 
 #ifdef _MSC_VER
@@ -50,17 +50,17 @@ namespace boost {
         template<typename CharType>
         class server_application_impl_ : public application_impl {
         public:
-
             // callback for app code
             typedef csbl::function<int(void)> mainop;
 
             // string types to be used internaly to handle unicode on windows
             typedef CharType char_type;
-            typedef std::basic_string <char_type> string_type;
+            typedef std::basic_string<char_type> string_type;
 
             server_application_impl_(const mainop &main_op, signal_binder &sb, application::context &context,
-                                     boost::system::error_code &ec) : application_impl(context), main_(main_op),
-                    launch_thread_(0), result_code_(0), terminate_event_(0), terminate_code_(0) {
+                                     boost::system::error_code &ec) :
+                application_impl(context),
+                main_(main_op), launch_thread_(0), result_code_(0), terminate_event_(0), terminate_code_(0) {
                 sb.start();
                 initialize(ec);
             }
@@ -82,7 +82,6 @@ namespace boost {
             }
 
         protected:
-
             void initialize(boost::system::error_code &ec) {
                 if (instance_ == 0) {
                     instance_ = this;
@@ -91,8 +90,8 @@ namespace boost {
                 string_type void_string;
 
                 // we suppport only one service on process
-                SERVICE_TABLE_ENTRY serviceTable[] = {{(char_type *) void_string.c_str(), (LPSERVICE_MAIN_FUNCTION) service_main_entry},
-                                                      {NULL,                              NULL}};
+                SERVICE_TABLE_ENTRY serviceTable[] = {
+                    {(char_type *)void_string.c_str(), (LPSERVICE_MAIN_FUNCTION)service_main_entry}, {NULL, NULL}};
 
                 // register with the scm
                 if (StartServiceCtrlDispatcher(serviceTable) != TRUE) {
@@ -110,7 +109,7 @@ namespace boost {
             //
 
             bool stop(void) {
-                csbl::shared_ptr <termination_handler> th = context_.find<termination_handler>();
+                csbl::shared_ptr<termination_handler> th = context_.find<termination_handler>();
 
                 if (th) {
                     handler<>::callback *cb = 0;
@@ -127,7 +126,7 @@ namespace boost {
             }
 
             bool pause(void) {
-                csbl::shared_ptr <pause_handler> ph = context_.find<pause_handler>();
+                csbl::shared_ptr<pause_handler> ph = context_.find<pause_handler>();
 
                 if (ph) {
                     handler<>::callback *cb = 0;
@@ -144,7 +143,7 @@ namespace boost {
             }
 
             bool resume(void) {
-                csbl::shared_ptr <resume_handler> rh = context_.find<resume_handler>();
+                csbl::shared_ptr<resume_handler> rh = context_.find<resume_handler>();
 
                 if (rh) {
                     handler<>::callback *cb = 0;
@@ -166,7 +165,7 @@ namespace boost {
 
             // Handle SCM signals
             void service_handler(DWORD dwOpcode) {
-                csbl::shared_ptr <status> st = context_.find<status>();
+                csbl::shared_ptr<status> st = context_.find<status>();
 
                 switch (dwOpcode) {
                     case SERVICE_CONTROL_STOP: {
@@ -177,8 +176,7 @@ namespace boost {
                         }
 
                         request_terminate(0);
-                    }
-                        break;
+                    } break;
                     case SERVICE_CONTROL_SHUTDOWN: {
                         stop();
                         request_terminate(0);
@@ -203,8 +201,7 @@ namespace boost {
                             request_terminate(GetLastError());
                             return;
                         }
-                    }
-                        break;
+                    } break;
 
                     case SERVICE_CONTROL_CONTINUE: {
                         if (!resume()) {
@@ -226,13 +223,11 @@ namespace boost {
                             request_terminate(GetLastError());
                             return;
                         }
-                    }
-                        break;
+                    } break;
 
                     case SERVICE_CONTROL_INTERROGATE: {
                         // Nothing here!
-                    }
-                        break;
+                    } break;
                 }
             }
 
@@ -314,8 +309,8 @@ namespace boost {
 
                 stop();
 
-                csbl::shared_ptr <status> st = context_.find<status>();
-                csbl::shared_ptr <wait_for_termination_request> tr = context_.find<wait_for_termination_request>();
+                csbl::shared_ptr<status> st = context_.find<status>();
+                csbl::shared_ptr<wait_for_termination_request> tr = context_.find<wait_for_termination_request>();
 
                 if (st) {
                     st->state(status::stopped);
@@ -340,8 +335,8 @@ namespace boost {
                 // then the RegisterServiceCtrlHandler
                 // function does not verify if the name is valid, because there is only
                 // one registered service in the process. can be  "" (void_string)
-                service_status_handle_ = RegisterServiceCtrlHandler((char_type *) void_string.c_str(),
-                                                                    (LPHANDLER_FUNCTION) service_handler_entry);
+                service_status_handle_ = RegisterServiceCtrlHandler((char_type *)void_string.c_str(),
+                                                                    (LPHANDLER_FUNCTION)service_handler_entry);
 
                 if (!service_status_handle_) {
                     return;
@@ -368,8 +363,8 @@ namespace boost {
                 }
 
                 // Launch work thread (main)
-                launch_thread_ = new csbl::thread(
-                        boost::bind(&server_application_impl_::work_thread, this, dw_argc, lpsz_argv));
+                launch_thread_ =
+                    new csbl::thread(boost::bind(&server_application_impl_::work_thread, this, dw_argc, lpsz_argv));
 
                 HANDLE hevent[2];
 
@@ -418,7 +413,6 @@ namespace boost {
             }
 
         private:
-
             // Event used to hold ServiceMain from completing
             HANDLE terminate_event_;
             DWORD terminate_code_;
@@ -441,8 +435,8 @@ namespace boost {
         };
 
         // The unique instance of server application (Windows)
-        template<typename CharType> server_application_impl_<CharType> *server_application_impl_<
-                CharType>::instance_ = 0;  // definition
+        template<typename CharType>
+        server_application_impl_<CharType> *server_application_impl_<CharType>::instance_ = 0;    // definition
 
         /////////////////////////////////////////////////////////////////////////////
         // server_application_impl
@@ -452,12 +446,11 @@ namespace boost {
         typedef server_application_impl_<character_types::char_type> server_application_impl;
         // wchar_t / char
 
-    }
-} // boost::application
+    }    // namespace application
+}    // namespace boost
 
 #ifdef BOOST_MSVC
 #pragma warning(pop)
 #endif
 
-#endif // BOOST_APPLICATION_SERVER_APPLICATION_IMPL_HPP
-
+#endif    // BOOST_APPLICATION_SERVER_APPLICATION_IMPL_HPP

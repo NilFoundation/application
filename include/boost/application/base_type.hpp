@@ -24,8 +24,7 @@ namespace boost {
 
         // use it if you want indicate to 'launch' that 'CustomType' is not necessary
         // int launch(Application& app, CustomType& ct, ...
-        struct not_necessary {
-        };
+        struct not_necessary {};
         // as launch<common>(app, not_necessary());
         //
 
@@ -66,11 +65,10 @@ namespace boost {
 #else
             typedef char char_type;
 #endif
-            typedef std::basic_string <char_type> string_type;
+            typedef std::basic_string<char_type> string_type;
         };
 
-    }
-} // boost::application
+    }    // namespace application
+}    // namespace boost
 
-#endif // BOOST_APPLICATION_BASE_TYPE_HPP
-
+#endif    // BOOST_APPLICATION_BASE_TYPE_HPP

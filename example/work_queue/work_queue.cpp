@@ -139,7 +139,7 @@ public:
 private:
 
     boost::mutex mutex_;
-    vector<vector<vector<double>>> result_;
+    vector<vector<vector<double> > > result_;
 
     int task_count_;
 

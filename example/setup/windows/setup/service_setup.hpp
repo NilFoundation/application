@@ -32,9 +32,8 @@ namespace boost {
         namespace example {
 
             // util class to open/close the SCM on current machine
-            class windows_scm : noncopyable {
+            class windows_scm : private boost::noncopyable {
             public:
-
                 windows_scm(DWORD dw_desired_access) {
                     boost::system::error_code ec;
                     open(dw_desired_access, ec);
@@ -57,7 +56,6 @@ namespace boost {
                 }
 
             protected:
-
                 void open(DWORD dw_desired_access, boost::system::error_code &ec) {
                     // open the SCM on this machine.
                     handle_ = OpenSCManager(NULL, NULL, dw_desired_access);
@@ -68,7 +66,6 @@ namespace boost {
                 }
 
             private:
-
                 SC_HANDLE handle_;
             };
 
@@ -81,9 +78,8 @@ namespace boost {
 
             // check if a given Windows Service (by name) is installed
             template<typename value_type>
-            class check_windows_service_ : noncopyable {
+            class check_windows_service_ : private boost::noncopyable {
             public:
-
                 typedef value_type char_type;
 
                 template<typename T>
@@ -110,7 +106,6 @@ namespace boost {
                 }
 
             protected:
-
                 // This method check if a given service (by name) is installed
                 virtual bool is_installed(boost::system::error_code &ec) {
                     windows_scm scm(SC_MANAGER_ENUMERATE_SERVICE, ec);
@@ -168,7 +163,7 @@ namespace boost {
 
                 std::basic_string<char_type> service_name_;
 
-            }; // check_windows_service
+            };    // check_windows_service
 
             // check_windows_service versions for common string and wide string
             typedef check_windows_service_<character_types::char_type> check_windows_service;
@@ -176,9 +171,8 @@ namespace boost {
 
             // uninstall a given Windows Service (by name)
             template<typename value_type>
-            class uninstall_windows_service_ : noncopyable {
+            class uninstall_windows_service_ : private boost::noncopyable {
             public:
-
                 typedef value_type char_type;
 
                 template<typename T>
@@ -204,7 +198,6 @@ namespace boost {
                 }
 
             protected:
-
                 // This method uninstall a given service (by name) on current machine
                 void uninstall_service(boost::system::error_code &ec) {
                     boost::filesystem::path path(service_path_name_);
@@ -242,11 +235,11 @@ namespace boost {
 
 #if defined(BOOST_APPLICATION_STD_WSTRING)
                     std::basic_string<char_type> subKey =
-                       L"SOFTWARE\\Microsoft\\Windows\\CurrentVersion\\App Paths\\" + service_path_name_;
+                        L"SOFTWARE\\Microsoft\\Windows\\CurrentVersion\\App Paths\\" + service_path_name_;
 
 #else
                     std::basic_string<char_type> subKey =
-                            "SOFTWARE\\Microsoft\\Windows\\CurrentVersion\\App Paths\\" + service_path_name_;
+                        "SOFTWARE\\Microsoft\\Windows\\CurrentVersion\\App Paths\\" + service_path_name_;
 #endif
 
                     error = RegDeleteKey(HKEY_LOCAL_MACHINE, subKey.c_str());
@@ -259,7 +252,7 @@ namespace boost {
                 std::basic_string<char_type> service_name_;
                 std::basic_string<char_type> service_path_name_;
 
-            }; // uninstall_windows_service
+            };    // uninstall_windows_service
 
             // uninstall_windows_service versions for common string and wide string
             typedef uninstall_windows_service_<character_types::char_type> uninstall_windows_service;
@@ -267,9 +260,8 @@ namespace boost {
 
             // install a given Windows Service (by name)
             template<typename value_type>
-            class install_windows_service_ : noncopyable {
+            class install_windows_service_ : private boost::noncopyable {
             public:
-
                 typedef value_type char_type;
 
                 template<typename T>
@@ -309,7 +301,6 @@ namespace boost {
                 }
 
             protected:
-
                 // this method install a given service (by name) on current machine
                 void install_service(boost::system::error_code &ec) {
                     boost::filesystem::path path(service_path_name_);
@@ -343,12 +334,12 @@ namespace boost {
                     std::replace(create_service_depends.begin(), create_service_depends.end(), '\\', '\0');
 
                     // Add this service to the SCM's database.
-                    SC_HANDLE hservice = CreateService(scm.get(), service_name_.c_str(), service_display_name_.c_str(),
-                                                       SERVICE_CHANGE_CONFIG, SERVICE_WIN32_OWN_PROCESS,
-                                                       create_service_start_mode, SERVICE_ERROR_NORMAL,
-                                                       pathname.c_str(), NULL, NULL,
-                                                       create_service_depends.data(), // service dependencies
-                                                       NULL, NULL);
+                    SC_HANDLE hservice =
+                        CreateService(scm.get(), service_name_.c_str(), service_display_name_.c_str(),
+                                      SERVICE_CHANGE_CONFIG, SERVICE_WIN32_OWN_PROCESS, create_service_start_mode,
+                                      SERVICE_ERROR_NORMAL, pathname.c_str(), NULL, NULL,
+                                      create_service_depends.data(),    // service dependencies
+                                      NULL, NULL);
 
                     if (hservice == NULL) {
                         ec = last_error_code();
@@ -368,18 +359,19 @@ namespace boost {
                         }
 
                         // If the function succeeds, the return value is nonzero.
-                        succeed = ::ChangeServiceConfig(hservice,                   // service handle
-                                                        SERVICE_NO_CHANGE,          // service type
-                                                        SERVICE_NO_CHANGE,          // start type
-                                                        SERVICE_NO_CHANGE,          // error control
-                                                        NULL,                       // path
-                                                        NULL,                       // load order group
-                                                        NULL,                       // tag id
-                                                        NULL,                       // dependencies
-                                                        actual_service_user.c_str(),// user account
-                                                        service_password_.c_str(),  // user account password
-                                                        NULL) ? true
-                                                              : false;                     // service display name
+                        succeed = ::ChangeServiceConfig(hservice,                       // service handle
+                                                        SERVICE_NO_CHANGE,              // service type
+                                                        SERVICE_NO_CHANGE,              // start type
+                                                        SERVICE_NO_CHANGE,              // error control
+                                                        NULL,                           // path
+                                                        NULL,                           // load order group
+                                                        NULL,                           // tag id
+                                                        NULL,                           // dependencies
+                                                        actual_service_user.c_str(),    // user account
+                                                        service_password_.c_str(),      // user account password
+                                                        NULL) ?
+                                      true :
+                                      false;    // service display name
 
                         if (!succeed) {
                             ec = last_error_code();
@@ -391,7 +383,7 @@ namespace boost {
 
 #if defined(BOOST_APPLICATION_STD_WSTRING)
                     wcscpy_s(serviceDescription, sizeof(serviceDescription) / sizeof(serviceDescription[0]),
-                        service_description_.c_str());
+                             service_description_.c_str());
 #else
                     strcpy_s(serviceDescription, sizeof(serviceDescription), service_description_.c_str());
 #endif
@@ -417,8 +409,7 @@ namespace boost {
                     LONG error;
 
 #if defined(BOOST_APPLICATION_STD_WSTRING)
-                    sub_key = L"SOFTWARE\\Microsoft\\Windows\\CurrentVersion\\App Paths\\"
-                       + path.filename().wstring();
+                    sub_key = L"SOFTWARE\\Microsoft\\Windows\\CurrentVersion\\App Paths\\" + path.filename().wstring();
 #else
                     sub_key = "SOFTWARE\\Microsoft\\Windows\\CurrentVersion\\App Paths\\" + path.filename().string();
 #endif
@@ -441,7 +432,7 @@ namespace boost {
                     default_entry = path.string();
 #endif
 
-                    error = RegSetValueEx(hkey, NULL, 0, REG_EXPAND_SZ, (PBYTE) default_entry.c_str(),
+                    error = RegSetValueEx(hkey, NULL, 0, REG_EXPAND_SZ, (PBYTE)default_entry.c_str(),
                                           default_entry.length());
 
                     if (error != NO_ERROR) {
@@ -458,7 +449,7 @@ namespace boost {
                     path_entry = path.branch_path().string();
 #endif
 
-                    error = RegSetValueEx(hkey, TEXT("path"), 0, REG_EXPAND_SZ, (PBYTE) path_entry.c_str(),
+                    error = RegSetValueEx(hkey, TEXT("path"), 0, REG_EXPAND_SZ, (PBYTE)path_entry.c_str(),
                                           path_entry.length());
 
                     if (error != NO_ERROR) {
@@ -485,16 +476,14 @@ namespace boost {
                 std::basic_string<char_type> service_user_;
                 std::basic_string<char_type> service_password_;
 
-            }; // install_windows_service
+            };    // install_windows_service
 
             // install_windows_service versions for common string and wide string
             typedef install_windows_service_<character_types::char_type> install_windows_service;
             // wchar_t / char
 
-        }
-    }
-} // boost::application::example
+        }    // namespace example
+    }        // namespace application
+}    // namespace boost
 
-#endif // BOOST_APPLICATION_IMPL_WINDOWS_SERVICE_SETUP_HPP
-
-
+#endif    // BOOST_APPLICATION_IMPL_WINDOWS_SERVICE_SETUP_HPP

@@ -3,7 +3,7 @@
 # file LICENSE_1_0.txt or copy at http://www.boost.org/LICENSE_1_0.txt)
 #
 # Copyright Antony Polukhin 2014. 
-# Copyright Mikhail Komarov 2018.
+# Copyright Mikhail Komarov 2018-2019.
 
 os:
 - linux
@@ -43,7 +43,7 @@ before_install:
 - git reset --hard; git clean -fxd
 - git status
 - rm -rf $BOOST/libs/$PROJECT_TO_TEST
-- mv $PROJECT_DIR/../Boost.Application/ $BOOST/libs/$PROJECT_TO_TEST
+- mv $PROJECT_DIR/../application/ $BOOST/libs/$PROJECT_TO_TEST
 - PROJECT_DIR=$BOOST/libs/$PROJECT_TO_TEST
 - ./bootstrap.sh
 - ./b2 headers

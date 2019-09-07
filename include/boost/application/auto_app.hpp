@@ -16,7 +16,7 @@
 
 //
 // *****************************************************************************
-// note that this is a experimental module 
+// note that this is a experimental module
 // *****************************************************************************
 //
 
@@ -33,7 +33,6 @@
 
 namespace boost {
     namespace application {
-
 
         /*!
          * @brief This class tie a application and context, and simplifies the
@@ -53,12 +52,11 @@ namespace boost {
          *
          */
 
-        struct no_custom_type {
-        };
+        struct no_custom_type {};
 
         template<typename ApplicationMode, typename Application, typename Context = context,
-                typename CustomType = no_custom_type>
-        struct auto_app : noncopyable {
+                 typename CustomType = no_custom_type>
+        struct auto_app : private boost::noncopyable {
 
             static int start(system::error_code &ec) {
 
@@ -113,7 +111,6 @@ namespace boost {
                 context cxt;
                 auto_handler<Application> dapp(cxt, appid);
                 return launch<ApplicationMode>(dapp, cxt, ec);
-
             }
 
             static int start(const uuids::uuid &appid) {
@@ -208,7 +205,7 @@ namespace boost {
             }
         };
 
-    }
-} // boost::application
+    }    // namespace application
+}    // namespace boost
 
-#endif // BOOST_APPLICATION_AUTO_HANDLER_HPP
+#endif    // BOOST_APPLICATION_AUTO_HANDLER_HPP

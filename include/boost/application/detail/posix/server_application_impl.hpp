@@ -74,18 +74,19 @@ namespace boost {
         template<typename CharType>
         class server_application_impl_ : public application_impl {
         public:
-
             // callback for app code
             typedef csbl::function<int(void)> mainop;
 
             // string types to be used internaly to handle unicode on windows
             typedef CharType char_type;
-            typedef std::basic_string <char_type> string_type;
+            typedef std::basic_string<char_type> string_type;
 
             server_application_impl_(const mainop &main, signal_binder &sb, application::context &context,
-                                     boost::system::error_code &ec) : application_impl(context), main_(main) {
+                                     boost::system::error_code &ec) :
+                application_impl(context),
+                main_(main) {
                 // ver 1
-#if defined( USE_DAEMONIZE_VER_1 )
+#if defined(USE_DAEMONIZE_VER_1)
                 process_id_ = daemonize(ec);
 #else
                 if (daemon(0, 0, ec) < 0) {
@@ -96,7 +97,7 @@ namespace boost {
                 process_id_ = getpid();
 #endif
 
-                sb.start(); // need be started after daemonize
+                sb.start();    // need be started after daemonize
             }
 
             int run() {
@@ -104,7 +105,6 @@ namespace boost {
             }
 
         protected:
-
             //
             // ver 2
 
@@ -120,19 +120,19 @@ namespace boost {
             // redirect_fds(): redirect stdin, stdout, and stderr to /dev/NULL */
 
             void redirect_fds(boost::system::error_code &ec) {
-                (void) close(0);
-                (void) close(1);
-                (void) close(2);
+                (void)close(0);
+                (void)close(1);
+                (void)close(2);
 
                 if (open("/dev/null", O_RDWR) != 0) {
-                    //syslog(LOG_ERR, "Unable to open /dev/null: %s", strerror(errno));
-                    //exit(1);
+                    // syslog(LOG_ERR, "Unable to open /dev/null: %s", strerror(errno));
+                    // exit(1);
                     ec = boost::application::last_error_code();
                     return;
                 }
 
-                (void) dup(0);
-                (void) dup(0);
+                (void)dup(0);
+                (void)dup(0);
             }
 
             int do_fork() {
@@ -159,12 +159,12 @@ namespace boost {
             int daemon(int nochdir, int noclose, boost::system::error_code &ec) {
                 int status = 0;
 
-                //openlog("daemonize", LOG_PID, LOG_DAEMON);
+                // openlog("daemonize", LOG_PID, LOG_DAEMON);
 
                 // fork once to go into the background.
                 if ((status = do_fork()) < 0) {
                     // create new session
-                } else if (setsid() < 0) {              // shouldn't fail
+                } else if (setsid() < 0) {    // shouldn't fail
                     status = -1;
                     // fork again to ensure that daemon never reacquires a control terminal.
                 } else if ((status = do_fork()) < 0) {
@@ -230,7 +230,7 @@ namespace boost {
                     ec = last_error_code();
                     return 0;
                 } else if (fork_pid != 0) {
-                    exit(0); // parent exits
+                    exit(0);    // parent exits
                 }
 
                 // child from here
@@ -257,21 +257,20 @@ namespace boost {
                     return 0;
                 }
 
-                if (sigaction(SIGHUP, &sa, NULL) < 0)
-                {
+                if (sigaction(SIGHUP, &sa, NULL) < 0) {
                     // can't ignore SIGHUP
                     ec = last_error_code();
                     return 0;
                 }
 
-                fork_pid = fork(); // become non-pgrp-leader
+                fork_pid = fork();    // become non-pgrp-leader
 
                 if (fork_pid < 0) {
                     // fork error
                     ec = last_error_code();
                     return 0;
                 } else if (fork_pid != 0) {
-                    exit(0); // parent exits again
+                    exit(0);    // parent exits again
                 }
 
                 // change the current working directory to the root so
@@ -286,7 +285,7 @@ namespace boost {
                     rl.rlim_max = 1024;
                 }
 
-                for (int i = 0; i < (int) rl.rlim_max; i++) {
+                for (int i = 0; i < (int)rl.rlim_max; i++) {
                     close(i);
                 }
 
@@ -303,7 +302,6 @@ namespace boost {
             }
 
         private:
-
             pid_t process_id_;
 
             // app code
@@ -318,8 +316,7 @@ namespace boost {
         typedef server_application_impl_<character_types::char_type> server_application_impl;
         // wchar_t / char
 
-    }
-} // boost::application
+    }    // namespace application
+}    // namespace boost
 
-#endif // BOOST_APPLICATION_SERVER_APPLICATION_IMPL_HPP
-
+#endif    // BOOST_APPLICATION_SERVER_APPLICATION_IMPL_HPP

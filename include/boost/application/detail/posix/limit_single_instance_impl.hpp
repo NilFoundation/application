@@ -33,12 +33,11 @@ namespace boost {
     namespace application {
 
         template<typename CharType>
-        class limit_single_instance_impl_ : noncopyable {
+        class limit_single_instance_impl_ : private boost::noncopyable {
 
         public:
-
             typedef CharType char_type;
-            typedef std::basic_string <char_type> string_type;
+            typedef std::basic_string<char_type> string_type;
 
             limit_single_instance_impl_() : owns_lock_(false) {
             }
@@ -54,11 +53,10 @@ namespace boost {
                 name_ = boost::to_upper_copy(boost::lexical_cast<string_type>(instance_id));
 
                 try {
-                    create_shared_memory_or_die_.reset(
-                            new interprocess::shared_memory_object(interprocess::create_only, name_.c_str(),
-                                                                   interprocess::read_write));
+                    create_shared_memory_or_die_.reset(new interprocess::shared_memory_object(
+                        interprocess::create_only, name_.c_str(), interprocess::read_write));
 
-                    owns_lock_ = false; // we lock now
+                    owns_lock_ = false;    // we lock now
                 } catch (...) {
                     // executable is already running
                     owns_lock_ = true;
@@ -87,7 +85,6 @@ namespace boost {
             }
 
         private:
-
             string_type name_;
 
             boost::scoped_ptr<interprocess::shared_memory_object> create_shared_memory_or_die_;
@@ -95,11 +92,9 @@ namespace boost {
             bool owns_lock_;
         };
 
-
         typedef limit_single_instance_impl_<character_types::char_type> limit_single_instance_impl;
 
-    }
-} // boost::application
+    }    // namespace application
+}    // namespace boost
 
-#endif // BOOST_APPLICATION_IMPL_POSIX_LIMIT_SINGLE_INSTANCE_IMPL_HPP
-
+#endif    // BOOST_APPLICATION_IMPL_POSIX_LIMIT_SINGLE_INSTANCE_IMPL_HPP

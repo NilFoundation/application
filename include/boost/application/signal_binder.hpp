@@ -49,11 +49,11 @@ namespace boost {
          *
          */
         class signal_binder {
-            template<class> friend
-            class common_application_impl_;
+            template<class>
+            friend class common_application_impl_;
 
-            template<class> friend
-            class server_application_impl_;
+            template<class>
+            friend class server_application_impl_;
 
         public:
             explicit signal_binder(context &cxt) : signals_(io_service_), context_(cxt) {
@@ -116,14 +116,14 @@ namespace boost {
             }
 
             /*!
-            * Bind/tie a standard SIGNAL to a handler callback. 'ec' version.
-            *
-            * \param signal_number The signal constant, e.g.: SIGUSR2, SIGINT.
-            *
-            * \param h An handler that hold a callback that will called when signal
-            *          arrives.
-            *
-            */
+             * Bind/tie a standard SIGNAL to a handler callback. 'ec' version.
+             *
+             * \param signal_number The signal constant, e.g.: SIGUSR2, SIGINT.
+             *
+             * \param h An handler that hold a callback that will called when signal
+             *          arrives.
+             *
+             */
             void bind(int signal_number, const handler<> &h, boost::system::error_code &ec) {
                 bind(signal_number, h, handler<>(), ec);
             }
@@ -186,7 +186,6 @@ namespace boost {
             }
 
         protected:
-
             void start() {
                 io_service_thread_.reset(new csbl::thread(boost::bind(&signal_binder::run_io_service, this)));
             }
@@ -204,7 +203,6 @@ namespace boost {
             }
 
         protected:
-
             void spawn(const boost::system::error_code &ec, int signal_number) {
                 if (ec) {
                     return;
@@ -227,7 +225,6 @@ namespace boost {
             }
 
         private:
-
             // signal < handler / handler>
             // if first handler returns true, the second handler are called
             csbl::unordered_map<int, std::pair<handler<>, handler<> > > handler_map_;
@@ -235,13 +232,11 @@ namespace boost {
             asio::io_service io_service_;
             asio::signal_set signals_;
 
-            csbl::shared_ptr <csbl::thread> io_service_thread_;
+            csbl::shared_ptr<csbl::thread> io_service_thread_;
 
         protected:
-
             // for signal_manager access
             application::context &context_;
-
         };
 
         /*!
@@ -251,7 +246,6 @@ namespace boost {
          */
         class signal_manager : public signal_binder {
         public:
-
             signal_manager(application::context &context, boost::system::error_code &ec) : signal_binder(context) {
                 register_signals(ec);
             }
@@ -267,13 +261,14 @@ namespace boost {
             }
 
         protected:
-
-            virtual csbl::shared_ptr <termination_handler> setup_termination_behaviour() {
-                strict_lock <application::aspect_map> guard(context_);
+            virtual csbl::shared_ptr<termination_handler> setup_termination_behaviour() {
+                strict_lock<application::aspect_map> guard(context_);
 
                 if (!context_.find<wait_for_termination_request>(guard)) {
-                    context_.insert<wait_for_termination_request>(csbl::shared_ptr<wait_for_termination_request>(
-                            new wait_for_termination_request_default_behaviour), guard);
+                    context_.insert<wait_for_termination_request>(
+                        csbl::shared_ptr<wait_for_termination_request>(
+                            new wait_for_termination_request_default_behaviour),
+                        guard);
                 }
 
                 return context_.find<termination_handler>(guard);
@@ -282,7 +277,7 @@ namespace boost {
             // parameter context version
 
             virtual void register_signals(boost::system::error_code &ec) {
-                csbl::shared_ptr <termination_handler> th = setup_termination_behaviour();
+                csbl::shared_ptr<termination_handler> th = setup_termination_behaviour();
 
                 if (th) {
                     handler<>::callback cb = boost::bind(&signal_manager::termination_signal_handler, this);
@@ -309,7 +304,7 @@ namespace boost {
                 context_.find<status>()->state(status::stopped);
 
                 // remove process lock
-                csbl::shared_ptr <limit_single_instance> si = context_.find<limit_single_instance>();
+                csbl::shared_ptr<limit_single_instance> si = context_.find<limit_single_instance>();
 
                 if (si) {
                     si->release(true);
@@ -321,11 +316,9 @@ namespace boost {
                 // this is not used
                 return false;
             }
-
         };
 
-    }
-} // boost::application
+    }    // namespace application
+}    // namespace boost
 
-#endif // BOOST_APPLICATION_SIGNAL_MANAGER_HPP
-
+#endif    // BOOST_APPLICATION_SIGNAL_MANAGER_HPP
