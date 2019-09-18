@@ -13,6 +13,7 @@ function(add_example_executable)
     cmake_parse_arguments(PARSE "${options}" "${oneValueArgs}" "${multiValueArgs}" ${ARGN})
 
     add_executable(${PARSE_NAME} ${PARSE_SOURCES})
+    set_target_properties(${PARSE_NAME} PROPERTIES CXX_STANDARD 11 CXX_STANDARD_REQUIRED TRUE)
     target_include_directories(${PARSE_NAME} PRIVATE ${Boost_INCLUDE_DIRS} ../include)
     target_link_libraries(${PARSE_NAME} boost::application ${Boost_LIBRARIES})
 
