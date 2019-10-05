@@ -48,8 +48,8 @@ add_example_executable(NAME termination_handler_with_global_context SOURCES term
 add_example_executable(NAME examples_test SOURCES test.cpp)
 add_example_executable(NAME wait_for_termination_request SOURCES wait_for_termination_request.cpp)
 
-add_custom_target(examples)
+add_custom_target(examples-${CURRENT_PROJECT_NAME})
 
 foreach(ITERATOR ${${CMAKE_PROJECT_NAME}_EXAMPLES})
-    add_dependencies(examples ${ITERATOR})
+    add_dependencies(examples-${CURRENT_PROJECT_NAME} ${ITERATOR})
 endforeach()
