@@ -3,7 +3,7 @@
 # file LICENSE_1_0.txt or copy at http://www.boost.org/LICENSE_1_0.txt)
 #
 # Copyright Antony Polukhin 2014. 
-# Copyright Mikhail Komarov 2018-2019.
+# Copyright Mikhail Komarov 2018-2020.
 
 os:
 - linux
@@ -14,8 +14,9 @@ git:
   depth: false
 
 env:
-- CXX_STANDARD=c++98
 - CXX_STANDARD=c++11
+- CXX_STANDARD=c++14
+- CXX_STANDARD=c++17
 
 before_install:
 # Set this to the name of your Boost library

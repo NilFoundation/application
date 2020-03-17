@@ -12,7 +12,8 @@ Note that this branch is a on active development, and can receive breaking chang
 
 ### Introduction
 
-Nil Application Framework provides an application environment, or start point to any people that want a basic infrastructure to build an system application on Windows or Unix Variants (e.g. Linux, MacOS).
+=nil; Application Framework provides an application environment, or start point to any people that want a basic
+ infrastructure to build an system application on Windows or Unix Variants (e.g. Linux, MacOS).
 
 ### Hello World (server)
 
@@ -243,31 +244,23 @@ If you intend to use 'Application' on your application, please send-me your name
 
  * server_application_impl now follows the BSD-style daemon(3) creation.
  
-### Note about other version
-
-* This release will be identified as : 0.4
-* To get 0.3 (older version) refer to: [0.3] (https://sourceforge.net/projects/boostapp/)
-
-Note that version 0.3 is no longer maintained! Version 0.4, is now maintained and receives regular updates. 
-
 ### Contributing
 
-Want to contribute with Boost.Application project? Open a pull request!
+Want to contribute with =nil; Application project? Open a pull request!
    
 ### Acknowledgements
 
 A special thanks to Vicente J. Botet Escriba that helped a lot on all areas of this lib.
-   
-Thanks to Benjamin Dieckmann for global_context implementation.<br>
+
+Thanks to Renato Tegon Forti for initial library implementation.
+Thanks to Benjamin Dieckmann for global_context implementation.
 Thanks to Rodrigo Madera (RM of Boost.Application).<br>
 Thanks to Antony Polukhin for improvements on plug-in system module (shared_library), that now is a new library, see notes above. 
 
 ### Contact
 
-[Renato Tegon Forti] (mailto:re.tf@acm.org)
+[Mikhail Komarov](mailto:nemo@nil.foundation)
 
 ### License
 
 Distributed under the [Boost Software License, Version 1.0](http://www.boost.org/LICENSE_1_0.txt).
-
-
