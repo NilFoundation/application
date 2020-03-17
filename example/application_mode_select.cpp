@@ -21,7 +21,6 @@ namespace po = boost::program_options;
 
 class my_application_functor_class {
 public:
-
     my_application_functor_class(application::context &context) : context_(context) {
     }
 
@@ -47,12 +46,11 @@ public:
 
     bool stop() {
         std::cout << "stop!" << std::endl;
-        return true; // return true to stop, false to ignore
+        return true;    // return true to stop, false to ignore
     }
 
 private:
     application::context &context_;
-
 };
 
 int main(int argc, char **argv) {
@@ -73,7 +71,7 @@ int main(int argc, char **argv) {
     application::handler<>::callback termination_callback = boost::bind(&my_application_functor_class::stop, &app);
 
     app_context.insert<application::termination_handler>(
-            boost::make_shared<application::termination_handler_default_behaviour>(termination_callback));
+        boost::make_shared<application::termination_handler_default_behaviour>(termination_callback));
 
     int result = 0;
     boost::system::error_code ec;
@@ -93,4 +91,3 @@ int main(int argc, char **argv) {
 
     return result;
 }
-

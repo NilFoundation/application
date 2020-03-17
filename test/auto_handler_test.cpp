@@ -20,7 +20,6 @@ using namespace boost;
 
 class myapp {
 public:
-
     myapp(application::context &context) : context_(context) {
     }
 
@@ -29,21 +28,19 @@ public:
     }
 
     bool stop() {
-        return true; // return true to stop, false to ignore
+        return true;    // return true to stop, false to ignore
     }
 
     bool pause() {
-        return true; // return true to pause, false to ignore
+        return true;    // return true to pause, false to ignore
     }
 
     bool resume() {
-        return true; // return true to resume, false to ignore
+        return true;    // return true to resume, false to ignore
     }
 
 private:
-
     application::context &context_;
-
 };
 
 int main(int argc, char *argv[]) {
@@ -54,7 +51,6 @@ int main(int argc, char *argv[]) {
 
     BOOST_CHECK(application::launch<application::server>(app, app_context, ec) == 0);
     BOOST_CHECK(ec.value());
-
 
     return 0;
 }

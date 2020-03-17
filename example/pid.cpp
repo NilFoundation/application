@@ -1,14 +1,14 @@
 // -----------------------------------------------------------------------------
-// path.cpp : examples that show how use 
-// Boost.Application to make a simplest interactive (terminal) application 
+// path.cpp : examples that show how use
+// Boost.Application to make a simplest interactive (terminal) application
 //
-// Note 1: The Boost.Application (Aspects v4) and this sample are in 
+// Note 1: The Boost.Application (Aspects v4) and this sample are in
 //         development process.
 // -----------------------------------------------------------------------------
 
 // Copyright 2011-2013 Renato Tegon Forti
 //
-// Distributed under the Boost Software License, Version 1.0. (See accompanying 
+// Distributed under the Boost Software License, Version 1.0. (See accompanying
 // file LICENSE_1_0.txt or copy at http://www.boost.org/LICENSE_1_0.txt)
 //
 
@@ -24,7 +24,6 @@ using namespace boost;
 //[pid
 class myapp {
 public:
-
     myapp(application::context &context) : context_(context) {
     }
 
@@ -36,13 +35,11 @@ public:
 
         std::cout << "pid : " << pid->pid() << std::endl;
 
-
         return 0;
     }
 
 private:
     application::context &context_;
-
 };
 
 // main

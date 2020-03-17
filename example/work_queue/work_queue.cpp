@@ -28,7 +28,7 @@ using namespace boost;
 // http://en.wikipedia.org/wiki/Gaussian_blur
 template<int kernelRadius = 3>
 struct gaussian_blur {
-    typedef boost::function<void(vector<vector<double> >)> callback;
+    typedef boost::function<void(vector<vector<double>>)> callback;
 
     gaussian_blur(const callback &cb) : callback_(cb) {
     }
@@ -46,7 +46,6 @@ struct gaussian_blur {
     }
 
 protected:
-
     double gaussian(double x, double mu, double sigma) {
         return exp(-(((x - mu) / (sigma)) * ((x - mu) / (sigma))) / 2.0);
     }
@@ -63,7 +62,7 @@ protected:
         for (int row = 0; row < kernel2d.size(); row++) {
             for (int col = 0; col < kernel2d[row].size(); col++) {
                 kernel2d[row][col] =
-                        gaussian(row, internalKernelRadius, sigma) * gaussian(col, internalKernelRadius, sigma);
+                    gaussian(row, internalKernelRadius, sigma) * gaussian(col, internalKernelRadius, sigma);
                 sum += kernel2d[row][col];
             }
         }
@@ -79,7 +78,6 @@ protected:
     }
 
 private:
-
     callback callback_;
     vector<vector<double>> kernel2d_;
 };
@@ -87,7 +85,6 @@ private:
 // application class
 class myapp : work_queue<0> {
 public:
-
     myapp(application::context &context) : context_(context) {
     }
 
@@ -107,7 +104,7 @@ public:
         // your application logic here!
         task_count_ = 0;
 
-        //our tasks
+        // our tasks
         add_task(gaussian_blur<3>(boost::bind(&myapp::add_result, this, _1)));
         add_task(gaussian_blur<6>(boost::bind(&myapp::add_result, this, _1)));
         add_task(gaussian_blur<9>(boost::bind(&myapp::add_result, this, _1)));
@@ -137,15 +134,14 @@ public:
     }
 
 private:
-
     boost::mutex mutex_;
-    vector<vector<vector<double> > > result_;
+    vector<vector<vector<double>>> result_;
 
     int task_count_;
 
     application::context &context_;
 
-}; // myapp 
+};    // myapp
 
 int main(int argc, char *argv[]) {
     BOOST_APPLICATION_FEATURE_SELECT
@@ -156,8 +152,7 @@ int main(int argc, char *argv[]) {
     application::handler<>::callback cb = boost::bind(&myapp::stop, &app);
 
     app_context.insert<application::termination_handler>(
-            make_shared<application::termination_handler_default_behaviour>(cb));
+        make_shared<application::termination_handler_default_behaviour>(cb));
 
     return application::launch<application::common>(app, app_context);
 }
-

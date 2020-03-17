@@ -24,17 +24,14 @@
 
 using namespace boost;
 
-
 // singleton access
 
 inline application::global_context_ptr this_application() {
     return application::global_context::get();
 }
 
-
 class myapp {
 public:
-
     ~myapp() {
         std::cout << "~myapp()" << std::endl;
     }
@@ -88,7 +85,6 @@ public:
         // tell to app to exit.
         return false;
     }
-
 };
 
 // main
@@ -101,7 +97,7 @@ int main(int argc, char *argv[]) {
     application::handler<>::callback callback = boost::bind(&myapp::stop, &app);
 
     this_application()->insert<application::termination_handler>(
-            boost::make_shared<application::termination_handler_default_behaviour>(callback));
+        boost::make_shared<application::termination_handler_default_behaviour>(callback));
 
     int ret = application::launch<application::common>(app, ctx);
 

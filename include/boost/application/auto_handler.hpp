@@ -1,12 +1,12 @@
-// auto_handler.hpp  ---------------------------------------------------------//
-// -----------------------------------------------------------------------------
-
-// Copyright 2011-2014 Renato Tegon Forti
-
-// Distributed under the Boost Software License, Version 1.0.
-// See http://www.boost.org/LICENSE_1_0.txt
-
-// -----------------------------------------------------------------------------
+//---------------------------------------------------------------------------//
+// Copyright (c) 2011-2014 Renato Tegon Forti
+// Copyright (c) 2018-2019 Nil Foundation
+// Copyright (c) 2018-2019 Mikhail Komarov <nemo@nilfoundation.org>
+//
+// Distributed under the Boost Software License, Version 1.0
+// See accompanying file LICENSE_1_0.txt or copy at
+// http://www.boost.org/LICENSE_1_0.txt
+//---------------------------------------------------------------------------//
 
 // Revision History
 // 05-06-2014 dd-mm-yyyy - Initial Release
@@ -166,8 +166,8 @@ namespace boost {
         class auto_handler
             : public detail::handler_detector,
               public boost::conditional<boost::is_convertible<context &, Application>::value,
-                                        detail::handler_auto_set_c<Application, auto_handler<Application> >,
-                                        detail::handler_auto_set_u<Application, auto_handler<Application> > >::type {
+                                        detail::handler_auto_set_c<Application, auto_handler<Application>>,
+                                        detail::handler_auto_set_u<Application, auto_handler<Application>>>::type {
 
             template<typename, typename>
             friend struct detail::handler_auto_set_u;
@@ -178,8 +178,8 @@ namespace boost {
         public:
             typedef
                 typename boost::conditional<boost::is_convertible<context &, Application>::value,
-                                            detail::handler_auto_set_c<Application, auto_handler<Application> >,
-                                            detail::handler_auto_set_u<Application, auto_handler<Application> > >::type
+                                            detail::handler_auto_set_c<Application, auto_handler<Application>>,
+                                            detail::handler_auto_set_u<Application, auto_handler<Application>>>::type
                     base_selector;
 
             auto_handler(context &cxt) : base_selector(cxt) {

@@ -17,7 +17,6 @@ using namespace boost;
 
 class myapp {
 public:
-
     myapp(application::context &context) : context_(context) {
     }
 
@@ -31,11 +30,11 @@ private:
 
 BOOST_AUTO_TEST_SUITE(simple_common_application_test_suite)
 
-    BOOST_AUTO_TEST_CASE(path_aspect1) {
-        application::context app_context;
-        myapp app(app_context);
+BOOST_AUTO_TEST_CASE(path_aspect1) {
+    application::context app_context;
+    myapp app(app_context);
 
-        BOOST_CHECK(application::launch<application::common>(app, app_context) == 0);
-    }
+    BOOST_CHECK(application::launch<application::common>(app, app_context) == 0);
+}
 
 BOOST_AUTO_TEST_SUITE_END()

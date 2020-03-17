@@ -5,7 +5,7 @@
 
 // Copyright 2011-2013 Renato Tegon Forti
 //
-// Distributed under the Boost Software License, Version 1.0. (See accompanying 
+// Distributed under the Boost Software License, Version 1.0. (See accompanying
 // file LICENSE_1_0.txt or copy at http://www.boost.org/LICENSE_1_0.txt)
 //
 
@@ -27,7 +27,6 @@ public:
     }
 
     virtual ~myexception_base() _NOEXCEPT {
-
     }
 
     virtual const char *what() const throw() {
@@ -65,7 +64,6 @@ using namespace boost;
 
 class myapp {
 public:
-
     myapp(application::context &context) : context_(context) {
     }
 
@@ -79,7 +77,6 @@ public:
 
 private:
     application::context &context_;
-
 };
 
 // main

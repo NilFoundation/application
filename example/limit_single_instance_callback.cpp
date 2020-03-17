@@ -1,14 +1,14 @@
 // -----------------------------------------------------------------------------
-// limit_single_instance_callback.cpp : examples that show how use 
-// Boost.Application to make a simplest interactive (terminal) application 
+// limit_single_instance_callback.cpp : examples that show how use
+// Boost.Application to make a simplest interactive (terminal) application
 //
-// Note 1: The Boost.Application (Aspects v4) and this sample are in 
+// Note 1: The Boost.Application (Aspects v4) and this sample are in
 //         development process.
 // -----------------------------------------------------------------------------
 
 // Copyright 2011-2013 Renato Tegon Forti
 //
-// Distributed under the Boost Software License, Version 1.0. (See accompanying 
+// Distributed under the Boost Software License, Version 1.0. (See accompanying
 // file LICENSE_1_0.txt or copy at http://www.boost.org/LICENSE_1_0.txt)
 //
 
@@ -26,7 +26,6 @@ using namespace boost;
 //[lsic
 class myapp {
 public:
-
     myapp(application::context &context) : context_(context) {
     }
 
@@ -53,7 +52,8 @@ public:
         char type;
         do {
             std::cout << "An instance of this application is already running on "
-                         "this operating system!" << std::endl;
+                         "this operating system!"
+                      << std::endl;
             std::cout << "Do you want to start another? [y/n]" << std::endl;
             std::cin >> type;
         } while (!std::cin.fail() && type != 'y' && type != 'n');
@@ -68,9 +68,7 @@ public:
     }
 
 private:
-
     application::context &context_;
-
 };
 
 // main
@@ -94,8 +92,8 @@ int main(int argc, char *argv[]) {
 
     // way 2
     app_context.insert<application::limit_single_instance>(
-            boost::make_shared<application::limit_single_instance_default_behaviour>(appuuid, application::handler<
-                    bool>::make_callback(app, &myapp::instace_aready_running)));
+        boost::make_shared<application::limit_single_instance_default_behaviour>(
+            appuuid, application::handler<bool>::make_callback(app, &myapp::instace_aready_running)));
 
     return application::launch<application::common>(app, app_context);
 }

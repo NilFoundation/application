@@ -37,7 +37,6 @@ private:
 
 class my_signal_manager : public application::signal_manager {
 public:
-
     my_signal_manager(application::context &context) : signal_manager(context) {
         application::handler<>::callback cb = boost::bind(&my_signal_manager::stop, this);
 
@@ -45,8 +44,8 @@ public:
     }
 
     bool stop() {
-        application::csbl::shared_ptr<application::wait_for_termination_request> th = context_.find<
-                application::wait_for_termination_request>();
+        application::csbl::shared_ptr<application::wait_for_termination_request> th =
+            context_.find<application::wait_for_termination_request>();
 
         th->proceed();
 
@@ -55,290 +54,278 @@ public:
 };
 
 BOOST_AUTO_TEST_SUITE(launch_test_suite)
-    // common
+// common
 
-    BOOST_AUTO_TEST_CASE(common_launch1) {
-        application::context cxt;
-        myapp2 app(cxt);
+BOOST_AUTO_TEST_CASE(common_launch1) {
+    application::context cxt;
+    myapp2 app(cxt);
 
-        BOOST_CHECK(!application::launch<application::common>(app, cxt));
+    BOOST_CHECK(!application::launch<application::common>(app, cxt));
+}
+
+BOOST_AUTO_TEST_CASE(common_launch2) {
+    myapp app;
+    application::global_context::create();
+
+    BOOST_CHECK(!application::launch<application::common>(app, application::global_context::get()));
+
+    application::global_context::destroy();
+}
+
+BOOST_AUTO_TEST_CASE(common_launch3) {
+    application::context cxt;
+    myapp2 app(cxt);
+
+    boost::system::error_code ec;
+    BOOST_CHECK(!application::launch<application::common>(app, cxt, ec));
+    BOOST_CHECK(!ec);
+}
+
+BOOST_AUTO_TEST_CASE(common_launch4) {
+    myapp app;
+    application::global_context::create();
+
+    boost::system::error_code ec;
+    BOOST_CHECK(!application::launch<application::common>(app, application::global_context::get(), ec));
+    BOOST_CHECK(!ec);
+
+    application::global_context::destroy();
+}
+
+// sm
+
+BOOST_AUTO_TEST_CASE(signal_manager1) {
+    application::context cxt;
+    myapp2 app(cxt);
+
+    my_signal_manager sm(cxt);
+
+    BOOST_CHECK(!application::launch<application::common>(app, sm, cxt));
+}
+
+BOOST_AUTO_TEST_CASE(signal_manager2) {
+    myapp app;
+    application::global_context::create();
+
+    my_signal_manager sm(*application::global_context::get().get());
+
+    BOOST_CHECK(!application::launch<application::common>(app, sm, application::global_context::get()));
+
+    application::global_context::destroy();
+}
+
+BOOST_AUTO_TEST_CASE(signal_manager3) {
+    application::context cxt;
+    myapp2 app(cxt);
+
+    my_signal_manager sm(cxt);
+
+    boost::system::error_code ec;
+    BOOST_CHECK(!application::launch<application::common>(app, sm, cxt, ec));
+    BOOST_CHECK(!ec);
+}
+
+BOOST_AUTO_TEST_CASE(signal_manager4) {
+    myapp app;
+    application::global_context::create();
+    my_signal_manager sm(*application::global_context::get().get());
+
+    boost::system::error_code ec;
+    BOOST_CHECK(!application::launch<application::common>(app, sm, application::global_context::get(), ec));
+    BOOST_CHECK(!ec);
+
+    application::global_context::destroy();
+}
+
+// server
+
+#if defined(BOOST_WINDOWS_API)
+
+// on windows we always will receive error:
+// 1063 (0x427)
+// The service process could not connect to the service controller.
+
+BOOST_AUTO_TEST_CASE(server1) {
+    application::context cxt;
+    myapp2 app(cxt);
+
+    try {
+        int ret = application::launch<application::server>(app, cxt);
+    } catch (boost::system::system_error &se) {
+        BOOST_CHECK(se.code().value() == 1063);
+    }
+}
+
+BOOST_AUTO_TEST_CASE(server2) {
+    myapp app;
+    application::global_context::create();
+
+    try {
+        int ret = application::launch<application::server>(app, application::global_context::get());
+    } catch (boost::system::system_error &se) {
+        BOOST_CHECK(se.code().value() == 1056);
     }
 
-    BOOST_AUTO_TEST_CASE(common_launch2) {
-        myapp app;
-        application::global_context::create();
+    application::global_context::destroy();
+}
 
-        BOOST_CHECK(!application::launch<application::common>(app, application::global_context::get()));
+BOOST_AUTO_TEST_CASE(server3) {
+    application::context cxt;
+    myapp2 app(cxt);
 
-        application::global_context::destroy();
+    boost::system::error_code ec;
+    int ret = application::launch<application::server>(app, cxt, ec);
+    BOOST_CHECK(ec.value() == 1056);
+}
+
+BOOST_AUTO_TEST_CASE(server4) {
+    myapp app;
+    application::global_context::create();
+
+    boost::system::error_code ec;
+    int ret = application::launch<application::server>(app, application::global_context::get(), ec);
+    BOOST_CHECK(ec.value() == 1056);
+
+    application::global_context::destroy();
+}
+
+// sm
+
+BOOST_AUTO_TEST_CASE(signal_manager5) {
+    application::context cxt;
+    myapp2 app(cxt);
+
+    my_signal_manager sm(cxt);
+
+    try {
+        int ret = application::launch<application::server>(app, sm, cxt);
+    } catch (boost::system::system_error &se) {
+        BOOST_CHECK(se.code().value() == 1056);
+    }
+}
+
+BOOST_AUTO_TEST_CASE(signal_manager6) {
+    myapp app;
+    application::global_context::create();
+    my_signal_manager sm(*application::global_context::get().get());
+
+    try {
+        int ret = application::launch<application::server>(app, sm, application::global_context::get());
+    } catch (boost::system::system_error &se) {
+        BOOST_CHECK(se.code().value() == 1056);
     }
 
-    BOOST_AUTO_TEST_CASE(common_launch3) {
-        application::context cxt;
-        myapp2 app(cxt);
+    application::global_context::destroy();
+}
 
-        boost::system::error_code ec;
-        BOOST_CHECK(!application::launch<application::common>(app, cxt, ec));
-        BOOST_CHECK(!ec);
-    }
+BOOST_AUTO_TEST_CASE(signal_manager7) {
 
-    BOOST_AUTO_TEST_CASE(common_launch4) {
-        myapp app;
-        application::global_context::create();
+    application::context cxt;
+    myapp2 app(cxt);
 
-        boost::system::error_code ec;
-        BOOST_CHECK(!application::launch<application::common>(app, application::global_context::get(), ec));
-        BOOST_CHECK(!ec);
+    my_signal_manager sm(cxt);
 
-        application::global_context::destroy();
-    }
+    boost::system::error_code ec;
+    int ret = application::launch<application::server>(app, sm, cxt, ec);
+    BOOST_CHECK(ec.value() == 1056);
+}
 
-    // sm
+BOOST_AUTO_TEST_CASE(signal_manager8) {
+    myapp app;
+    application::global_context::create();
+    my_signal_manager sm(*application::global_context::get().get());
 
-    BOOST_AUTO_TEST_CASE(signal_manager1) {
-        application::context cxt;
-        myapp2 app(cxt);
+    boost::system::error_code ec;
+    int ret = application::launch<application::server>(app, sm, application::global_context::get(), ec);
+    BOOST_CHECK(ec.value() == 1056);
 
-        my_signal_manager sm(cxt);
+    application::global_context::destroy();
+}
 
-        BOOST_CHECK(!application::launch<application::common>(app, sm, cxt));
-    }
+#elif defined(BOOST_POSIX_API)
 
-    BOOST_AUTO_TEST_CASE(signal_manager2) {
-        myapp app;
-        application::global_context::create();
+BOOST_AUTO_TEST_CASE(server1) {
 
-        my_signal_manager sm(*application::global_context::get().get());
+    application::context cxt;
+    myapp2 app(cxt);
 
-        BOOST_CHECK(!application::launch<application::common>(app, sm, application::global_context::get()));
+    BOOST_CHECK(!application::launch<application::server>(app, cxt));
+}
 
-        application::global_context::destroy();
-    }
+BOOST_AUTO_TEST_CASE(server2) {
+    myapp app;
+    application::global_context::create();
 
-    BOOST_AUTO_TEST_CASE(signal_manager3) {
-        application::context cxt;
-        myapp2 app(cxt);
-
-        my_signal_manager sm(cxt);
+    BOOST_CHECK(!application::launch<application::server>(app, application::global_context::get()));
 
-        boost::system::error_code ec;
-        BOOST_CHECK(!application::launch<application::common>(app, sm, cxt, ec));
-        BOOST_CHECK(!ec);
-    }
-
-    BOOST_AUTO_TEST_CASE(signal_manager4) {
-        myapp app;
-        application::global_context::create();
-        my_signal_manager sm(*application::global_context::get().get());
-
-        boost::system::error_code ec;
-        BOOST_CHECK(!application::launch<application::common>(app, sm, application::global_context::get(), ec));
-        BOOST_CHECK(!ec);
-
-        application::global_context::destroy();
-    }
+    application::global_context::destroy();
+}
 
-    // server
+BOOST_AUTO_TEST_CASE(server3) {
+    application::context cxt;
+    myapp2 app(cxt);
 
-#if defined( BOOST_WINDOWS_API )
+    boost::system::error_code ec;
+    BOOST_CHECK(!application::launch<application::server>(app, cxt, ec));
+    BOOST_CHECK(!ec);
+}
 
-    // on windows we always will receive error:
-    // 1063 (0x427)
-    // The service process could not connect to the service controller.
+BOOST_AUTO_TEST_CASE(server4) {
+    myapp app;
+    application::global_context::create();
 
-    BOOST_AUTO_TEST_CASE(server1){
-       application::context cxt;
-       myapp2 app(cxt);
+    boost::system::error_code ec;
+    BOOST_CHECK(!application::launch<application::server>(app, application::global_context::get(), ec));
+    BOOST_CHECK(!ec);
 
-       try
-       {
-          int ret = application::launch<application::server>(app, cxt);
-       }
-       catch(boost::system::system_error& se)
-       {
-          BOOST_CHECK(se.code().value() == 1063);
-       }
-    }
+    application::global_context::destroy();
+}
 
-    BOOST_AUTO_TEST_CASE(server2){
-       myapp app;
-       application::global_context::create();
+// sm
 
-       try
-       {
-          int ret = application::launch<application::server>(app, application::global_context::get());
-       }
-       catch(boost::system::system_error& se)
-       {
-          BOOST_CHECK(se.code().value() == 1056);
-       }
+BOOST_AUTO_TEST_CASE(signal_manager5) {
 
-       application::global_context::destroy();
-    }
+    application::context cxt;
+    myapp2 app(cxt);
 
-    BOOST_AUTO_TEST_CASE(server3){
-       application::context cxt;
-       myapp2 app(cxt);
+    my_signal_manager sm(cxt);
 
-       boost::system::error_code ec;
-       int ret = application::launch<application::server>(app, cxt, ec);
-       BOOST_CHECK(ec.value() == 1056);
-    }
+    BOOST_CHECK(!application::launch<application::server>(app, sm, cxt));
+}
 
-    BOOST_AUTO_TEST_CASE(server4){
-       myapp app;
-       application::global_context::create();
+BOOST_AUTO_TEST_CASE(signal_manager6) {
+    myapp app;
+    application::global_context::create();
 
-       boost::system::error_code ec;
-       int ret = application::launch<application::server>(app, application::global_context::get(), ec);
-       BOOST_CHECK(ec.value() == 1056);
+    my_signal_manager sm(*application::global_context::get().get());
 
-       application::global_context::destroy();
-    }
+    BOOST_CHECK(!application::launch<application::server>(app, sm, application::global_context::get()));
 
-    // sm
+    application::global_context::destroy();
+}
 
-    BOOST_AUTO_TEST_CASE(signal_manager5){
-       application::context cxt;
-       myapp2 app(cxt);
+BOOST_AUTO_TEST_CASE(signal_manager7) {
+    application::context cxt;
+    myapp2 app(cxt);
 
-       my_signal_manager sm(cxt);
+    my_signal_manager sm(cxt);
 
-       try
-       {
-          int ret = application::launch<application::server>(app, sm, cxt);
-       }
-       catch(boost::system::system_error& se)
-       {
-          BOOST_CHECK(se.code().value() == 1056);
-       }
-    }
+    boost::system::error_code ec;
+    BOOST_CHECK(!application::launch<application::server>(app, sm, cxt, ec));
+    BOOST_CHECK(!ec);
+}
 
-    BOOST_AUTO_TEST_CASE(signal_manager6){
-       myapp app;
-       application::global_context::create();
-       my_signal_manager sm(*application::global_context::get().get());
-
-       try
-       {
-          int ret = application::launch<application::server>(app, sm, application::global_context::get());
-       }
-       catch(boost::system::system_error& se)
-       {
-          BOOST_CHECK(se.code().value() == 1056);
-       }
-
-       application::global_context::destroy();
-    }
-
-    BOOST_AUTO_TEST_CASE(signal_manager7){
-
-       application::context cxt;
-       myapp2 app(cxt);
-
-       my_signal_manager sm(cxt);
-
-       boost::system::error_code ec;
-       int ret = application::launch<application::server>(app, sm, cxt, ec);
-       BOOST_CHECK(ec.value() == 1056);
-    }
-
-    BOOST_AUTO_TEST_CASE(signal_manager8){
-       myapp app;
-       application::global_context::create();
-       my_signal_manager sm(*application::global_context::get().get());
-
-       boost::system::error_code ec;
-       int ret = application::launch<application::server>(app, sm, application::global_context::get(), ec);
-       BOOST_CHECK(ec.value() == 1056);
-
-       application::global_context::destroy();
-    }
-
-#elif defined( BOOST_POSIX_API )
-
-    BOOST_AUTO_TEST_CASE(server1) {
-
-        application::context cxt;
-        myapp2 app(cxt);
-
-        BOOST_CHECK(!application::launch<application::server>(app, cxt));
-    }
-
-    BOOST_AUTO_TEST_CASE(server2) {
-        myapp app;
-        application::global_context::create();
-
-        BOOST_CHECK(!application::launch<application::server>(app, application::global_context::get()));
-
-        application::global_context::destroy();
-    }
-
-    BOOST_AUTO_TEST_CASE(server3) {
-        application::context cxt;
-        myapp2 app(cxt);
-
-        boost::system::error_code ec;
-        BOOST_CHECK(!application::launch<application::server>(app, cxt, ec));
-        BOOST_CHECK(!ec);
-    }
-
-    BOOST_AUTO_TEST_CASE(server4) {
-        myapp app;
-        application::global_context::create();
-
-        boost::system::error_code ec;
-        BOOST_CHECK(!application::launch<application::server>(app, application::global_context::get(), ec));
-        BOOST_CHECK(!ec);
-
-        application::global_context::destroy();
-    }
-
-    // sm
-
-    BOOST_AUTO_TEST_CASE(signal_manager5) {
-
-        application::context cxt;
-        myapp2 app(cxt);
-
-        my_signal_manager sm(cxt);
-
-        BOOST_CHECK(!application::launch<application::server>(app, sm, cxt));
-    }
-
-    BOOST_AUTO_TEST_CASE(signal_manager6) {
-        myapp app;
-        application::global_context::create();
-
-        my_signal_manager sm(*application::global_context::get().get());
-
-        BOOST_CHECK(!application::launch<application::server>(app, sm, application::global_context::get()));
-
-        application::global_context::destroy();
-    }
-
-    BOOST_AUTO_TEST_CASE(signal_manager7) {
-        application::context cxt;
-        myapp2 app(cxt);
-
-        my_signal_manager sm(cxt);
-
-        boost::system::error_code ec;
-        BOOST_CHECK(!application::launch<application::server>(app, sm, cxt, ec));
-        BOOST_CHECK(!ec);
-    }
-
-    BOOST_AUTO_TEST_CASE(signal_manager8) {
-        myapp app;
-        application::global_context::create();
-        my_signal_manager sm(*application::global_context::get().get());
-
-        boost::system::error_code ec;
-        BOOST_CHECK(!application::launch<application::server>(app, sm, application::global_context::get(), ec));
-        BOOST_CHECK(!ec);
-
-        application::global_context::destroy();
-    }
+BOOST_AUTO_TEST_CASE(signal_manager8) {
+    myapp app;
+    application::global_context::create();
+    my_signal_manager sm(*application::global_context::get().get());
+
+    boost::system::error_code ec;
+    BOOST_CHECK(!application::launch<application::server>(app, sm, application::global_context::get(), ec));
+    BOOST_CHECK(!ec);
+
+    application::global_context::destroy();
+}
 
 #endif
 

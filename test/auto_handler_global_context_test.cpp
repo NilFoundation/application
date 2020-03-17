@@ -22,7 +22,6 @@ inline application::global_context_ptr this_application() {
 
 class myapp {
 public:
-
     myapp(application::context &context) : context_(context) {
     }
 
@@ -31,38 +30,36 @@ public:
     }
 
     bool stop() {
-        return true; // return true to stop, false to ignore
+        return true;    // return true to stop, false to ignore
     }
 
     bool pause() {
-        return true; // return true to pause, false to ignore
+        return true;    // return true to pause, false to ignore
     }
 
     bool resume() {
-        return true; // return true to resume, false to ignore
+        return true;    // return true to resume, false to ignore
     }
 
 private:
-
     application::context &context_;
-
 };
 
 BOOST_AUTO_TEST_SUITE(auto_handler_global_context_test_suite)
 
-    BOOST_AUTO_TEST_CASE(auto_handler_global_context_test_case) {
-        system::error_code ec;
+BOOST_AUTO_TEST_CASE(auto_handler_global_context_test_case) {
+    system::error_code ec;
 
-        application::global_context_ptr app_context = application::global_context::create(ec);
-        BOOST_CHECK(ec.value());
+    application::global_context_ptr app_context = application::global_context::create(ec);
+    BOOST_CHECK(ec.value());
 
-        application::auto_handler<myapp> app(app_context);
+    application::auto_handler<myapp> app(app_context);
 
-        BOOST_CHECK(application::launch<application::server>(app, app_context, ec) == 0);
-        BOOST_CHECK(ec.value());
+    BOOST_CHECK(application::launch<application::server>(app, app_context, ec) == 0);
+    BOOST_CHECK(ec.value());
 
-        application::global_context::destroy(ec);
-        BOOST_CHECK(ec.value());
-    }
+    application::global_context::destroy(ec);
+    BOOST_CHECK(ec.value());
+}
 
 BOOST_AUTO_TEST_SUITE_END()

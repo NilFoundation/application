@@ -12,13 +12,12 @@
 #include <boost/thread.hpp>
 #include <boost/bind.hpp>
 
-// work_queue class 
-// NWorkers : nuber of worker threads 
+// work_queue class
+// NWorkers : nuber of worker threads
 // provide 0 to use available cores of machine
 template<int NWorkers = 0>
 class work_queue {
 public:
-
     work_queue() {
         work_ctrl_ = new boost::asio::io_service::work(io_service_);
 
@@ -44,13 +43,10 @@ public:
     }
 
 private:
-
     boost::asio::io_service io_service_;
     boost::thread_group threads_;
 
     boost::asio::io_service::work *work_ctrl_;
 };
 
-#endif // BOOST_APPLICATION_WORK_QUEUE_HPP
-
-
+#endif    // BOOST_APPLICATION_WORK_QUEUE_HPP

@@ -1,9 +1,13 @@
-// Copyright 2013 Vicente J. Botet Escriba.
-// Copyright 2014 Renato Tegon Forti.
+//---------------------------------------------------------------------------//
+// Copyright (c) 2013 Vicente J. Botet Escriba.
+// Copyright (c) 2014 Renato Tegon Forti.
+// Copyright (c) 2018-2020 Nil Foundation AG
+// Copyright (c) 2018-2020 Mikhail Komarov <nemo@nil.foundation>
 //
-// Distributed under the Boost Software License, Version 1.0.
-// (See accompanying file LICENSE_1_0.txt
-// or copy at http://www.boost.org/LICENSE_1_0.txt)
+// Distributed under the Boost Software License, Version 1.0
+// See accompanying file LICENSE_1_0.txt or copy at
+// http://www.boost.org/LICENSE_1_0.txt
+//---------------------------------------------------------------------------//
 
 #ifndef BOOST_APPLICATION_ASPECT_MAP_HPP
 #define BOOST_APPLICATION_ASPECT_MAP_HPP

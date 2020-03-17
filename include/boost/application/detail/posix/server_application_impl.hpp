@@ -1,22 +1,12 @@
-// server_application_impl.hpp -----------------------------------------------//
-// -----------------------------------------------------------------------------
-
-// Copyright 2011-2014 Renato Tegon Forti
-
-// Distributed under the Boost Software License, Version 1.0.
-// See http://www.boost.org/LICENSE_1_0.txt
-
-// -----------------------------------------------------------------------------
-
-// Revision History
-// 22-10-2013 dd-mm-yyyy - Initial Release
-
-/*
----  0---|--- 10---|--- 20---|--- 30---|--- 40---|--- 50---|--- 60---|--- 70---|--- 80---|--- 90---|
-123456789|123456789|123456789|123456789|123456789|123456789|123456789|123456789|123456789|123456789|
-*/
-
-// -----------------------------------------------------------------------------
+//---------------------------------------------------------------------------//
+// Copyright (c) 2011-2014 Renato Tegon Forti
+// Copyright (c) 2018-2019 Nil Foundation
+// Copyright (c) 2018-2019 Mikhail Komarov <nemo@nilfoundation.org>
+//
+// Distributed under the Boost Software License, Version 1.0
+// See accompanying file LICENSE_1_0.txt or copy at
+// http://www.boost.org/LICENSE_1_0.txt
+//---------------------------------------------------------------------------//
 
 #ifndef BOOST_APPLICATION_SERVER_APPLICATION_IMPL_HPP
 #define BOOST_APPLICATION_SERVER_APPLICATION_IMPL_HPP

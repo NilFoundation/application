@@ -1,10 +1,10 @@
 // -----------------------------------------------------------------------------
-// simple_server_application_help.cpp : help only 
+// simple_server_application_help.cpp : help only
 // -----------------------------------------------------------------------------
 
 // Copyright 2011-2013 Renato Tegon Forti
 //
-// Distributed under the Boost Software License, Version 1.0. (See accompanying 
+// Distributed under the Boost Software License, Version 1.0. (See accompanying
 // file LICENSE_1_0.txt or copy at http://www.boost.org/LICENSE_1_0.txt)
 //
 
@@ -19,16 +19,15 @@ using namespace boost;
 
 //[simplesrvrhelp
 /*<< Define a 'functor' myapp class for our application >>*/
-class myapp // [[a]]
+class myapp    // [[a]]
 {
 public:
-
     /*<<Define the constructor that will receive a application context>>*/
     myapp(application::context &context) : context_(context) {
     }
 
     /*<< Define a application operator using 'param' signature >>*/
-    int operator()() // [[a]]
+    int operator()()    // [[a]]
     {
         // Do some thing
 
@@ -42,11 +41,10 @@ public:
     /*<< Optionally, define a 'stop callback' handler, using 'param' signature >>*/
     bool stop() {
         // Do some thing
-        return true; // return true to stop, false to ignore
+        return true;    // return true to stop, false to ignore
     }
 
 private:
-
     /*<<Application context to hold aspects>>*/
     application::context &context_;
 };
@@ -54,10 +52,10 @@ private:
 int main(int argc, char *argv[]) {
 
     /*<< Create a local 'context' for application that will hold our aspects >>*/
-    application::context app_context; // [[b]]
+    application::context app_context;    // [[b]]
 
     /*<< Instatntiate our application using auto_handler, the 'stop' method will be automatically handled >>*/
-    application::auto_handler<myapp> app(app_context); // [[a]]
+    application::auto_handler<myapp> app(app_context);    // [[a]]
 
     // my server aspects
 
@@ -70,4 +68,3 @@ int main(int argc, char *argv[]) {
     return application::launch<application::server>(app, app_context);
 }
 //]
-

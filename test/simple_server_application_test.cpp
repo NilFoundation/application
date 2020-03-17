@@ -30,25 +30,23 @@ private:
 
 BOOST_AUTO_TEST_SUITE(simple_server_application_test_suite)
 
-    BOOST_AUTO_TEST_CASE(test_case) {
-        application::context app_context;
-        myapp app(app_context);
+BOOST_AUTO_TEST_CASE(test_case) {
+    application::context app_context;
+    myapp app(app_context);
 
-        boost::system::error_code ec;
-        int ret = application::launch<application::server>(app, app_context, ec);
+    boost::system::error_code ec;
+    int ret = application::launch<application::server>(app, app_context, ec);
 
 #if defined(BOOST_WINDOWS_API)
 #if !defined(__MINGW32__)
-        // 1063 (0x427)
-        // The service process could not connect to the service controller.
-        BOOST_CHECK(ec.value() == 1063);
-        // on windows we need run on SCM
+    // 1063 (0x427)
+    // The service process could not connect to the service controller.
+    BOOST_CHECK(ec.value() == 1063);
+    // on windows we need run on SCM
 #endif
 #else
-        BOOST_CHECK(ret == 0);
+    BOOST_CHECK(ret == 0);
 #endif
-    }
+}
 
 BOOST_AUTO_TEST_SUITE_END()
-
-

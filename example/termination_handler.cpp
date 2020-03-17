@@ -26,7 +26,6 @@ using namespace boost::application;
 
 class myapp {
 public:
-
     myapp(context &context) : context_(context) {
     }
 
@@ -85,9 +84,7 @@ public:
     }
 
 private:
-
     context &context_;
-
 };
 
 // main

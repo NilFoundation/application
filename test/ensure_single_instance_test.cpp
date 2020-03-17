@@ -22,7 +22,6 @@ inline application::global_context_ptr this_application() {
 
 class myapp {
 public:
-
     bool instance_aready_running_false() {
         return false;
     }
@@ -30,12 +29,10 @@ public:
     bool instance_aready_running_true() {
         return true;
     }
-
 };
 
 class myapp2 {
 public:
-
     myapp2(application::context &context) : context_(context) {
     }
 
@@ -49,103 +46,101 @@ public:
 
 private:
     application::context &context_;
-
 };
 
 BOOST_AUTO_TEST_SUITE(ensure_single_instance_test_suite)
 
-    BOOST_AUTO_TEST_CASE(ensure_single_instance_test) {
-        application::context cxt;
-        boost::system::error_code ec;
+BOOST_AUTO_TEST_CASE(ensure_single_instance_test) {
+    application::context cxt;
+    boost::system::error_code ec;
 
-        BOOST_CHECK(!application::detail::ensure_single_instance<application::context>()(cxt, ec));
-        BOOST_CHECK(!ec);
-    }
+    BOOST_CHECK(!application::detail::ensure_single_instance<application::context>()(cxt, ec));
+    BOOST_CHECK(!ec);
+}
 
-    BOOST_AUTO_TEST_CASE(instance_already_running_param_false) {
-        application::context cxt;
-        boost::system::error_code ec;
-        myapp2 app(cxt);
+BOOST_AUTO_TEST_CASE(instance_already_running_param_false) {
+    application::context cxt;
+    boost::system::error_code ec;
+    myapp2 app(cxt);
 
-        boost::uuids::string_generator gen;
-        boost::uuids::uuid appuuid = gen("{8F66E4AD-ECA5-475D-8784-4BAA329EF9F2}");
+    boost::uuids::string_generator gen;
+    boost::uuids::uuid appuuid = gen("{8F66E4AD-ECA5-475D-8784-4BAA329EF9F2}");
 
-        application::handler<>::callback cb = boost::bind(&myapp2::instance_aready_running_false, &app);
+    application::handler<>::callback cb = boost::bind(&myapp2::instance_aready_running_false, &app);
 
-        cxt.insert<application::limit_single_instance>(
-                boost::make_shared<application::limit_single_instance_default_behaviour>(appuuid, cb));
+    cxt.insert<application::limit_single_instance>(
+        boost::make_shared<application::limit_single_instance_default_behaviour>(appuuid, cb));
 
-        BOOST_CHECK(!application::detail::ensure_single_instance<application::context>()(cxt, ec));
-        BOOST_CHECK(!ec);
-        BOOST_CHECK(application::detail::ensure_single_instance<application::context>()(cxt, ec));
-        BOOST_CHECK(!ec);
-    }
+    BOOST_CHECK(!application::detail::ensure_single_instance<application::context>()(cxt, ec));
+    BOOST_CHECK(!ec);
+    BOOST_CHECK(application::detail::ensure_single_instance<application::context>()(cxt, ec));
+    BOOST_CHECK(!ec);
+}
 
-    BOOST_AUTO_TEST_CASE(instance_already_running_param_true) {
-        application::context cxt;
-        boost::system::error_code ec;
-        myapp2 app(cxt);
+BOOST_AUTO_TEST_CASE(instance_already_running_param_true) {
+    application::context cxt;
+    boost::system::error_code ec;
+    myapp2 app(cxt);
 
-        boost::uuids::string_generator gen;
-        boost::uuids::uuid appuuid = gen("{7F66E4AD-ECA5-475D-8784-4BAA329EF9F2}");
+    boost::uuids::string_generator gen;
+    boost::uuids::uuid appuuid = gen("{7F66E4AD-ECA5-475D-8784-4BAA329EF9F2}");
 
-        application::handler<>::callback cb = boost::bind(&myapp2::instance_aready_running_true, &app);
+    application::handler<>::callback cb = boost::bind(&myapp2::instance_aready_running_true, &app);
 
-        cxt.insert<application::limit_single_instance>(
-                boost::make_shared<application::limit_single_instance_default_behaviour>(appuuid, cb));
+    cxt.insert<application::limit_single_instance>(
+        boost::make_shared<application::limit_single_instance_default_behaviour>(appuuid, cb));
 
-        BOOST_CHECK(!application::detail::ensure_single_instance<application::context>()(cxt, ec));
-        BOOST_CHECK(!ec);
-        BOOST_CHECK(!application::detail::ensure_single_instance<application::context>()(cxt, ec));
-        BOOST_CHECK(!ec);
-    }
+    BOOST_CHECK(!application::detail::ensure_single_instance<application::context>()(cxt, ec));
+    BOOST_CHECK(!ec);
+    BOOST_CHECK(!application::detail::ensure_single_instance<application::context>()(cxt, ec));
+    BOOST_CHECK(!ec);
+}
 
-    BOOST_AUTO_TEST_CASE(instance_already_running_false) {
-        myapp app;
-        boost::system::error_code ec;
+BOOST_AUTO_TEST_CASE(instance_already_running_false) {
+    myapp app;
+    boost::system::error_code ec;
 
-        boost::uuids::string_generator gen;
-        boost::uuids::uuid appuuid = gen("{6F66E4AD-ECA5-475D-8784-4BAA329EF9F2}");
+    boost::uuids::string_generator gen;
+    boost::uuids::uuid appuuid = gen("{6F66E4AD-ECA5-475D-8784-4BAA329EF9F2}");
 
-        application::global_context::create();
+    application::global_context::create();
 
-        application::handler<>::callback cb = boost::bind(&myapp::instance_aready_running_false, &app);
+    application::handler<>::callback cb = boost::bind(&myapp::instance_aready_running_false, &app);
 
-        this_application()->insert<application::limit_single_instance>(
-                boost::make_shared<application::limit_single_instance_default_behaviour>(appuuid, cb));
+    this_application()->insert<application::limit_single_instance>(
+        boost::make_shared<application::limit_single_instance_default_behaviour>(appuuid, cb));
 
-        BOOST_CHECK(!application::detail::ensure_single_instance<application::global_context_ptr>()(this_application(),
-                                                                                                    ec));
-        BOOST_CHECK(!ec);
-        BOOST_CHECK(
-                application::detail::ensure_single_instance<application::global_context_ptr>()(this_application(), ec));
-        BOOST_CHECK(!ec);
+    BOOST_CHECK(
+        !application::detail::ensure_single_instance<application::global_context_ptr>()(this_application(), ec));
+    BOOST_CHECK(!ec);
+    BOOST_CHECK(application::detail::ensure_single_instance<application::global_context_ptr>()(this_application(), ec));
+    BOOST_CHECK(!ec);
 
-        application::global_context::destroy();
-    }
+    application::global_context::destroy();
+}
 
-    BOOST_AUTO_TEST_CASE(instance_aready_running_true) {
-        myapp app;
-        boost::system::error_code ec;
+BOOST_AUTO_TEST_CASE(instance_aready_running_true) {
+    myapp app;
+    boost::system::error_code ec;
 
-        boost::uuids::string_generator gen;
-        boost::uuids::uuid appuuid = gen("{5F66E4AD-ECA5-475D-8784-4BAA329EF9F2}");
+    boost::uuids::string_generator gen;
+    boost::uuids::uuid appuuid = gen("{5F66E4AD-ECA5-475D-8784-4BAA329EF9F2}");
 
-        application::global_context::create();
+    application::global_context::create();
 
-        application::handler<>::callback cb = boost::bind(&myapp::instance_aready_running_true, &app);
+    application::handler<>::callback cb = boost::bind(&myapp::instance_aready_running_true, &app);
 
-        this_application()->insert<application::limit_single_instance>(
-                boost::make_shared<application::limit_single_instance_default_behaviour>(appuuid, cb));
+    this_application()->insert<application::limit_single_instance>(
+        boost::make_shared<application::limit_single_instance_default_behaviour>(appuuid, cb));
 
-        BOOST_CHECK(!application::detail::ensure_single_instance<application::global_context_ptr>()(this_application(),
-                                                                                                    ec));
-        BOOST_CHECK(!ec);
-        BOOST_CHECK(!application::detail::ensure_single_instance<application::global_context_ptr>()(this_application(),
-                                                                                                    ec));
-        BOOST_CHECK(!ec);
+    BOOST_CHECK(
+        !application::detail::ensure_single_instance<application::global_context_ptr>()(this_application(), ec));
+    BOOST_CHECK(!ec);
+    BOOST_CHECK(
+        !application::detail::ensure_single_instance<application::global_context_ptr>()(this_application(), ec));
+    BOOST_CHECK(!ec);
 
-        application::global_context::destroy();
-    }
+    application::global_context::destroy();
+}
 
 BOOST_AUTO_TEST_SUITE_END()

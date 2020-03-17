@@ -83,7 +83,6 @@ public:
 
 private:
     request_rec *r_;
-
 };
 
 //
@@ -93,15 +92,13 @@ private:
 class apache2_httpd_mod {
 
 public:
-
     static int mode() {
         static int id = new_run_mode<int>();
         return id;
     }
 
     template<typename Application, typename RequestRec>
-    apache2_httpd_mod(Application &myapp, RequestRec &rr, context &cxt, boost::system::error_code &ec)
-            : error_(OK) {
+    apache2_httpd_mod(Application &myapp, RequestRec &rr, context &cxt, boost::system::error_code &ec) : error_(OK) {
         handle_request(myapp, rr, cxt);
     }
 
@@ -110,7 +107,6 @@ public:
     }
 
 protected:
-
     template<typename Application, typename RequestRec>
     void handle_request(Application &myapp, RequestRec &rr, context &cxt) {
         // default impl aspects
@@ -179,27 +175,17 @@ protected:
     }
 
 private:
-
     int error_;
-
 };
 
-#define BOOST_APPLICATION_APACHE_REGISTER_TEST_MY_MODE(h, m)                   \
-extern "C" {                                                                   \
-void boost_application_register_hooks(apr_pool_t *p)                           \
-{                                                                              \
-   ap_hook_handler(h, NULL, NULL, APR_HOOK_MIDDLE);                            \
-}                                                                              \
-                                                                               \
-module AP_MODULE_DECLARE_DATA m = {                                            \
-    STANDARD20_MODULE_STUFF,                                                   \
-    NULL,                                                                      \
-    NULL,                                                                      \
-    NULL,                                                                      \
-    NULL,                                                                      \
-    NULL,                                                                      \
-    boost_application_register_hooks                                           \
-}; }
+#define BOOST_APPLICATION_APACHE_REGISTER_TEST_MY_MODE(h, m)                                          \
+    extern "C" {                                                                                      \
+    void boost_application_register_hooks(apr_pool_t *p) {                                            \
+        ap_hook_handler(h, NULL, NULL, APR_HOOK_MIDDLE);                                              \
+    }                                                                                                 \
+                                                                                                      \
+    module AP_MODULE_DECLARE_DATA m = {STANDARD20_MODULE_STUFF,         NULL, NULL, NULL, NULL, NULL, \
+                                       boost_application_register_hooks};                             \
+    }
 
-#endif // BOOST_APPLICATION_MY_APPLICATION_MODE_HPP
-
+#endif    // BOOST_APPLICATION_MY_APPLICATION_MODE_HPP

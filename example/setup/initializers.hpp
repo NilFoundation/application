@@ -49,8 +49,7 @@ namespace boost {
 #endif
         }
 
-    }
-} // boost::application
+    }    // namespace application
+}    // namespace boost
 
-#endif // BOOST_APPLICATION_SHARED_LIBRARY_INITIALIZERS_HPP
-
+#endif    // BOOST_APPLICATION_SHARED_LIBRARY_INITIALIZERS_HPP

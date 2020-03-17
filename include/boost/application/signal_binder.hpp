@@ -1,17 +1,12 @@
-// signal_binder.hpp ---------------------------------------------------------//
-// -----------------------------------------------------------------------------
-
-// Copyright 2011-2014 Renato Tegon Forti
-
-// Distributed under the Boost Software License, Version 1.0.
-// See http://www.boost.org/LICENSE_1_0.txt
-
-// -----------------------------------------------------------------------------
-
-// Revision History
-// 26-10-2013 dd-mm-yyyy - Initial Release
-
-// -----------------------------------------------------------------------------
+//---------------------------------------------------------------------------//
+// Copyright (c) 2011-2014 Renato Tegon Forti
+// Copyright (c) 2018-2019 Nil Foundation
+// Copyright (c) 2018-2019 Mikhail Komarov <nemo@nilfoundation.org>
+//
+// Distributed under the Boost Software License, Version 1.0
+// See accompanying file LICENSE_1_0.txt or copy at
+// http://www.boost.org/LICENSE_1_0.txt
+//---------------------------------------------------------------------------//
 
 #ifndef BOOST_APPLICATION_SIGNAL_MANAGER_HPP
 #define BOOST_APPLICATION_SIGNAL_MANAGER_HPP
@@ -227,7 +222,7 @@ namespace boost {
         private:
             // signal < handler / handler>
             // if first handler returns true, the second handler are called
-            csbl::unordered_map<int, std::pair<handler<>, handler<> > > handler_map_;
+            csbl::unordered_map<int, std::pair<handler<>, handler<>>> handler_map_;
 
             asio::io_service io_service_;
             asio::signal_set signals_;

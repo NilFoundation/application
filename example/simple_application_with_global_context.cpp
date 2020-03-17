@@ -1,15 +1,15 @@
 // -----------------------------------------------------------------------------
 // simple_application_with_global_context.cpp : examples that show how use
-// Boost.Application to make a simplest interactive (terminal) application 
+// Boost.Application to make a simplest interactive (terminal) application
 // using global_context
 //
-// Note 1: The Boost.Application (Aspects v4) and this sample are in 
+// Note 1: The Boost.Application (Aspects v4) and this sample are in
 //         development process.
 // -----------------------------------------------------------------------------
 
 // Copyright 2011-2013 Renato Tegon Forti
 //
-// Distributed under the Boost Software License, Version 1.0. (See accompanying 
+// Distributed under the Boost Software License, Version 1.0. (See accompanying
 // file LICENSE_1_0.txt or copy at http://www.boost.org/LICENSE_1_0.txt)
 //
 
@@ -35,7 +35,6 @@ inline application::global_context_ptr this_application() {
 
 class myapp {
 public:
-
     /*<<Define the application operator (singleton, no param)>>*/
     int operator()() {
         BOOST_APPLICATION_FEATURE_SELECT
@@ -52,13 +51,11 @@ public:
             }
         }
 
-
         /*<<Add other application logic>>*/
         // code your application
 
         return 0;
     }
-
 };
 
 // main
@@ -82,4 +79,3 @@ int main(int argc, char *argv[]) {
     return ret;
 }
 //]
-

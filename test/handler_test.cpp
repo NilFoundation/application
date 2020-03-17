@@ -28,35 +28,35 @@ struct fixture {
 
 BOOST_AUTO_TEST_SUITE()
 
-    BOOST_FIXTURE_TEST_CASE(test_case1, fixture) {
-        application::handler<> h;
+BOOST_FIXTURE_TEST_CASE(test_case1, fixture) {
+    application::handler<> h;
 
-        BOOST_CHECK(!h.is_valid());
-        BOOST_CHECK(!h.is_valid());
-    }
+    BOOST_CHECK(!h.is_valid());
+    BOOST_CHECK(!h.is_valid());
+}
 
-    BOOST_FIXTURE_TEST_CASE(test_case2, fixture) {
-        application::handler<>::callback cb = boost::bind(&handler_test::handler, &app_handler_test);
+BOOST_FIXTURE_TEST_CASE(test_case2, fixture) {
+    application::handler<>::callback cb = boost::bind(&handler_test::handler, &app_handler_test);
 
-        application::handler<> h(cb);
-        BOOST_CHECK(h.is_valid());
+    application::handler<> h(cb);
+    BOOST_CHECK(h.is_valid());
 
-        application::handler<>::callback *hvb = nullptr;
-        BOOST_CHECK(h.get(hvb));
-        BOOST_CHECK((*hvb)());
-    }
+    application::handler<>::callback *hvb = nullptr;
+    BOOST_CHECK(h.get(hvb));
+    BOOST_CHECK((*hvb)());
+}
 
-    BOOST_FIXTURE_TEST_CASE(test_case3, fixture) {
-        application::handler<>::callback cb = boost::bind(&handler_test::handler, &app_handler_test);
+BOOST_FIXTURE_TEST_CASE(test_case3, fixture) {
+    application::handler<>::callback cb = boost::bind(&handler_test::handler, &app_handler_test);
 
-        application::handler<> h;
-        h.set(cb);
+    application::handler<> h;
+    h.set(cb);
 
-        BOOST_CHECK(h.is_valid());
+    BOOST_CHECK(h.is_valid());
 
-        application::handler<>::callback *hcb = nullptr;
-        BOOST_CHECK(h.get(hcb));
-        BOOST_CHECK((*hcb)());
-    }
+    application::handler<>::callback *hcb = nullptr;
+    BOOST_CHECK(h.get(hcb));
+    BOOST_CHECK((*hcb)());
+}
 
 BOOST_AUTO_TEST_SUITE_END()

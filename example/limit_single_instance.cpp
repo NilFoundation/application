@@ -1,14 +1,14 @@
 // -----------------------------------------------------------------------------
-// simple_application.cpp : examples that show how use 
-// Boost.Application to make a simplest interactive (terminal) application 
+// simple_application.cpp : examples that show how use
+// Boost.Application to make a simplest interactive (terminal) application
 //
-// Note 1: The Boost.Application (Aspects v4) and this sample are in 
+// Note 1: The Boost.Application (Aspects v4) and this sample are in
 //         development process.
 // -----------------------------------------------------------------------------
 
 // Copyright 2011-2013 Renato Tegon Forti
 //
-// Distributed under the Boost Software License, Version 1.0. (See accompanying 
+// Distributed under the Boost Software License, Version 1.0. (See accompanying
 // file LICENSE_1_0.txt or copy at http://www.boost.org/LICENSE_1_0.txt)
 //
 
@@ -24,7 +24,6 @@ using namespace boost;
 
 class myapp {
 public:
-
     myapp(application::context &context) : context_(context) {
     }
 
@@ -47,7 +46,6 @@ public:
     }
 
 private:
-
     application::context &context_;
 };
 
@@ -60,8 +58,8 @@ int main(int argc, char *argv[]) {
     boost::uuids::string_generator gen;
 
     app_context.insert<application::limit_single_instance>(
-            boost::make_shared<application::limit_single_instance_default_behaviour>(
-                    gen("{2F66E4AD-ECA5-475D-8784-4BAA329EF9F1}")));
+        boost::make_shared<application::limit_single_instance_default_behaviour>(
+            gen("{2F66E4AD-ECA5-475D-8784-4BAA329EF9F1}")));
 
     return application::launch<application::common>(app, app_context);
 }

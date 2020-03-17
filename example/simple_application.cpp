@@ -1,14 +1,14 @@
 // -----------------------------------------------------------------------------
 
-// simple_application.cpp : examples that show how use 
-// Boost.Application to make a simplest interactive (terminal) application 
+// simple_application.cpp : examples that show how use
+// Boost.Application to make a simplest interactive (terminal) application
 //
 
 // -----------------------------------------------------------------------------
 
 // Copyright 2011-2014 Renato Tegon Forti
 //
-// Distributed under the Boost Software License, Version 1.0. (See accompanying 
+// Distributed under the Boost Software License, Version 1.0. (See accompanying
 // file LICENSE_1_0.txt or copy at http://www.boost.org/LICENSE_1_0.txt)
 //
 
@@ -25,7 +25,6 @@ using namespace boost;
 /*<<Define application functor class>>*/
 class myapp {
 public:
-
     /*<<Define the constructor that will receive a application context>>*/
     myapp(application::context &context) : context_(context) {
     }
@@ -52,10 +51,8 @@ public:
     }
 
 private:
-
     /*<<Application context to hold aspects>>*/
     application::context &context_;
-
 };
 
 // main
@@ -75,5 +72,3 @@ int main(int argc, char *argv[]) {
     return application::launch<application::common>(app, app_context);
 }
 //]
-
-

@@ -12,7 +12,6 @@
 
 #define BOOST_APPLICATION_FEATURE_NS_SELECT_BOOST
 
-
 #include <iostream>
 #include <boost/application.hpp>
 
@@ -22,7 +21,6 @@ using namespace boost;
 
 class myapp {
 public:
-
     myapp(application::context &context) : context_(context) {
     }
 
@@ -47,8 +45,6 @@ public:
 
 private:
     application::context &context_;
-
 };
 
 //]
-

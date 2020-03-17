@@ -53,8 +53,8 @@ public:
     int operator()() {
         std::cout << "myapp2" << std::endl;
 
-        application::csbl::shared_ptr<application::args> myargs = application::global_context::get()->find<
-                application::args>();
+        application::csbl::shared_ptr<application::args> myargs =
+            application::global_context::get()->find<application::args>();
 
         if (myargs) {
             const std::vector<std::string> &arg_vector = myargs->arg_vector();
@@ -78,54 +78,59 @@ int main(int argc, char *argv[]) {
     BOOST_CHECK(!(application::auto_app<application::common, myapp1>::start()));
 
     BOOST_CHECK(!(application::auto_app<application::common, myapp1>::start(
-            uuids::string_generator()("{2F66E4AD-ECA5-475D-8784-4BAA329EF9F1}"), ec)));
+        uuids::string_generator()("{2F66E4AD-ECA5-475D-8784-4BAA329EF9F1}"), ec)));
     BOOST_CHECK(!(application::auto_app<application::common, myapp1>::start(
-            uuids::string_generator()("{2F66E4AD-ECA5-475D-8784-4BAA329EF9F1}"))));
+        uuids::string_generator()("{2F66E4AD-ECA5-475D-8784-4BAA329EF9F1}"))));
 
     BOOST_CHECK(!(application::auto_app<application::common, myapp1>::start(argc, argv, ec)));
     BOOST_CHECK(!(application::auto_app<application::common, myapp1>::start(argc, argv)));
 
-    BOOST_CHECK(!(application::auto_app<application::common, myapp1>::start(argc, argv, uuids::string_generator()(
-            "{2F66E4AD-ECA5-475D-8784-4BAA329EF9F1}"), ec)));
-    BOOST_CHECK(!(application::auto_app<application::common, myapp1>::start(argc, argv, uuids::string_generator()(
-            "{2F66E4AD-ECA5-475D-8784-4BAA329EF9F1}"))));
+    BOOST_CHECK(!(application::auto_app<application::common, myapp1>::start(
+        argc, argv, uuids::string_generator()("{2F66E4AD-ECA5-475D-8784-4BAA329EF9F1}"), ec)));
+    BOOST_CHECK(!(application::auto_app<application::common, myapp1>::start(
+        argc, argv, uuids::string_generator()("{2F66E4AD-ECA5-475D-8784-4BAA329EF9F1}"))));
 
     BOOST_CHECK(!(application::auto_app<application::common, myapp2, application::global_context>::start(ec)));
     BOOST_CHECK(!(application::auto_app<application::common, myapp2, application::global_context>::start()));
 
     BOOST_CHECK(!(application::auto_app<application::common, myapp2, application::global_context>::start(
-            uuids::string_generator()("{2F66E4AD-ECA5-475D-8784-4BAA329EF9F1}"), ec)));
+        uuids::string_generator()("{2F66E4AD-ECA5-475D-8784-4BAA329EF9F1}"), ec)));
     BOOST_CHECK(!(application::auto_app<application::common, myapp2, application::global_context>::start(
-            uuids::string_generator()("{2F66E4AD-ECA5-475D-8784-4BAA329EF9F1}"))));
+        uuids::string_generator()("{2F66E4AD-ECA5-475D-8784-4BAA329EF9F1}"))));
 
     BOOST_CHECK(
-            !(application::auto_app<application::common, myapp2, application::global_context>::start(argc, argv, ec)));
+        !(application::auto_app<application::common, myapp2, application::global_context>::start(argc, argv, ec)));
     BOOST_CHECK(!(application::auto_app<application::common, myapp2, application::global_context>::start(argc, argv)));
 
-    BOOST_CHECK(!(application::auto_app<application::common, myapp2, application::global_context>::start(argc, argv,
-                                                                                                         uuids::string_generator()(
-                                                                                                                 "{2F66E4AD-ECA5-475D-8784-4BAA329EF9F1}"),
-                                                                                                         ec)));
-    BOOST_CHECK(!(application::auto_app<application::common, myapp2, application::global_context>::start(argc, argv,
-                                                                                                         uuids::string_generator()(
-                                                                                                                 "{2F66E4AD-ECA5-475D-8784-4BAA329EF9F1}"))));
+    BOOST_CHECK(!(application::auto_app<application::common, myapp2, application::global_context>::start(
+        argc, argv, uuids::string_generator()("{2F66E4AD-ECA5-475D-8784-4BAA329EF9F1}"), ec)));
+    BOOST_CHECK(!(application::auto_app<application::common, myapp2, application::global_context>::start(
+        argc, argv, uuids::string_generator()("{2F66E4AD-ECA5-475D-8784-4BAA329EF9F1}"))));
 
     /*
     BOOST_CHECK(!(application::launch<application::auto_app<application::common, myapp1> >()));
-    BOOST_CHECK(!(application::launch<application::auto_app<application::common, myapp2, application::global_context> >()));
-    BOOST_CHECK(!(application::launch<application::auto_app<application::common, myapp1, application::context> >()));
+    BOOST_CHECK(!(application::launch<application::auto_app<application::common, myapp2, application::global_context>
+    >())); BOOST_CHECK(!(application::launch<application::auto_app<application::common, myapp1, application::context>
+    >()));
 
-    BOOST_CHECK(!(application::launch<application::auto_app<application::common, myapp1> >(boost::uuids::string_generator()("{2F66E4AD-ECA5-475D-8784-4BAA329EF9F1}"))));
-    BOOST_CHECK(!(application::launch<application::auto_app<application::common, myapp2, application::global_context> >(boost::uuids::string_generator()("{2F66E4AD-ECA5-475D-8784-4BAA329EF9F1}"))));
-    BOOST_CHECK(!(application::launch<application::auto_app<application::common, myapp1, application::context> >(boost::uuids::string_generator()("{2F66E4AD-ECA5-475D-8784-4BAA329EF9F1}"))));
+    BOOST_CHECK(!(application::launch<application::auto_app<application::common, myapp1>
+    >(boost::uuids::string_generator()("{2F66E4AD-ECA5-475D-8784-4BAA329EF9F1}"))));
+    BOOST_CHECK(!(application::launch<application::auto_app<application::common, myapp2, application::global_context>
+    >(boost::uuids::string_generator()("{2F66E4AD-ECA5-475D-8784-4BAA329EF9F1}"))));
+    BOOST_CHECK(!(application::launch<application::auto_app<application::common, myapp1, application::context>
+    >(boost::uuids::string_generator()("{2F66E4AD-ECA5-475D-8784-4BAA329EF9F1}"))));
 
     BOOST_CHECK(!(application::launch<application::auto_app<application::common, myapp1> >(argc, argv)));
-    BOOST_CHECK(!(application::launch<application::auto_app<application::common, myapp2, application::global_context> >(argc, argv)));
-    BOOST_CHECK(!(application::launch<application::auto_app<application::common, myapp1, application::context> >(argc, argv)));
+    BOOST_CHECK(!(application::launch<application::auto_app<application::common, myapp2, application::global_context>
+    >(argc, argv))); BOOST_CHECK(!(application::launch<application::auto_app<application::common, myapp1,
+    application::context> >(argc, argv)));
 
-    BOOST_CHECK(!(application::launch<application::auto_app<application::common, myapp1> >(argc, argv, boost::uuids::string_generator()("{2F66E4AD-ECA5-475D-8784-4BAA329EF9F1}"))));
-    BOOST_CHECK(!(application::launch<application::auto_app<application::common, myapp2, application::global_context> >(argc, argv, boost::uuids::string_generator()("{2F66E4AD-ECA5-475D-8784-4BAA329EF9F1}"))));
-    BOOST_CHECK(!(application::launch<application::auto_app<application::common, myapp1, application::context> >(argc, argv, boost::uuids::string_generator()("{2F66E4AD-ECA5-475D-8784-4BAA329EF9F1}"))));
+    BOOST_CHECK(!(application::launch<application::auto_app<application::common, myapp1> >(argc, argv,
+    boost::uuids::string_generator()("{2F66E4AD-ECA5-475D-8784-4BAA329EF9F1}"))));
+    BOOST_CHECK(!(application::launch<application::auto_app<application::common, myapp2, application::global_context>
+    >(argc, argv, boost::uuids::string_generator()("{2F66E4AD-ECA5-475D-8784-4BAA329EF9F1}"))));
+    BOOST_CHECK(!(application::launch<application::auto_app<application::common, myapp1, application::context> >(argc,
+    argv, boost::uuids::string_generator()("{2F66E4AD-ECA5-475D-8784-4BAA329EF9F1}"))));
     */
 
     return boost::unit_test::unit_test_main(init_unit_test, argc, argv);

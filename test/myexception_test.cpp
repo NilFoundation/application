@@ -30,7 +30,6 @@ public:
     }
 
     virtual ~myexception_base() _NOEXCEPT override {
-
     }
 
     virtual const char *what() const throw() override {
@@ -68,7 +67,6 @@ using namespace boost;
 
 class myapp {
 public:
-
     myapp(application::context &context) : context_(context) {
     }
 
@@ -82,9 +80,7 @@ public:
 
 private:
     application::context &context_;
-
 };
-
 
 BOOST_AUTO_TEST_CASE(myexception_throw) {
     {
@@ -97,11 +93,11 @@ BOOST_AUTO_TEST_CASE(myexception_throw) {
 
 /*
 int test_main(int argc, char** argv)
-{   
+{
 
-   try 
+   try
    {
-      application::context app_context;      
+      application::context app_context;
       myapp app(app_context);
 
        BOOST_CHECK_THROW(application::launch<application::common>(app, app_context), myexception);

@@ -46,40 +46,40 @@ public:
 
 BOOST_AUTO_TEST_SUITE(signal_binder_test_suite)
 
-    BOOST_AUTO_TEST_CASE(signal_binder) {
-        application::context app_context;
-        my_signal_binder app_signal_binder(app_context);
-        handler_test app_handler_test;
+BOOST_AUTO_TEST_CASE(signal_binder) {
+    application::context app_context;
+    my_signal_binder app_signal_binder(app_context);
+    handler_test app_handler_test;
 
-        app_signal_binder.start();
+    app_signal_binder.start();
 
-        application::handler<>::callback cb = boost::bind(&handler_test::signal_handler1, &app_handler_test);
+    application::handler<>::callback cb = boost::bind(&handler_test::signal_handler1, &app_handler_test);
 
-        boost::system::error_code ec;
-        app_signal_binder.bind(SIGABRT, cb, ec);
+    boost::system::error_code ec;
+    app_signal_binder.bind(SIGABRT, cb, ec);
 
-        raise(SIGABRT);
+    raise(SIGABRT);
 
-        BOOST_CHECK(!ec);
+    BOOST_CHECK(!ec);
 
-        app_signal_binder.bind(SIGINT, cb, ec);
+    app_signal_binder.bind(SIGINT, cb, ec);
 
-        BOOST_CHECK(!ec);
+    BOOST_CHECK(!ec);
 
-        app_signal_binder.bind(SIGINT, cb, cb, ec);
+    app_signal_binder.bind(SIGINT, cb, cb, ec);
 
-        BOOST_CHECK(!ec);
-        BOOST_CHECK(app_signal_binder.is_bound(SIGINT));
+    BOOST_CHECK(!ec);
+    BOOST_CHECK(app_signal_binder.is_bound(SIGINT));
 
-        app_signal_binder.unbind(SIGINT, ec);
+    app_signal_binder.unbind(SIGINT, ec);
 
-        BOOST_CHECK(!app_signal_binder.is_bound(SIGINT));
+    BOOST_CHECK(!app_signal_binder.is_bound(SIGINT));
 
-        while (app_handler_test.running()) {
-            std::cerr << "waiting..." << std::endl;
-        }
-
-        BOOST_CHECK(app_handler_test.count_ > 0);
+    while (app_handler_test.running()) {
+        std::cerr << "waiting..." << std::endl;
     }
+
+    BOOST_CHECK(app_handler_test.count_ > 0);
+}
 
 BOOST_AUTO_TEST_SUITE_END()

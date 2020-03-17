@@ -4,7 +4,7 @@
 
 // Copyright 2011-2013 Renato Tegon Forti
 //
-// Distributed under the Boost Software License, Version 1.0. (See accompanying 
+// Distributed under the Boost Software License, Version 1.0. (See accompanying
 // file LICENSE_1_0.txt or copy at http://www.boost.org/LICENSE_1_0.txt)
 //
 
@@ -34,7 +34,6 @@ class selfpipe_state {
     boost::logic::tribool state_;
 
 public:
-
     selfpipe_state() : state_(false) {
     }
 
@@ -52,12 +51,10 @@ public:
         boost::lock_guard<boost::mutex> lock(mutex_);
         return state_;
     }
-
 };
 
 class myapp {
 public:
-
     int operator()() {
         boost::shared_ptr<application::selfpipe> selfpipe = this_application()->find<application::selfpipe>();
 
@@ -71,7 +68,8 @@ public:
         int retval = 0;
 
         /*<<Use select posix system call to wait for SIGUSR2 signal, using our self-pipe>>*/
-        while ((retval = select(selfpipe->read_fd() + 1, &readfds, 0, 0, 0)) == -1 && errno == EINTR) // block and wait
+        while ((retval = select(selfpipe->read_fd() + 1, &readfds, 0, 0, 0)) == -1 &&
+               errno == EINTR)    // block and wait
         {
             // nothing here, restart when signal is catch
             std::cout << "signal is catch" << std::endl;
@@ -92,7 +90,6 @@ public:
     }
 
 protected:
-
     void worker() {
         while (selfpipe_state_.state() == false) {
             boost::this_thread::sleep(boost::posix_time::seconds(1));
@@ -109,15 +106,12 @@ protected:
     }
 
 private:
-
     selfpipe_state selfpipe_state_;
-
 };
 
 /*<<Define a new signal_manager to act on SIGUSR2>>*/
 class signal_usr2 : public application::signal_manager {
 public:
-
     /*<< Customize SIGNALS bind >>*/
     signal_usr2(application::global_context_ptr cxt) : application::signal_manager(cxt) {
         application::handler<>::parameter_callback callback1 = boost::bind(&signal_usr2::signal_usr1_handler, this);
@@ -164,4 +158,3 @@ int main(int argc, char *argv[]) {
     return ret;
 }
 //]
-

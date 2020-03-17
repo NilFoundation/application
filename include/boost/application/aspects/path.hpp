@@ -1,8 +1,12 @@
-// Copyright 2014 Renato Tegon Forti
+//---------------------------------------------------------------------------//
+// Copyright (c) 2014 Renato Tegon Forti
+// Copyright (c) 2018-2019 Nil Foundation
+// Copyright (c) 2018-2019 Mikhail Komarov <nemo@nilfoundation.org>
 //
-// Distributed under the Boost Software License, Version 1.0.
-// (See accompanying file LICENSE_1_0.txt
-// or copy at http://www.boost.org/LICENSE_1_0.txt)
+// Distributed under the Boost Software License, Version 1.0
+// See accompanying file LICENSE_1_0.txt or copy at
+// http://www.boost.org/LICENSE_1_0.txt
+//---------------------------------------------------------------------------//
 
 #ifndef BOOST_APPLICATION_PATH_ASPECT_HPP
 #define BOOST_APPLICATION_PATH_ASPECT_HPP
@@ -28,7 +32,7 @@ namespace boost {
             path() : impl_(new detail::default_path_impl) {
             }
 
-            filesystem::path current_path(void) {
+            filesystem::path current_path() {
                 return impl_->current_path();
             }
 
@@ -60,7 +64,7 @@ namespace boost {
                 return impl_->location(ec).filename();
             }
 
-            filesystem::path executable_full_name(void) {
+            filesystem::path executable_full_name() {
                 return impl_->location().filename();
             }
 
@@ -68,23 +72,23 @@ namespace boost {
                 return impl_->location(ec).stem();
             }
 
-            filesystem::path executable_name(void) {
+            filesystem::path executable_name() {
                 return impl_->location().stem();
             }
 
-            filesystem::path home_path(void) {
+            filesystem::path home_path() {
                 return impl_->home_path();
             }
 
-            filesystem::path config_path(void) {
+            filesystem::path config_path() {
                 return impl_->config_path();
             }
 
-            filesystem::path app_data_path(void) {
+            filesystem::path app_data_path() {
                 return impl_->app_data_path();
             }
 
-            filesystem::path temp_path(void) {
+            filesystem::path temp_path() {
                 return impl_->temp_path();
             }
 

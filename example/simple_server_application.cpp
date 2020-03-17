@@ -54,7 +54,7 @@
 
 // provide setup example for windows service
 #if defined(BOOST_WINDOWS_API)
-#   include "setup/windows/setup/service_setup.hpp"
+#include "setup/windows/setup/service_setup.hpp"
 #endif
 
 namespace po = boost::program_options;
@@ -67,7 +67,6 @@ BOOST_APPLICATION_FEATURE_SELECT
 class myapp {
 
 public:
-
     myapp(application::context &context) : context_(context) {
     }
 
@@ -129,27 +128,25 @@ public:
         my_log_file_ << "Stoping my application..." << std::endl;
         my_log_file_.close();
 
-        return true; // return true to stop, false to ignore
+        return true;    // return true to stop, false to ignore
     }
 
     // windows specific (ignored on posix)
 
     bool pause() {
         my_log_file_ << "Pause my application..." << std::endl;
-        return true; // return true to pause, false to ignore
+        return true;    // return true to pause, false to ignore
     }
 
     bool resume() {
         my_log_file_ << "Resume my application..." << std::endl;
-        return true; // return true to resume, false to ignore
+        return true;    // return true to resume, false to ignore
     }
 
 private:
-
     std::ofstream my_log_file_;
 
     application::context &context_;
-
 };
 
 // my setup code for windows service
@@ -170,48 +167,43 @@ bool setup(application::context &context) {
 
     // define our simple installation schema options
     po::options_description install("service options");
-    install.add_options()
-       ("help", "produce a help message")
-       (",i", "install service")
-       (",u", "unistall service")
-       ("name", po::value<std::string>()->default_value(mypath->executable_name().stem().string()), "service name")
-       ("display", po::value<std::string>()->default_value(""), "service display name (optional, installation only)")
-       ("description", po::value<std::string>()->default_value(""), "service description (optional, installation only)")
-       ;
+    install.add_options()("help", "produce a help message")(",i", "install service")(",u", "unistall service")(
+        "name", po::value<std::string>()->default_value(mypath->executable_name().stem().string()), "service name")(
+        "display", po::value<std::string>()->default_value(""), "service display name (optional, installation only)")(
+        "description",
+        po::value<std::string>()->default_value(""),
+        "service description (optional, installation only)");
 
-       po::variables_map vm;
-       po::store(po::parse_command_line(myargs->argc(), myargs->argv(), install), vm);
-       boost::system::error_code ec;
+    po::variables_map vm;
+    po::store(po::parse_command_line(myargs->argc(), myargs->argv(), install), vm);
+    boost::system::error_code ec;
 
-       if (vm.count("help"))
-       {
-          std::cout << install << std::endl;
-          return true;
-       }
+    if (vm.count("help")) {
+        std::cout << install << std::endl;
+        return true;
+    }
 
-       if (vm.count("-i"))
-       {
-          application::example::install_windows_service(
-          application::setup_arg(vm["name"].as<std::string>()),
-          application::setup_arg(vm["display"].as<std::string>()),
-          application::setup_arg(vm["description"].as<std::string>()),
-          application::setup_arg(executable_path_name)).install(ec);
+    if (vm.count("-i")) {
+        application::example::install_windows_service(application::setup_arg(vm["name"].as<std::string>()),
+                                                      application::setup_arg(vm["display"].as<std::string>()),
+                                                      application::setup_arg(vm["description"].as<std::string>()),
+                                                      application::setup_arg(executable_path_name))
+            .install(ec);
 
-          std::cout << ec.message() << std::endl;
+        std::cout << ec.message() << std::endl;
 
-          return true;
-       }
+        return true;
+    }
 
-       if (vm.count("-u"))
-       {
-          application::example::uninstall_windows_service(
-             application::setup_arg(vm["name"].as<std::string>()),
-             application::setup_arg(executable_path_name)).uninstall(ec);
+    if (vm.count("-u")) {
+        application::example::uninstall_windows_service(application::setup_arg(vm["name"].as<std::string>()),
+                                                        application::setup_arg(executable_path_name))
+            .uninstall(ec);
 
-          std::cout << ec.message() << std::endl;
+        std::cout << ec.message() << std::endl;
 
-          return true;
-       }
+        return true;
+    }
 
 #endif
 #endif
@@ -234,7 +226,7 @@ int main(int argc, char *argv[]) {
     application::handler<>::callback termination_callback = boost::bind(&myapp::stop, &app);
 
     app_context.insert<application::termination_handler>(
-            application::csbl::make_shared<application::termination_handler_default_behaviour>(termination_callback));
+        application::csbl::make_shared<application::termination_handler_default_behaviour>(termination_callback));
 
     // To  "pause/resume" works, is required to add the 2 handlers.
 
@@ -242,19 +234,17 @@ int main(int argc, char *argv[]) {
 
     // windows only : add pause handler
 
-    application::handler<>::callback pause_callback
-       = boost::bind(&myapp::pause, &app);
+    application::handler<>::callback pause_callback = boost::bind(&myapp::pause, &app);
 
     app_context.insert<application::pause_handler>(
-       application::csbl::make_shared<application::pause_handler_default_behaviour>(pause_callback));
+        application::csbl::make_shared<application::pause_handler_default_behaviour>(pause_callback));
 
     // windows only : add resume handler
 
-    application::handler<>::callback resume_callback
-       = boost::bind(&myapp::resume, &app);
+    application::handler<>::callback resume_callback = boost::bind(&myapp::resume, &app);
 
     app_context.insert<application::resume_handler>(
-       application::csbl::make_shared<application::resume_handler_default_behaviour>(resume_callback));
+        application::csbl::make_shared<application::resume_handler_default_behaviour>(resume_callback));
 
 #endif
 

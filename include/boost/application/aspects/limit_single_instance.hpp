@@ -1,17 +1,12 @@
-// limit_single_instance.hpp ------------------------------------------------//
-// -----------------------------------------------------------------------------
-
-// Copyright 2011-2014 Renato Tegon Forti
-
-// Distributed under the Boost Software License, Version 1.0.
-// See http://www.boost.org/LICENSE_1_0.txt
-
-// -----------------------------------------------------------------------------
-
-// Revision History
-// 06-01-2012 dd-mm-yyyy - Initial Release
-
-// -----------------------------------------------------------------------------
+//---------------------------------------------------------------------------//
+// Copyright (c) 2011-2014 Renato Tegon Forti
+// Copyright (c) 2018-2019 Nil Foundation
+// Copyright (c) 2018-2019 Mikhail Komarov <nemo@nilfoundation.org>
+//
+// Distributed under the Boost Software License, Version 1.0
+// See accompanying file LICENSE_1_0.txt or copy at
+// http://www.boost.org/LICENSE_1_0.txt
+//---------------------------------------------------------------------------//
 
 #ifndef BOOST_APPLICATION_LIMIT_SINGLE_INSTANCE_ASPECT_HPP
 #define BOOST_APPLICATION_LIMIT_SINGLE_INSTANCE_ASPECT_HPP
@@ -47,7 +42,7 @@ namespace boost {
             limit_single_instance() {
             }
 
-            limit_single_instance(const callback& cb) : handler<>(cb) {
+            limit_single_instance(const callback &cb) : handler<>(cb) {
             }
 
             virtual ~limit_single_instance() {
@@ -59,7 +54,7 @@ namespace boost {
              * running on current operating system.
              *
              */
-            virtual bool lock(boost::system::error_code& ec) = 0;
+            virtual bool lock(boost::system::error_code &ec) = 0;
 
             virtual bool lock() = 0;
 
@@ -105,7 +100,7 @@ namespace boost {
              *        In case of positive evaluation of single istance application,
              *        will exit.
              */
-            limit_single_instance_default_behaviour(const uuids::uuid& app_uuid) : uuid_(app_uuid), owns_lock_(false) {
+            limit_single_instance_default_behaviour(const uuids::uuid &app_uuid) : uuid_(app_uuid), owns_lock_(false) {
             }
 
             /*!
@@ -119,7 +114,7 @@ namespace boost {
              *        with application execution, and false to terminate application
              *        execution in case of positive evaluation of single istance.
              */
-            limit_single_instance_default_behaviour(const uuids::uuid& app_uuid, const callback& cb) :
+            limit_single_instance_default_behaviour(const uuids::uuid &app_uuid, const callback &cb) :
                 limit_single_instance(cb), uuid_(app_uuid), owns_lock_(false) {
             }
 
@@ -140,7 +135,7 @@ namespace boost {
              *         running on current operating system.
              *
              */
-            bool lock(boost::system::error_code& ec) {
+            bool lock(boost::system::error_code &ec) {
                 std::string instance_id = to_upper_copy(boost::lexical_cast<std::string>(uuid_));
 
                 if (named_mutex_ == 0) {

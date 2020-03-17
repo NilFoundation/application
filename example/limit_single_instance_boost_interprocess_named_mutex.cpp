@@ -1,15 +1,15 @@
 // -----------------------------------------------------------------------------
 // limit_single_instance_boost_interprocess_named_mutex.cpp : examples that
 // show how use Boost.Application to make a simplest interactive
-// (terminal) application 
+// (terminal) application
 //
-// Note 1: The Boost.Application (Aspects v4) and this sample are in 
+// Note 1: The Boost.Application (Aspects v4) and this sample are in
 //         development process.
 // -----------------------------------------------------------------------------
 
 // Copyright 2011-2013 Renato Tegon Forti
 //
-// Distributed under the Boost Software License, Version 1.0. (See accompanying 
+// Distributed under the Boost Software License, Version 1.0. (See accompanying
 // file LICENSE_1_0.txt or copy at http://www.boost.org/LICENSE_1_0.txt)
 //
 
@@ -27,13 +27,12 @@
 
 using namespace boost;
 
-// we have a bug here. on windows the destructor of 
+// we have a bug here. on windows the destructor of
 // limit_single_instance_named_mutex_behaviour never is called, this cause
 // to Named Mutex to not be released, need fix
 
 class myapp {
 public:
-
     myapp(application::context &context) : context_(context) {
     }
 
@@ -57,7 +56,6 @@ public:
 
 private:
     application::context &context_;
-
 };
 
 // main
@@ -69,8 +67,8 @@ int main(int argc, char *argv[]) {
     boost::uuids::string_generator gen;
 
     app_context.insert<application::limit_single_instance>(
-            boost::make_shared<application::limit_single_instance_default_behaviour>(
-                    gen("{0F1164AD-ECA5-175D-8784-4BAA329EF9F2}")));
+        boost::make_shared<application::limit_single_instance_default_behaviour>(
+            gen("{0F1164AD-ECA5-175D-8784-4BAA329EF9F2}")));
 
     return application::launch<application::common>(app, app_context);
 }
