@@ -1,18 +1,8 @@
-# =nil; Application Framework (0.4.12) [![Build Status](https://travis-ci.com/nemothenoone/application.svg?token=DHGZQ8ocJtbnXsTs61qE&branch=master)](https://travis-ci.com/nemothenoone/application)
-
-This library is derived from Boost.Application (https://github.com/retf/Boost.Application).
-
-### Caution
-
-This is not yet an official Boost C++ library. It wasn't reviewed and can't be downloaded from www.boost.org. This beta is available to boost community to know real interest and get comments for refinement.The intention is to submit library to formal review, if community think that it is interesting!
-
-### Warning
-
-Note that this branch is a on active development, and can receive breaking changes without notifications. The stable version is: 4.8 (0.4.8)
+# =nil; Application Framework [![Build Status](https://travis-ci.com/nemothenoone/application.svg?token=DHGZQ8ocJtbnXsTs61qE&branch=master)](https://travis-ci.com/nemothenoone/application)
 
 ### Introduction
 
-=nil; Application Framework provides an application environment, or start point to any people that want a basic
+=nil; Application provides an application environment, or start point to any people that want a basic
  infrastructure to build an system application on Windows or Unix Variants (e.g. Linux, MacOS).
 
 ### Hello World (server)
@@ -162,32 +152,19 @@ int main(int argc, char *argv[])
 
 ### Note about Plug-In system
 
-Starting with version 0.4.10 the plug-in module has been moved to a new library, called Boost.DLL.
+This library is not intended to be the only building block for the plugin system. It is supposed to be
+ built along with [Boost.DLL](https://github.com/apolukhin/Boost.DLL) usage. 
 
-Refer to [Boost.DLL] (https://github.com/apolukhin/Boost.DLL)
-
-Note that versions 0.4.8 and 0.4.9 still have the plugin system, but this version is not longer maintained! 
-The new library [Boost.DLL] (https://github.com/apolukhin/Boost.DLL) was refactored, and have a lot of fixes and improvements. 
-If you intend to use 'plugin system' and Boost.Application, we recommend that you use the last version with Boost.DLL. 
-     
 ### On-line Documentation (Work in Progress), and other information
 
-* [Online Docs (updated)] (http://retf.github.io/Boost.Application/app.docs/libs/application/doc/html/index.html) 
-* [Wiki] (https://github.com/retf/Boost.Application/wiki)
-* [Boost Library Incubator](http://rrsd.com/blincubator.com/bi_library/application/)
-
-### Questions, suggestions or bugs, please use Boost ML, stackoverflow or this group: 
-
-[Discussion Group] (https://groups.google.com/forum/embed/?place=forum/boost_application)
+* [Online Docs](https://database.nil.foundation/projects/application/index.html) 
 
 ### Articles
 
-Note that here we are using version 4.8 (0.4.8). If you are using current version 4.11 (0.4.11) you need adapt all article samples and download [Boost.DLL] (https://github.com/apolukhin/Boost.DLL)
-
-Library use:<br>
+Library use:
 [Build a Server Application using Application Library] (http://www.codeproject.com/Articles/756866/Build-a-Server-Application-using-Application-Libra)
 
-Library customization:<br>
+Library customization:
 [Creating a New Application Mode] (http://www.codeproject.com/Articles/695937/Creating-a-New-Application-Mode)
 
 ### Installation Notes
@@ -205,44 +182,12 @@ If you are using boost lower than 1.56.0 you need install TypeIndex library manu
    * MinGW 4.7/4.8
    * Visual Studio 2013
 
-### Review Schedule
-
-Boost Review Schedule (http://www.boost.org/community/review_schedule.html)
-
-### Who's Using 'Application'
-
-* [Dokfile Software (Colaboration and Backup System)](http://www.dokfile.com/)
-
-If you intend to use 'Application' on your application, please send-me your name and project. I am looking for create a list of users of ‘Application’.
-<br>re.tf@acm.org (Renato Tegon Forti)
-
 ### Other 'Application' Frameworks:
 
- * [Pocoproject (WinService)](http://pocoproject.org/docs-1.5.3/Poco.Util.WinService.html)
- * [Libdaemon (Daemon)] (http://www.tyrfingr.is/projects/libdaemon/)
- * [Qt (qtservice)](http://doc.qt.digia.com/solutions/4/qtservice/qtservice.html)
- 
-### Changes on 0.4.12
-
- * The header config.hpp was refactored;
- * global_context can handle errors using boost::system::error_code;
- * global_context now throws boost::system::system_error, not more std::logic_error;
- 
- #### Aspects
-
- * The 'path' aspect do not use path_default interface more.
- 
-### Changes on 0.4.11
-
-#### Aspects
-
- * The 'path' aspect do not receive more any params (args) on constructor.
- * The 'path' aspect is added by default on 'common' and 'server' application modes.
- * New 'process_id' aspect, now is provided in context by default to obtaining a PID of proccess.
-
-#### POSIX
-
- * server_application_impl now follows the BSD-style daemon(3) creation.
+* [Boost.Application](https://github.com/retf/Boost.Application)
+* [Pocoproject (WinService)](http://pocoproject.org/docs-1.5.3/Poco.Util.WinService.html)
+* [Libdaemon (Daemon)] (http://www.tyrfingr.is/projects/libdaemon/)
+* [Qt (qtservice)](http://doc.qt.digia.com/solutions/4/qtservice/qtservice.html)
  
 ### Contributing
 
@@ -252,7 +197,7 @@ Want to contribute with =nil; Application project? Open a pull request!
 
 A special thanks to Vicente J. Botet Escriba that helped a lot on all areas of this lib.
 
-Thanks to Renato Tegon Forti for initial library implementation.
+Thanks to Renato Tegon Forti for the initial library implementation.
 Thanks to Benjamin Dieckmann for global_context implementation.
 Thanks to Rodrigo Madera (RM of Boost.Application).<br>
 Thanks to Antony Polukhin for improvements on plug-in system module (shared_library), that now is a new library, see notes above. 
