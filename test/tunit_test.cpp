@@ -1,8 +1,6 @@
 #define BOOST_APPLICATION_FEATURE_NS_SELECT_BOOST
 
 #define BOOST_TEST_MODULE tunit_test
-#define BOOST_TEST_NO_MAIN
-#define BOOST_TEST_ALTERNATIVE_INIT_API
 
 // intro
 #include <iostream>
@@ -13,7 +11,10 @@
 // other unit
 #include "myapp.hpp"
 
-int main(int argc, char *argv[]) {
+BOOST_AUTO_TEST_CASE(tunit) {
+    auto &argc = boost::unit_test::framework::master_test_suite().argc;
+    auto &argv = boost::unit_test::framework::master_test_suite().argv;
+
     myapp app;
     application::global_context_ptr ctx = application::global_context::create();
 
@@ -22,6 +23,4 @@ int main(int argc, char *argv[]) {
     BOOST_CHECK(application::launch<application::common>(app, ctx) == 0);
 
     application::global_context::destroy();
-
-    return boost::unit_test::unit_test_main(init_unit_test, argc, argv);
 }

@@ -24,9 +24,7 @@ struct fixture {
     application::path path;
 };
 
-BOOST_AUTO_TEST_SUITE(path_aspect_test_suite)
-
-BOOST_FIXTURE_TEST_CASE(path_aspect_test_case, fixture) {
+BOOST_AUTO_TEST_CASE(path_aspect) {
     auto &argc = boost::unit_test::framework::master_test_suite().argc;
     auto &argv = boost::unit_test::framework::master_test_suite().argv;
 
@@ -47,34 +45,30 @@ BOOST_FIXTURE_TEST_CASE(path_aspect_test_case, fixture) {
         module_path_name = std::string(resolved_path);
     }
 #endif
-}
 
-BOOST_FIXTURE_TEST_CASE(path_aspect1, fixture) {
-    BOOST_CHECK(filesystem::current_path() == path.current_path());
-}
+    application::path path;
 
-BOOST_FIXTURE_TEST_CASE(path_aspect2, fixture) {
-    const filesystem::path &module_path(module_path_name);
-    BOOST_CHECK(module_path.stem() == path.executable_name());
-}
+    { BOOST_CHECK(filesystem::current_path() == path.current_path()); }
 
-BOOST_FIXTURE_TEST_CASE(path_aspect3, fixture) {
-    const filesystem::path &module_path(module_path_name);
-    BOOST_CHECK(module_path.filename() == path.executable_full_name());
-}
+    {
+        filesystem::path module_path(module_path_name);
+        BOOST_CHECK(module_path.stem() == path.executable_name());
+    }
 
-BOOST_FIXTURE_TEST_CASE(path_aspect4, fixture) {
-    const filesystem::path &module_path(module_path_name);
-    BOOST_CHECK(module_path.parent_path() == path.executable_path());
-}
+    {
+        filesystem::path module_path(module_path_name);
+        BOOST_CHECK(module_path.filename() == path.executable_full_name());
+    }
 
-BOOST_FIXTURE_TEST_CASE(path_aspect5, fixture) {
-    BOOST_CHECK(module_path_name == path.executable_path_name());
-}
+    {
+        filesystem::path module_path(module_path_name);
+        BOOST_CHECK(module_path.parent_path() == path.executable_path());
+    }
 
-BOOST_FIXTURE_TEST_CASE(path_aspect6, fixture) {
+    { BOOST_CHECK(module_path_name == path.executable_path_name()); }
+
     std::string isempty;
-    BOOST_CHECK(isempty.empty());
+    BOOST_CHECK(!isempty.size());
 
     isempty = path.app_data_path().string();
     BOOST_CHECK(isempty.size());
@@ -91,5 +85,3 @@ BOOST_FIXTURE_TEST_CASE(path_aspect6, fixture) {
     isempty = path.temp_path().string();
     BOOST_CHECK(isempty.size());
 }
-
-BOOST_AUTO_TEST_SUITE_END()
