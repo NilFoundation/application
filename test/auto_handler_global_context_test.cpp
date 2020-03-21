@@ -1,9 +1,12 @@
-// Copyright 2011-2014 Renato Tegon Forti
-// Distributed under the Boost Software License, Version 1.0.
-// (See accompanying file LICENSE_1_0.txt
-// or copy at http://www.boost.org/LICENSE_1_0.txt)
-
-// For more information, see http://www.boost.org
+//---------------------------------------------------------------------------//
+// Copyright (c) 2011-2014 Renato Tegon Forti
+// Copyright (c) 2018-2020 Nil Foundation
+// Copyright (c) 2018-2020 Mikhail Komarov <nemo@nil.foundation>
+//
+// Distributed under the Boost Software License, Version 1.0
+// See accompanying file LICENSE_1_0.txt or copy at
+// http://www.boost.org/LICENSE_1_0.txt
+//---------------------------------------------------------------------------//
 
 #define BOOST_APPLICATION_FEATURE_NS_SELECT_BOOST
 
@@ -51,15 +54,15 @@ BOOST_AUTO_TEST_CASE(auto_handler_global_context_test_case) {
     system::error_code ec;
 
     application::global_context_ptr app_context = application::global_context::create(ec);
-    BOOST_CHECK(ec.value());
+    BOOST_CHECK(!ec.value());
 
     application::auto_handler<myapp> app(app_context);
 
     BOOST_CHECK(application::launch<application::server>(app, app_context, ec) == 0);
-    BOOST_CHECK(ec.value());
+    BOOST_CHECK(!ec.value());
 
     application::global_context::destroy(ec);
-    BOOST_CHECK(ec.value());
+    BOOST_CHECK(!ec.value());
 }
 
 BOOST_AUTO_TEST_SUITE_END()

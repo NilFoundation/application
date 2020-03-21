@@ -1,15 +1,16 @@
-// Copyright 2011-2012 Renato Tegon Forti
-// Distributed under the Boost Software License, Version 1.0.
-// (See accompanying file LICENSE_1_0.txt
-// or copy at http://www.boost.org/LICENSE_1_0.txt)
-
-// For more information, see http://www.boost.org
+//---------------------------------------------------------------------------//
+// Copyright (c) 2011-2012 Renato Tegon Forti
+// Copyright (c) 2018-2020 Nil Foundation
+// Copyright (c) 2018-2020 Mikhail Komarov <nemo@nil.foundation>
+//
+// Distributed under the Boost Software License, Version 1.0
+// See accompanying file LICENSE_1_0.txt or copy at
+// http://www.boost.org/LICENSE_1_0.txt
+//---------------------------------------------------------------------------//
 
 #define BOOST_APPLICATION_FEATURE_NS_SELECT_BOOST
 
 #define BOOST_TEST_MODULE path_aspect_test
-#define BOOST_TEST_NO_MAIN
-#define BOOST_TEST_ALTERNATIVE_INIT_API
 
 #include <iostream>
 #include <boost/application.hpp>
@@ -23,7 +24,12 @@ struct fixture {
     application::path path;
 };
 
-int main(int argc, char *argv[]) {
+BOOST_AUTO_TEST_SUITE(path_aspect_test_suite)
+
+BOOST_FIXTURE_TEST_CASE(path_aspect_test_case, fixture) {
+    auto &argc = boost::unit_test::framework::master_test_suite().argc;
+    auto &argv = boost::unit_test::framework::master_test_suite().argv;
+
     filesystem::path module_path_name;
 
 #if defined(BOOST_WINDOWS_API)
@@ -41,11 +47,7 @@ int main(int argc, char *argv[]) {
         module_path_name = std::string(resolved_path);
     }
 #endif
-
-    return boost::unit_test::unit_test_main(init_unit_test, argc, argv);
 }
-
-BOOST_AUTO_TEST_SUITE(path_aspect_test_suite)
 
 BOOST_FIXTURE_TEST_CASE(path_aspect1, fixture) {
     BOOST_CHECK(filesystem::current_path() == path.current_path());

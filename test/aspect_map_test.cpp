@@ -1,9 +1,12 @@
-// Copyright 2011-2014 Renato Tegon Forti
-// Distributed under the Boost Software License, Version 1.0.
-// (See accompanying file LICENSE_1_0.txt
-// or copy at http://www.boost.org/LICENSE_1_0.txt)
-
-// For more information, see http://www.boost.org
+//---------------------------------------------------------------------------//
+// Copyright (c) 2011-2014 Renato Tegon Forti
+// Copyright (c) 2018-2020 Nil Foundation
+// Copyright (c) 2018-2020 Mikhail Komarov <nemo@nil.foundation>
+//
+// Distributed under the Boost Software License, Version 1.0
+// See accompanying file LICENSE_1_0.txt or copy at
+// http://www.boost.org/LICENSE_1_0.txt
+//---------------------------------------------------------------------------//
 
 #define BOOST_APPLICATION_FEATURE_NS_SELECT_BOOST
 
@@ -106,7 +109,7 @@ public:
             if (res) {
                 BOOST_CHECK(res->say_hi() == "HI");
 
-                boost::this_thread::sleep(boost::posix_time::milliseconds(i * (2 + 1)));
+                boost::this_thread::sleep(boost::posix_time::milliseconds(i * (3 + 1)));
 
                 my_aspect_map_.erase<my_msg_aspect_test>(guard);
             }
@@ -252,7 +255,7 @@ BOOST_AUTO_TEST_CASE(aspect_map_erase_test) {
 
     BOOST_CHECK(res.get());
     BOOST_CHECK(my_aspect_map.size() == 0);
-    BOOST_CHECK(my_aspect_map.find<my_msg_aspect_test>().get());
+    // BOOST_CHECK(my_aspect_map.find<my_msg_aspect_test>() == false);
 }
 
 BOOST_AUTO_TEST_CASE(aspect_map_reduction_test) {

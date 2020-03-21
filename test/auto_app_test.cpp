@@ -1,15 +1,16 @@
-// Copyright 2011-2014 Renato Tegon Forti
-// Distributed under the Boost Software License, Version 1.0.
-// (See accompanying file LICENSE_1_0.txt
-// or copy at http://www.boost.org/LICENSE_1_0.txt)
-
-// For more information, see http://www.boost.org
+//---------------------------------------------------------------------------//
+// Copyright (c) 2011-2014 Renato Tegon Forti
+// Copyright (c) 2018-2020 Nil Foundation
+// Copyright (c) 2018-2020 Mikhail Komarov <nemo@nil.foundation>
+//
+// Distributed under the Boost Software License, Version 1.0
+// See accompanying file LICENSE_1_0.txt or copy at
+// http://www.boost.org/LICENSE_1_0.txt
+//---------------------------------------------------------------------------//
 
 #define BOOST_APPLICATION_FEATURE_NS_SELECT_BOOST
 
 #define BOOST_TEST_MODULE auto_app_test
-#define BOOST_TEST_NO_MAIN
-#define BOOST_TEST_ALTERNATIVE_INIT_API
 
 #include <iostream>
 #include <boost/application.hpp>
@@ -71,7 +72,11 @@ public:
     }
 };
 
-int main(int argc, char *argv[]) {
+BOOST_AUTO_TEST_SUITE(auto_app_test_suite)
+
+BOOST_AUTO_TEST_CASE(auto_app_test_case) {
+    auto &argc = boost::unit_test::framework::master_test_suite().argc;
+    auto &argv = boost::unit_test::framework::master_test_suite().argv;
     system::error_code ec;
 
     BOOST_CHECK(!(application::auto_app<application::common, myapp1>::start(ec)));
@@ -132,6 +137,6 @@ int main(int argc, char *argv[]) {
     BOOST_CHECK(!(application::launch<application::auto_app<application::common, myapp1, application::context> >(argc,
     argv, boost::uuids::string_generator()("{2F66E4AD-ECA5-475D-8784-4BAA329EF9F1}"))));
     */
-
-    return boost::unit_test::unit_test_main(init_unit_test, argc, argv);
 }
+
+BOOST_AUTO_TEST_SUITE_END()
