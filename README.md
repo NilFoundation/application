@@ -4,6 +4,8 @@
 
 =nil; Application provides an application environment, or start point to any people that want a basic
  infrastructure to build an system application on Windows or Unix Variants (e.g. Linux, MacOS).
+ 
+ This library intends to be put int [Boost](https://boost.org) sometime.
 
 ### Hello World (server)
 
