@@ -1,7 +1,6 @@
 //---------------------------------------------------------------------------//
 // Copyright (c) 2013 Vicente J. Botet Escriba.
 // Copyright (c) 2014 Renato Tegon Forti.
-// Copyright (c) 2018-2020 Nil Foundation AG
 // Copyright (c) 2018-2020 Mikhail Komarov <nemo@nil.foundation>
 //
 // Distributed under the Boost Software License, Version 1.0

@@ -1,19 +1,18 @@
-// auto_handler.hpp  ---------------------------------------------------------//
-// -----------------------------------------------------------------------------
-
-// Copyright 2011-2014 Renato Tegon Forti
-
-// Distributed under the Boost Software License, Version 1.0.
-// See http://www.boost.org/LICENSE_1_0.txt
-
-// -----------------------------------------------------------------------------
-
+//---------------------------------------------------------------------------//
+// Copyright (c) 2011-2014 Renato Tegon Forti
+// Copyright (c) 2018-2020 Mikhail Komarov <nemo@nil.foundation>
+//
+// Distributed under the Boost Software License, Version 1.0
+// See accompanying file LICENSE_1_0.txt or copy at
+// http://www.boost.org/LICENSE_1_0.txt
+//---------------------------------------------------------------------------//
+//
 // Revision History
 // 05-06-2014 dd-mm-yyyy - Initial Release
 //
 //
 // -----------------------------------------------------------------------------
-
+//
 //
 // *****************************************************************************
 // note that this is a experimental module
