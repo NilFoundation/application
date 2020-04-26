@@ -12,11 +12,18 @@
 #ifndef BOOST_APPLICATION_ASPECT_MAP_HPP
 #define BOOST_APPLICATION_ASPECT_MAP_HPP
 
+#define BOOST_RESULT_OF_USE_DECLTYPE
+
 #include <utility>
 
 #include <boost/config.hpp>
+
 #include <boost/application/config.hpp>
 #include <boost/application/detail/csbl.hpp>
+
+#include <boost/log/utility/functional/bind.hpp>
+
+#include <boost/iterator/transform_iterator.hpp>
 
 #include <boost/thread.hpp>
 #include <boost/thread/strict_lock.hpp>
@@ -47,17 +54,69 @@ namespace boost {
          * Internal and External locking Version that can be used as part of an
          * atomic transaction are available.
          *
-         * <STRONG> Thread Safe: </STRONG> Yes <BR>
+         * <STRONG> Thread Safe: </STRONG> Yes (Iterators are NOT thread-safe) <BR>
          * <STRONG> Exception Safe: </STRONG>  Yes
          *
          */
         class aspect_map : public basic_lockable_adapter<recursive_mutex> {
+
+            template<typename MapType>
+            struct value_selector {
+                typedef MapType map_type;
+
+                typedef typename map_type::value_type argument_type;
+                typedef typename map_type::mapped_type result_type;
+
+                inline result_type operator()(const argument_type &x, const argument_type &v) const {
+                    return v.second;
+                }
+            };
+
+            template<class Operation>
+            class binder1st {
+            public:
+                typedef Operation operation_type;
+                typedef typename operation_type::result_type result_type;
+                typedef typename operation_type::argument_type argument_type;
+
+                binder1st() {
+                }
+                binder1st(const operation_type &x, const argument_type &y) : op(x), value(y) {
+                }
+                inline result_type operator()(const argument_type &x) const {
+                    return op(value, x);
+                }
+
+            protected:
+                operation_type op;
+                argument_type value;
+            };
+
+            template<class Operation, class T>
+            inline binder1st<Operation> bind1st(const Operation &op, const T &x) const {
+                typedef typename Operation::argument_type arg1_type;
+                return binder1st<Operation>(op, arg1_type(x));
+            }
+
+        public:
             typedef size_t size_type;
+            typedef std::ptrdiff_t difference_type;
 
             typedef csbl::type_index key_type;
             typedef csbl::shared_ptr<void> value_type;
             typedef csbl::unordered_map<key_type, value_type> map_type;
 
+            typedef typename map_type::hasher hasher;
+            typedef typename map_type::key_equal key_equal;
+            typedef typename map_type::allocator_type allocator_type;
+
+            typedef typename map_type::pointer pointer;
+            typedef typename map_type::const_pointer const_pointer;
+
+            typedef value_type &reference;
+            typedef value_type const &const_reference;
+
+        protected:
             map_type aspects_;
 
             /// @cond
@@ -67,7 +126,62 @@ namespace boost {
             }
             /// @endcond
 
+            typedef binder1st<value_selector<map_type>> TransformFunctor;
+
         public:
+            typedef transform_iterator<TransformFunctor, typename map_type::iterator> iterator;
+            typedef transform_iterator<TransformFunctor, typename map_type::const_iterator> const_iterator;
+            typedef transform_iterator<TransformFunctor, typename map_type::local_iterator> local_iterator;
+            typedef transform_iterator<TransformFunctor, typename map_type::const_local_iterator> const_local_iterator;
+
+            /*!
+             * @warning Use with caution. Not thread-safe.
+             */
+            iterator begin() BOOST_NOEXCEPT {
+                auto f = bind1st(value_selector<map_type>(), *aspects_.begin());
+                return make_transform_iterator(aspects_.begin(), f);
+            }
+
+            /*!
+             * @warning Use with caution. Not thread-safe.
+             */
+            const_iterator begin() const BOOST_NOEXCEPT {
+                return boost::make_transform_iterator(aspects_.begin(),
+                                                      bind1st(value_selector<map_type>(), *aspects_.begin()));
+            }
+
+            /*!
+             * @warning Use with caution. Not thread-safe.
+             */
+            iterator end() BOOST_NOEXCEPT {
+                return boost::make_transform_iterator(aspects_.end(),
+                                                      bind1st(value_selector<map_type>(), *aspects_.end()));
+            }
+
+            /*!
+             * @warning Use with caution. Not thread-safe.
+             */
+            const_iterator end() const BOOST_NOEXCEPT {
+                return boost::make_transform_iterator(aspects_.end(),
+                                                      bind1st(value_selector<map_type>(), *aspects_.end()));
+            }
+
+            /*!
+             * @warning Use with caution. Not thread-safe.
+             */
+            const_iterator cbegin() const BOOST_NOEXCEPT {
+                return boost::make_transform_iterator(aspects_.cbegin(),
+                                                      bind1st(value_selector<map_type>(), *aspects_.cbegin()));
+            }
+
+            /*!
+             * @warning Use with caution. Not thread-safe.
+             */
+            const_iterator cend() const BOOST_NOEXCEPT {
+                return boost::make_transform_iterator(aspects_.cbegin(),
+                                                      bind1st(value_selector<map_type>(), *aspects_.cend()));
+            }
+
             /*!
              * Lookup a aspect and return the shared_ptr<T> of it.
              * Internal locking Version.
