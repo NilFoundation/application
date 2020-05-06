@@ -18,6 +18,11 @@
 #include <pwd.h>
 #include <unistd.h>
 
+#ifdef BOOST_OS_MACOS_AVAILABLE
+#include <mach-o/dyld.h>
+#include <sys/param.h>
+#endif
+
 #ifdef BOOST_HAS_PRAGMA_ONCE
 #pragma once
 #endif
@@ -30,7 +35,25 @@ namespace boost {
                 filesystem::path full_path_;
 
                 boost::filesystem::path path_from_me(boost::system::error_code &ec) {
+#ifdef BOOST_OS_MACOS_AVAILABLE
+                    char path[4096], rpath[4096];
+                    uint32_t size = sizeof(path);
+                    if (_NSGetExecutablePath(path, &size) == 0) {
+                        if (realpath(path, rpath)) {
+                            return boost::filesystem::path(rpath);
+                        } else {
+                            ec = boost::system::error_code(errno, boost::system::system_category());
+                            boost::throw_exception(boost::system::system_error(ec, "Cannot resolve the absolute path"));
+                        }
+                    } else {
+                        ec = boost::system::error_code(errno, boost::system::system_category());
+                        boost::throw_exception(boost::system::system_error(ec,
+                                                                           "Path is too long (more than 4096 "
+                                                                           "symbols)"));
+                    }
+#else
                     return boost::filesystem::read_symlink("/proc/self/exe", ec);
+#endif
                 }
 
                 boost::filesystem::path getenv(const char *env_name) {
@@ -89,7 +112,7 @@ namespace boost {
                 inline boost::filesystem::path app_data_path() {
                     boost::filesystem::path path = getenv("XDG_DATA_HOME");
                     if (path.empty()) {
-#if BOOST_OS_MACOS
+#ifdef BOOST_OS_MACOS_AVAILABLE
                         return home_path() / "Library/Preferences/";
 #else
                         return home_path() / ".local/share";
@@ -102,7 +125,7 @@ namespace boost {
 
                     boost::filesystem::path path = getenv("XDG_CONFIG_HOME");
                     if (path.empty()) {
-#if BOOST_OS_MACOS
+#ifdef BOOST_OS_MACOS_AVAILABLE
                         return home_path() / "Library/Preferences/";
 #else
                         return home_path() / ".config";
