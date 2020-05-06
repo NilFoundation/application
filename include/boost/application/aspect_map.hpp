@@ -153,16 +153,20 @@ namespace boost {
              * @warning Use with caution. Not thread-safe.
              */
             iterator end() BOOST_NOEXCEPT {
-                return boost::make_transform_iterator(aspects_.end(),
-                                                      bind1st(value_selector<map_type>(), *aspects_.end()));
+                return boost::make_transform_iterator(
+                    aspects_.end(),
+                    bind1st(value_selector<map_type>(),
+                            std::make_pair<key_type, value_type>(key_type(typeid(void)), value_type())));
             }
 
             /*!
              * @warning Use with caution. Not thread-safe.
              */
             const_iterator end() const BOOST_NOEXCEPT {
-                return boost::make_transform_iterator(aspects_.end(),
-                                                      bind1st(value_selector<map_type>(), *aspects_.end()));
+                return boost::make_transform_iterator(
+                    aspects_.end(),
+                    bind1st(value_selector<map_type>(),
+                            std::make_pair<key_type, value_type>(key_type(typeid(void)), value_type())));
             }
 
             /*!
@@ -177,8 +181,10 @@ namespace boost {
              * @warning Use with caution. Not thread-safe.
              */
             const_iterator cend() const BOOST_NOEXCEPT {
-                return boost::make_transform_iterator(aspects_.cbegin(),
-                                                      bind1st(value_selector<map_type>(), *aspects_.cend()));
+                return boost::make_transform_iterator(
+                    aspects_.cend(),
+                    bind1st(value_selector<map_type>(),
+                            std::make_pair<key_type, value_type>(key_type(typeid(void)), value_type())));
             }
 
             /*!
