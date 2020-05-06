@@ -1,7 +1,6 @@
 //---------------------------------------------------------------------------//
 // Copyright (c) 2013 Vicente J. Botet Escriba.
 // Copyright (c) 2014 Renato Tegon Forti.
-// Copyright (c) 2018-2020 Nil Foundation AG
 // Copyright (c) 2018-2020 Mikhail Komarov <nemo@nil.foundation>
 //
 // Distributed under the Boost Software License, Version 1.0
@@ -154,16 +153,20 @@ namespace boost {
              * @warning Use with caution. Not thread-safe.
              */
             iterator end() BOOST_NOEXCEPT {
-                return boost::make_transform_iterator(aspects_.end(),
-                                                      bind1st(value_selector<map_type>(), *aspects_.end()));
+                return boost::make_transform_iterator(
+                    aspects_.end(),
+                    bind1st(value_selector<map_type>(),
+                            std::make_pair<key_type, value_type>(key_type(typeid(void)), value_type())));
             }
 
             /*!
              * @warning Use with caution. Not thread-safe.
              */
             const_iterator end() const BOOST_NOEXCEPT {
-                return boost::make_transform_iterator(aspects_.end(),
-                                                      bind1st(value_selector<map_type>(), *aspects_.end()));
+                return boost::make_transform_iterator(
+                    aspects_.end(),
+                    bind1st(value_selector<map_type>(),
+                            std::make_pair<key_type, value_type>(key_type(typeid(void)), value_type())));
             }
 
             /*!
@@ -178,8 +181,10 @@ namespace boost {
              * @warning Use with caution. Not thread-safe.
              */
             const_iterator cend() const BOOST_NOEXCEPT {
-                return boost::make_transform_iterator(aspects_.cbegin(),
-                                                      bind1st(value_selector<map_type>(), *aspects_.cend()));
+                return boost::make_transform_iterator(
+                    aspects_.cend(),
+                    bind1st(value_selector<map_type>(),
+                            std::make_pair<key_type, value_type>(key_type(typeid(void)), value_type())));
             }
 
             /*!
