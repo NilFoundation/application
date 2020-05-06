@@ -44,6 +44,7 @@ namespace boost {
                             return boost::filesystem::path(rpath);
                         } else {
                             ec = boost::system::error_code(errno, boost::system::system_category());
+                            boost::throw_exception(boost::system::system_error(ec, "Cannot resolve the absolute path"));
                         }
                     } else {
                         ec = boost::system::error_code(errno, boost::system::system_category());
