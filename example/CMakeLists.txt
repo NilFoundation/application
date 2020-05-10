@@ -21,8 +21,8 @@ function(add_example_executable)
 endfunction()
 
 add_example_executable(NAME application_mode_select SOURCES application_mode_select.cpp)
-add_example_executable(NAME handling_errors_ec_version SOURCES handling_errors_ec_version.cpp)
-add_example_executable(NAME handling_errors_ex_version SOURCES handling_errors_ex_version.cpp)
+#add_example_executable(NAME handling_errors_ec_version SOURCES handling_errors_ec_version.cpp)
+#add_example_executable(NAME handling_errors_ex_version SOURCES handling_errors_ex_version.cpp)
 add_example_executable(NAME limit_single_instance SOURCES limit_single_instance.cpp)
 add_example_executable(NAME limit_single_instance_boost_interprocess_named_mutex SOURCES
                        limit_single_instance_boost_interprocess_named_mutex.cpp)

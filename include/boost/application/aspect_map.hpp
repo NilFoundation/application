@@ -20,8 +20,6 @@
 #include <boost/application/config.hpp>
 #include <boost/application/detail/csbl.hpp>
 
-#include <boost/log/utility/functional/bind.hpp>
-
 #include <boost/iterator/transform_iterator.hpp>
 
 #include <boost/thread.hpp>

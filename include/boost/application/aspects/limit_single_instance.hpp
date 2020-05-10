@@ -117,7 +117,7 @@ namespace boost {
                 limit_single_instance(cb), uuid_(app_uuid), owns_lock_(false) {
             }
 
-            ~limit_single_instance_default_behaviour() {
+            virtual ~limit_single_instance_default_behaviour() {
                 release();
             }
 
