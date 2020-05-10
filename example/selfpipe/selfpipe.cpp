@@ -113,7 +113,7 @@ private:
 class signal_usr2 : public application::signal_manager {
 public:
     /*<< Customize SIGNALS bind >>*/
-    signal_usr2(application::global_context_ptr cxt) : application::signal_manager(cxt) {
+    signal_usr2(application::context &cxt) : application::signal_manager(cxt) {
         application::handler<>::parameter_callback callback1 = boost::bind(&signal_usr2::signal_usr1_handler, this);
 
         application::handler<>::parameter_callback callback2 = boost::bind(&signal_usr2::signal_usr2_handler, this);
@@ -152,7 +152,7 @@ int main(int argc, char *argv[]) {
     /*<<Add selfpipe to application context>>*/
     this_application()->insert<application::posix::selfpipe>(boost::make_shared<application::posix::selfpipe>());
 
-    signal_usr2 sm(ctx);
+    signal_usr2 sm(*ctx);
     int ret = application::launch<application::common>(app, sm, ctx);
 
     return ret;
